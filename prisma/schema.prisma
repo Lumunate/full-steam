@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SERVICE_MASTER
+  ADMIN
+  USER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  role      Role     @default(USER)
+  password  String
+  email     String   @unique
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  firstName         String
+  lastName          String
+  birthDate         DateTime
+  gender            Gender           @default(OTHER)
+  phoneNumber       String
+  username          String           @unique
+
+  googleCalendarId   String?
+  googleRefreshToken String?
+
+  isDeleted Boolean   @default(false)
+  isBlocked Boolean   @default(false)
+  deletedAt DateTime?
+  blockedAt DateTime?
+
+  @@map("users")
+}
+
+model VerificationRequest {
+  id         String   @id @default(cuid())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, token])
+}
