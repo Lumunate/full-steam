@@ -8,9 +8,9 @@ datasource db {
 }
 
 enum Role {
-  SERVICE_MASTER
   ADMIN
-  USER
+  FAMILY
+  NANNY
 }
 
 enum Gender {
@@ -19,24 +19,37 @@ enum Gender {
   OTHER
 }
 
+
+enum ServiceType {
+  SERVICE_TYPE_1
+  SERVICE_TYPE_2
+  SERVICE_TYPE_3
+  SERVICE_TYPE_4
+  SERVICE_TYPE_5
+}
+
+
 model User {
   id        String   @id @default(cuid())
-  role      Role     @default(USER)
+  role      Role
   password  String
   email     String   @unique
   image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  firstName         String
-  lastName          String
-  birthDate         DateTime
-  gender            Gender           @default(OTHER)
-  phoneNumber       String
-  username          String           @unique
+  firstName   String
+  lastName    String
+  birthDate   DateTime
+  gender      Gender   @default(OTHER)
+  phoneNumber String
+  username    String   @unique
+  address     String
+  city        String
+  postalCode  String
 
-  googleCalendarId   String?
-  googleRefreshToken String?
+  children Children[]
+  services UserService[]
 
   isDeleted Boolean   @default(false)
   isBlocked Boolean   @default(false)
@@ -55,4 +68,48 @@ model VerificationRequest {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
+}
+
+
+model Children {
+  id         String   @id @default(cuid())
+  firstName  String
+  lastName   String
+  age        Int
+  specialNotes String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@map("children")
+}
+
+model Service {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String?
+  price       Float
+  type        ServiceType
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  users       UserService[]
+
+  @@map("services")
+}
+
+model UserService {
+  id        String   @id @default(cuid())
+  userId    String
+  serviceId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@map("user_services")
 }

@@ -13,13 +13,13 @@ export const registerUserSchema = z.object({
   username: z.string().min(4, 'Username must be at least 4 characters'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   isAdmin: z.boolean().optional(),
-  role: z
-    .enum([Role.ADMIN, Role.USER], {
-      message: 'Role can only be Admin or Therapist',
-    })
-    .optional(),
+  role: z.nativeEnum(Role),
   prefix: z.string().optional(),
   suffix: z.string().optional(),
+
+  address: z.string().min(1, 'Address is required'),
+  city: z.string().min(1, 'City is required'),
+  postalCode: z.string().min(1, 'Postal code is required')
 });
 
 export type CreateUser = z.infer<typeof registerUserSchema>;

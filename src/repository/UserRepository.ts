@@ -1,4 +1,4 @@
-import { Role, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { CreateUser } from '@/types/auth/register-user';
@@ -22,19 +22,12 @@ export async function findUserByEmail(email: string) {
 }
 
 export async function createUser(data: CreateUser) {
-  const birthDate = new Date(data.birthDate);
+  const birthDate = new Date(data.birthDate as string | number | Date);
 
   return prisma.user.create({
     data: {
-      role: data.isAdmin ? Role.ADMIN : Role.USER,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      birthDate: birthDate,
-      gender: data.gender,
-      email: data.email,
-      password: data.password,
-      phoneNumber: data.phoneNumber,
-      username: data.username,
+      ...data,
+      birthDate,
     },
   });
 }
