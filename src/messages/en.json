@@ -1,0 +1,68 @@
+{
+  "common": {
+    "buttons": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "back": "Back",
+      "next": "Next",
+      "login": "Log In",
+      "register": "Sign Up",
+      "logout": "Log Out"
+    },
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "username": "Username",
+      "search": "Search"
+    },
+    "navigation": {
+      "home": "Home",
+      "profile": "Profile",
+      "settings": "Settings",
+      "about": "About",
+      "contact": "Contact",
+      "help": "Help"
+    },
+    "placeholders": {
+      "search": "Search...",
+      "email": "Enter your email",
+      "password": "Enter your password"
+    }
+  },
+  "errors": {
+    "general": {
+      "somethingWentWrong": "Something went wrong",
+      "tryAgain": "Please try again later",
+      "pageNotFound": "Page not found",
+      "serverError": "Server error",
+      "unauthorized": "Unauthorized access",
+      "forbidden": "Access forbidden",
+      "notFound": "Resource not found"
+    },
+    "form": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email",
+      "passwordMismatch": "Passwords do not match",
+      "passwordLength": "Password must be at least 8 characters",
+      "invalidInput": "Invalid input"
+    },
+    "auth": {
+      "invalidCredentials": "Invalid email or password",
+      "sessionExpired": "Your session has expired. Please log in again"
+    }
+  },
+  "success": {
+    "saved": "Successfully saved",
+    "updated": "Successfully updated",
+    "deleted": "Successfully deleted",
+    "created": "Successfully created"
+  },
+  "loading": "Loading...",
+  "emptyState": "No items to display"
+}
+
