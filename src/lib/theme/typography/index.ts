@@ -1,6 +1,6 @@
 const typography = {
   fontFamily:
-    '--font-segoe, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif',
+    'Urbansit, --font-segoe, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif',
   h1: {
     fontSize: '48px',
     lineHeight: '72px',

@@ -3,7 +3,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
 import { routing } from '@/i18n/routing';
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ParamsWithLocale = Promise<{ locale: any }>;
 
