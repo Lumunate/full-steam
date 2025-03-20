@@ -1,12 +1,26 @@
-import createMiddleware from 'next-intl/middleware';
+import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
-import { routing } from './i18n/routing';
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const isAuthenticated = !!token;
+  const isAdmin = token?.isAdmin === true;
+  
+  const { pathname } = req.nextUrl;
 
-export default createMiddleware(routing);
+  // Protect admin routes
+  if (pathname.startsWith("/admin") && !isAdmin) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // Protect user dashboard routes
+  if (pathname.startsWith("/dashboard") && !isAuthenticated) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: [
-    '/',
-    '/(de|en)/:path*',
-  ],
+  matcher: ["/admin/:path*", "/dashboard/:path*"],
 };

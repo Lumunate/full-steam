@@ -1,18 +1,27 @@
 import { NextResponse } from 'next/server';
 
-import handleErrors from '@/lib/handlers/errors';
-import { makeUser } from '@/services/UserService';
-import { registerUserSchema } from '@/types/auth/register-user';
+import { registerUser } from '@/services/UserService';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const validatedBody = registerUserSchema.parse(body);
+    
+    await registerUser(body);
 
-    const user = await makeUser(validatedBody);
-
-    return NextResponse.json(user, { status: 201 });
-  } catch (error) {
-    return handleErrors(error);
+    return NextResponse.json(
+      { message: 'User registered successfully' },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    console.error('Registration error:', error);
+    
+    // Return appropriate error response
+    return NextResponse.json(
+      { 
+        message: error.type || 'Failed to register user',
+        details: error.message 
+      },
+      { status: error.statusCode || 500 }
+    );
   }
 }

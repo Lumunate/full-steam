@@ -1,61 +1,60 @@
+import { prisma } from '@/lib/prisma';
 import { Prisma, Service } from '@prisma/client';
 
-import { prisma } from '@/lib/prisma';
+/**
+ * Find services for a user
+ */
+export async function findServicesByUserId(userId: string) {
+  return prisma.service.findUnique({
+    where: {
+      userId,
+    },
+  });
+}
 
-export async function createService(
-  data: Prisma.ServiceCreateInput,
-): Promise<Service> {
+/**
+ * Create new services for a user
+ */
+export async function createServices(data: Prisma.ServiceCreateInput): Promise<Service> {
   return prisma.service.create({
     data,
   });
 }
 
-export async function findAllServices(params: {
-  skip?: number;
-  take?: number;
-  cursor?: Prisma.ServiceWhereUniqueInput;
-  where?: Prisma.ServiceWhereInput;
-  orderBy?: Prisma.ServiceOrderByWithRelationInput;
-  include?: Prisma.ServiceInclude;
-}): Promise<Service[]> {
-  const { skip, take, cursor, where, orderBy, include } = params;
-
-  return prisma.service.findMany({
-    skip,
-    take,
-    cursor,
-    where,
-    orderBy,
-    include,
-  });
-}
-
-export async function findOneService(
-  serviceWhereUniqueInput: Prisma.ServiceWhereUniqueInput,
-  include?: Prisma.ServiceInclude,
-): Promise<Service | null> {
-  return prisma.service.findUnique({
-    where: serviceWhereUniqueInput,
-    include,
-  });
-}
-
-export async function updateService(params: {
-  where: Prisma.ServiceWhereUniqueInput;
-  data: Prisma.ServiceUpdateInput;
-}): Promise<Service> {
-  const { where, data } = params;
-
-  return prisma.service.update({
-    data,
-    where,
-  });
-}
-
-export async function deleteService(
-  where: Prisma.ServiceWhereUniqueInput,
+/**
+ * Update services for a user
+ */
+export async function updateServices(
+  userId: string,
+  data: Prisma.ServiceUpdateInput
 ): Promise<Service> {
-  return prisma.service.delete({
-    where,
+  return prisma.service.update({
+    where: {
+      userId,
+    },
+    data,
   });
+}
+
+/**
+ * Create or update services for a user
+ * This is helpful when we're not sure if the user already has services
+ */
+export async function upsertServices(
+  userId: string,
+  data: Prisma.ServiceUpdateInput
+): Promise<Service> {
+  // First, check if services exist for the user
+  const existingServices = await findServicesByUserId(userId);
+  
+  if (existingServices) {
+    // Update existing services
+    return updateServices(userId, data);
+  } else {
+    // Create new services
+    return createServices({
+      ...data as Prisma.ServiceCreateInput,
+      user: { connect: { id: userId } }
+    });
+  }
 }

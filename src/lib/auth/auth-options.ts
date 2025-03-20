@@ -1,28 +1,35 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { compare } from 'bcryptjs';
 import { NextAuthOptions } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
-import { prisma } from '@/lib/prisma';
-
+import { prisma } from '../prisma';
 import AuthError, { AuthErrorType } from '../handlers/errors/types/AuthError';
 
-export const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt',
+  },
+  pages: {
+    signIn: '/',
+    error: '/?error=auth',
+  },
   providers: [
-    Credentials({
-      id: 'credentials',
+    CredentialsProvider({
       name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      authorize: async credentials => {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new AuthError(AuthErrorType.MISSING_FIELDS, 400);
         }
 
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials.email as string,
+            email: credentials.email,
           },
         });
 
@@ -30,47 +37,46 @@ export const options: NextAuthOptions = {
           throw new AuthError(AuthErrorType.USER_NOT_FOUND, 404);
         }
 
-        const isValidPassword =
-          (credentials.password as string) === user.password;
+        const isPasswordValid = await compare(
+          credentials.password,
+          user.password
+        );
 
-        if (!isValidPassword) {
+        if (!isPasswordValid) {
           throw new AuthError(AuthErrorType.INVALID_CREDENTIALS, 401);
+        }
+
+        // Check if user is approved, except for admin
+        if (!user.isApproved && !user.isAdmin) {
+          throw new AuthError(AuthErrorType.ACCOUNT_UNVERIFIED, 403);
         }
 
         return {
           id: user.id,
           email: user.email,
-          name: user.username,
-          role: user.role,
+          name: `${user.firstName} ${user.lastName}`,
+          isAdmin: user.isAdmin,
+          role: user.isAdmin ? 'admin' : 'user', // Add the role property
         };
       },
     }),
   ],
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: 'jwt',
-  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
         token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
+        token.isAdmin = user.isAdmin;
       }
-
       return token;
     },
     async session({ session, token }) {
-      session.user = {
-        ...session.user,
-        id: token.id as string,
-        role: token.role as string,
-        email: token.email as string,
-        name: token.name as string,
-      };
-
+      if (token) {
+        session.user.id = token.id as string;
+        session.user.isAdmin = token.isAdmin as boolean;
+      }
       return session;
     },
   },
+  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET,
 };
