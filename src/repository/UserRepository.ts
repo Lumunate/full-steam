@@ -103,6 +103,8 @@ export async function getAllUsers() {
       city: true,
       postalCode: true,
       additionalInfo: true,
+      profilePicture: true, // Include profile picture
+      role: true, // Include role
       isApproved: true,
       isActive: true,
       createdAt: true,
@@ -149,6 +151,8 @@ export async function getUserDetailsById(userId: string) {
       city: true,
       postalCode: true,
       additionalInfo: true,
+      profilePicture: true, // Include profile picture
+      role: true, // Include role
       isApproved: true,
       isActive: true,
       createdAt: true,
@@ -202,6 +206,9 @@ export async function getUserProfile(userId: string) {
       city: true,
       postalCode: true,
       additionalInfo: true,
+      profilePicture: true, // Include profile picture
+      role: true, // Include role
+      dateOfBirth: true, // Include dateOfBirth
       children: {
         select: {
           id: true,

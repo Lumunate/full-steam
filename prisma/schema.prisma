@@ -10,17 +10,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+enum Role {
+  SERVICE_MASTER
+  ADMIN
+  FAMILY
+}
 model User {
   id                 String       @id @default(cuid())
   email              String       @unique
   password           String
   firstName          String
   lastName           String
+    role      Role     @default(FAMILY)
   phone              String
   address            String
   city               String
   postalCode         String
   additionalInfo     String?
+  dateOfBirth        DateTime?    // Added date of birth field
+  profilePicture     String?      // Added profile picture field
   isAdmin            Boolean      @default(false)
   isApproved         Boolean      @default(false)
   isActive           Boolean      @default(true)    // Added for account deactivation
@@ -30,6 +39,15 @@ model User {
   services           Service?
   paymentInfo        Payment?
   updateRequests     UpdateRequest[]
+
+  isDeleted Boolean   @default(false)
+  isBlocked Boolean   @default(false)
+
+    
+   googleCalendarId   String?
+  googleRefreshToken String?
+
+
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 }
