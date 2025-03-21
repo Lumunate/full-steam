@@ -54,7 +54,7 @@ Learn More About Daycare Matching
 
         </Box>
         <Box >
-          <Image src="/home/daycare-spot.png" alt="hero-image" width={615} height={327} />
+          <Image src="/home/new-service/daycare-spot.png" alt="hero-image" width={615} height={327} />
 
         </Box>
 

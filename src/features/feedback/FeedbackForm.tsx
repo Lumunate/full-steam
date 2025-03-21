@@ -181,7 +181,7 @@ export default function FeedbackForm() {
                   onChange={(_, newValue) => field.onChange(String(newValue))}  
                   size='large'
                   icon={<Image src='/icons/star.svg' alt='Filled Star' width={26} height={25} />} 
-                  emptyIcon={<Image src='/icons/unfilledstar.svg' alt='Outlined Star' width={26} height={25} />} 
+                  emptyIcon={<Image src='/icons/unfilled-star.svg' alt='Outlined Star' width={26} height={25} />} 
                   sx={{
                     '& .MuiRating-icon': {
                       marginRight: '5px', 

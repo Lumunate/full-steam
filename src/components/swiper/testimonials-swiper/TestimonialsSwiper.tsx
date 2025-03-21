@@ -48,7 +48,7 @@ const TestimonialsSwiper: FC = () => {
     return Array.from({ length: starCount }, (_, index) => (
       <Image
         key={index}
-        src='/icons/Star.svg'
+        src='/icons/star.svg'
         width={16}
         height={15}
         alt='Star-icon'
