@@ -22,7 +22,6 @@ export const ProcessCardHeading = styled(Typography)({
   alignItems: 'center',
   color: '#000',
   fontSize: '22px',
-  fontFamily: 'Urbanist',
   fontWeight: 600,
   gap: '6px',
 });
@@ -30,7 +29,6 @@ export const ProcessCardDescription = styled(Box)({
   
   color: '#000',
   fontSize: '16px',
-  fontFamily: 'Urbanist',
   fontWeight: 400,
   marginTop: '12px'
 });

@@ -14,8 +14,7 @@ export const CommonHeadingContainer = styled(Box)<{ align: string , textSize: st
 
 export const CommonHeadingTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 500,
-  color: '#005782', 
-  fontFamily: 'Urbanist, sans-serif',
+  color: '#005782',
   fontStyle: 'normal',
   whiteSpace: 'nowrap',
   textAlign: 'center',
@@ -25,5 +24,5 @@ export const CommonHeadingTypography = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down('sm')]: {
     fontSize: '12px',
-  }
+  },
 }));

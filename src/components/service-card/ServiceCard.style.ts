@@ -20,14 +20,12 @@ export const CardHeading = styled(Typography)(() => ({
   fontSize: '33px',
   fontWeight: 600,
   color: '#005782',
-  fontFamily: 'Urbanist',
   textWrap: 'nowrap'
 }));
 export const CardDescription = styled(Typography)(() => ({
   fontSize: '16px',
   fontWeight: 400,
   color: '#005782',
-  fontFamily: 'Urbanist',
   textTransform: 'capitalize',
 
 }));

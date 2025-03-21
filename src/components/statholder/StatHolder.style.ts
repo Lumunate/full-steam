@@ -6,7 +6,7 @@ export const StatHolderContainer = styled(Box)(() => ({
   fontSize: '12px',
   fontWeight: 700,
   height: '75px',
-  fontFamily: 'Urbanist, sans-serif',
+  fontFamily: ', sans-serif',
   display: 'flex',
   color: '#1570B8',
   alignItems: 'center',

@@ -5,7 +5,6 @@ import { styled, Typography } from '@mui/material';
 export const MainHeadingTypography = styled(Typography)(({ theme, color}) => ({
   fontSize: '56px',
   fontWeight: 700,
-  fontFamily: 'Urbanist, sans-serif',
   display: 'flex',
   color: color,
   alignItems: 'center',
@@ -18,7 +17,6 @@ export const MainHeadingSpan = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   
   color: '#1A3375', 
-  fontFamily: 'Urbanist, sans-serif',
   fontStyle: 'normal',
   whiteSpace: 'nowrap',
 }));

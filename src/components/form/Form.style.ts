@@ -13,7 +13,6 @@ export const StyledTextField = styled(TextField)<{
   input: {
     fontWeight: 600,
     fontSize: inputfontsize,
-    fontFamily: 'Urbanist, sans-serif',
     height: '36px',
     minHeight: '36px',
     padding: '0',
@@ -23,12 +22,10 @@ export const StyledTextField = styled(TextField)<{
     fontWeight: 600,
     fontSize: labelfontsize,
     textTransform: 'capitalize',
-    fontFamily: 'Urbanist, sans-serif',
   },
   '& .MuiInputBase-input.MuiInput-input': {
     fontWeight: 600,
     fontSize: inputfontsize, 
-    fontFamily: 'Urbanist, sans-serif',
   },
   '& .MuiFormHelperText-root.Mui-error ': {
     fontSize: '10px',
@@ -55,7 +52,6 @@ export const CustomFormControl = styled(FormControl)<{
     fontWeight: 600,
     fontSize: labelfontsize, 
     textTransform: 'capitalize',
-    fontFamily: 'Urbanist, sans-serif',
   },
 
   '& .MuiFormHelperText-root.Mui-error ': {
@@ -75,7 +71,6 @@ export const StyledSelectField = styled(Select)<{
   textAlign: 'start',
   fontWeight: 600,
   fontSize: inputfontsize,
-  fontFamily: 'Urbanist, sans-serif',
   overflow: 'hidden',
   height: '36px',
   minHeight: '36px',
@@ -105,7 +100,6 @@ export const CustomInputLabel = styled(MenuItem)({
   fontWeight: 600,
   fontSize: '16px', 
   textTransform: 'capitalize',
-  fontFamily: 'Urbanist, sans-serif',
   padding: '0',
   background: 'none',
   '&:hover ': {
@@ -122,5 +116,4 @@ export const StyledFormControl = styled(FormControl)({
 
 export const StyledMenuItem = styled(MenuItem)({
   fontSize: '14px',
-  fontFamily: 'Urbanist, sans-serif',
 });

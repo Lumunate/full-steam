@@ -28,7 +28,6 @@ const BoxLink = styled(Box)({
 const LinkHeading = styled(Typography)({
   color: '#fff',
   fontSize: '16px',
-  fontFamily: 'Urbanist',
   fontWeight: 700,
   marginBottom: '24px',
   letterSpacing: '1px',
@@ -41,10 +40,8 @@ const FooterLinksList = styled(List)({
   gap: '16px',
   padding: '0',
   color: '#fff',
-  fontFamily: 'Urbanist',
 });
 const FooterListItem = styled(ListItem)({
-  fontFamily: 'Urbanist',
 
   padding: '0',
 });
@@ -140,14 +137,12 @@ const FooterMediaItem = styled(ListItem)(({ theme }) => ({
 const FooterTypography = styled(Typography)(() => ({
   color: '#fff',
   fontSize: '16px',
-  fontFamily: 'Urbanist',
   fontWeight: 400,
   letterSpacing: '1px',
 }));
 
 const FooterCopyRight = styled(Typography)(() => ({
   fontSize: '16px',
-  fontFamily:  'Urbanist',
   fontWeight: 400,
   color: '#fff',
   letterSpacing: '1px',
@@ -159,7 +154,6 @@ const FooterCopyRight = styled(Typography)(() => ({
 //   fontSize: '16px',
 //   textTransform: 'capitalize',
 //   fontStyle: 'normal',
-//   fontFamily: 'Urbanist, sans-serif',
 //   margin: '0 36px',
 //   whiteSpace: 'nowrap',
 //   [theme.breakpoints.down('md')]: {

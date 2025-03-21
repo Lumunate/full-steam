@@ -51,7 +51,6 @@ export const ContactLinksHead = styled(Box)(({ theme }) => ({
 
 export const ContactHeadingTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
-  fontFamily: 'Urbanist, sans-serif',
   color: '#1F1F1F',
   fontSize: '50px',
   textTransform: 'uppercase',
@@ -76,7 +75,6 @@ export const ContactHeadingTypography = styled(Typography)(({ theme }) => ({
 }));
 export const ContactParaTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 500,
-  fontFamily: 'Urbanist, sans-serif',
   color: '#000000',
   fontSize: '16px',
   maxWidth: '586px',
@@ -94,7 +92,6 @@ export const ContactStyledLinkOne = styled(Link)(({ theme }) => ({
   flexDirection: 'row',
   alignItems: 'center',
   textDecoration: 'none',
-  fontFamily: 'Urbanist, sans-serif',
   fontSize: '16px',
   '&:hover': {
     textDecoration: 'underline',
