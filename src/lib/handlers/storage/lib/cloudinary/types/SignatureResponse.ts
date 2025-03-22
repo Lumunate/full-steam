@@ -1,4 +1,3 @@
-
 export interface SignatureResponse {
   signature: string;
   timestamp: number;

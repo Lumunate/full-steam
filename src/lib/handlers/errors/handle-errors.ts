@@ -11,14 +11,17 @@ export function handleErrors(error: unknown): NextResponse {
     return NextResponse.json(
       {
         error: 'Validation failed',
-        details: error.errors.reduce((acc, err) => {
-          const field = err.path.join('.');
+        details: error.errors.reduce(
+          (acc, err) => {
+            const field = err.path.join('.');
 
-          if (!acc[field]) acc[field] = [];
-          acc[field].push(err.message);
+            if (!acc[field]) acc[field] = [];
+            acc[field].push(err.message);
 
-          return acc;
-        }, {} as Record<string, string[]>),
+            return acc;
+          },
+          {} as Record<string, string[]>,
+        ),
       },
       { status: 400 },
     );
@@ -33,7 +36,7 @@ export function handleErrors(error: unknown): NextResponse {
       { status: 400 },
     );
   }
-  
+
   if (error instanceof PrismaClientKnownRequestError) {
     // Handle Prisma errors
     switch (error.code) {
@@ -48,7 +51,7 @@ export function handleErrors(error: unknown): NextResponse {
 
     case 'P2025': {
       const entityName = error.meta?.cause || 'Record';
-      
+
       return NextResponse.json(
         {
           error: 'Not Found',
