@@ -1,24 +1,13 @@
-import { Decimal } from '@prisma/client/runtime/library';
+
+import { UserRole } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
-import { CreateUser, RegisterUserInput, Role } from '@/types/auth/register-user';
+import { CreateUser, RegisterUserInput } from '@/types/auth/register-user';
 
 type User = {
   id: string;
   [key: string]: any;
 };
-
-export async function findUser(id: string) {
-  return prisma.user.findUniqueOrThrow({
-    where: { id },
-  });
-}
-
-export async function findUserByUsername(username: string) {
-  return prisma.user.findUniqueOrThrow({
-    where: { username },
-  });
-}
 
 export async function findUserByEmail(email: string) {
   return prisma.user.findUniqueOrThrow({
@@ -27,11 +16,11 @@ export async function findUserByEmail(email: string) {
 }
 
 export async function createUser(data: CreateUser) {
-  const birthDate = new Date(data.dateOfBirth);
+  const birthDate = new Date(data.dateOfBirth as string);
 
   return prisma.user.create({
     data: {
-      role: data.role || Role.USER,
+      role: data.role || UserRole.USER,
       firstName: data.firstName,
       lastName: data.lastName,
       dateOfBirth: birthDate,
@@ -47,9 +36,9 @@ export async function createUser(data: CreateUser) {
 }
 
 export async function registerUser(data: RegisterUserInput) {
-  const dateOfBirth = new Date(data.dateOfBirth);
+  const dateOfBirth = new Date(data.dateOfBirth as string);
   
-  const hourlyRate = data.hourlyRate ? new Decimal(data.hourlyRate) : null;
+  const hourlyRate = data.hourlyRate ? Number(data.hourlyRate) : null;
 
   return prisma.user.create({
     data: {
@@ -81,7 +70,7 @@ export async function registerUser(data: RegisterUserInput) {
       paymentCardExpiry: data.paymentCardExpiry,
       paymentCardCvv: data.paymentCardCvv,
       savePaymentCard: data.savePaymentCard,
-      isApproved: data.role !== Role.HELPER, 
+      isApproved: data.role !== UserRole.HELPER, 
     },
   });
 }

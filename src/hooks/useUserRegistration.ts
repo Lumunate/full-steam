@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { useState } from 'react';
 
 import { useSnackbar } from '@/components/snackbar';
 import { RegisterUserInput } from '@/types/auth/register-user';
@@ -13,6 +12,9 @@ interface FileData {
   profileImage?: File | null;
 }
 
+type RegistrationInput = Omit<RegisterUserInput, 
+  'governmentIdDocumentUrl' | 'policeCheckDocumentUrl' | 'image'> & FileData;
+
 interface RegistrationState {
   isLoading: boolean;
   isSuccess: boolean;
@@ -21,34 +23,16 @@ interface RegistrationState {
 }
 
 interface UseUserRegistrationReturn {
-  register: (userData: Omit<RegisterUserInput, 
-    'governmentIdDocumentUrl' | 'policeCheckDocumentUrl' | 'image'> & FileData) => Promise<void>;
+  register: (userData: RegistrationInput) => void;
   registrationState: RegistrationState;
 }
 
 export const useUserRegistration = (): UseUserRegistrationReturn => {
-  const [registrationState, setRegistrationState] = useState<RegistrationState>({
-    isLoading: false,
-    isSuccess: false,
-    error: null,
-    data: null,
-  });
-  
-  const { uploadFile, isUploading } = useCloudinaryUpload();
+  const { uploadFile } = useCloudinaryUpload();
   const { showSnackbar } = useSnackbar();
 
-  const register = async (userData: Omit<RegisterUserInput, 
-    'governmentIdDocumentUrl' | 'policeCheckDocumentUrl' | 'image'> & FileData): Promise<void> => {
-    
-    // Reset state
-    setRegistrationState({
-      isLoading: true,
-      isSuccess: false,
-      error: null,
-      data: null,
-    });
-
-    try {
+  const registerMutation = useMutation({
+    mutationFn: async (userData: RegistrationInput) => {
       const fileUploads = [];
       let governmentIdDocumentUrl = '';
       let policeCheckDocumentUrl = '';
@@ -78,7 +62,6 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
         );
       }
 
-      // Wait for all file uploads to complete
       if (fileUploads.length > 0) {
         await Promise.all(fileUploads);
       }
@@ -98,31 +81,24 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
         ...(imageUrl && { image: imageUrl }),
       };
 
+      // Submit registration data to API
       const response = await axios.post('/api/user/register', registrationData);
 
-      // Set success state
-      setRegistrationState({
-        isLoading: false,
-        isSuccess: true,
-        error: null,
-        data: response.data,
-      });
-
-      // Show success notification
+      return response.data;
+    },
+    onSuccess: (data) => {
       showSnackbar({
         type: 'success',
         title: 'Registration Successful',
         message: 'Your account has been created successfully.',
       });
-
-    } catch (error) {
-      // Handle errors
+    },
+    onError: (error: Error | AxiosError) => {
       let errorMessage = 'An error occurred during registration.';
       
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<any>;
         
-        // Extract error message from the API response
         if (axiosError.response?.data) {
           const { message, error: errorTitle } = axiosError.response.data;
 
@@ -141,24 +117,21 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
         errorMessage = error.message;
       }
 
-      setRegistrationState({
-        isLoading: false,
-        isSuccess: false,
-        error: errorMessage,
-        data: null,
-      });
-
-      // Show error notification
       showSnackbar({
         type: 'error',
         title: 'Registration Failed',
         message: errorMessage,
       });
     }
-  };
+  });
 
   return {
-    register,
-    registrationState,
+    register: (userData: RegistrationInput) => registerMutation.mutate(userData),
+    registrationState: {
+      isLoading: registerMutation.isPending,
+      isSuccess: registerMutation.isSuccess,
+      error: registerMutation.error ? (registerMutation.error as Error).message : null,
+      data: registerMutation.data,
+    }
   };
 };

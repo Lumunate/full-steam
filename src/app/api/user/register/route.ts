@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server';
 
 import handleErrors from '@/lib/handlers/errors';
@@ -10,9 +9,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = registerUserSchema.parse(body);
     
-    if (typeof validatedData.email !== 'string') {
-      throw new Error('Invalid email format');
-    }
     const user = await registerUser(validatedData as { email: string } & typeof validatedData);
     
     const { 

@@ -1,23 +1,5 @@
+import { Gender, PaymentMethod, UserRole } from '@prisma/client';
 import { z } from 'zod';
-
-// Define enum values directly instead of importing from @prisma/client
-export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-  OTHER = 'OTHER',
-}
-
-export enum Role {
-  SERVICE_MASTER = 'SERVICE_MASTER',
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  HELPER = 'HELPER',
-}
-
-export enum PaymentMethod {
-  E_TRANSFER = 'E_TRANSFER',
-  DIRECT_DEPOSIT = 'DIRECT_DEPOSIT',
-}
 
 export const registerUserSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -28,7 +10,7 @@ export const registerUserSchema = z.object({
   city: z.string().min(1, 'City is required'),
   postalCode: z.string().min(1, 'Postal code is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  gender: z.enum([Gender.MALE, Gender.FEMALE, Gender.OTHER], {
+  gender: z.nativeEnum(Gender, {
     message: 'Gender is required',
   }),
   dateOfBirth: z.string().min(1, 'Date of birth is required'),
@@ -36,12 +18,7 @@ export const registerUserSchema = z.object({
     message: 'You must agree to the terms and conditions',
   }),
   
-  role: z.enum([
-    Role.SERVICE_MASTER,
-    Role.ADMIN,
-    Role.USER,
-    Role.HELPER,
-  ]).default(Role.USER),
+  role: z.nativeEnum(UserRole).default(UserRole.USER),
   
   isApproved: z.boolean().optional(),
   
@@ -51,7 +28,7 @@ export const registerUserSchema = z.object({
   hourlyRate: z.number().optional(),
   governmentIdDocumentUrl: z.string().optional(),
   policeCheckDocumentUrl: z.string().optional(),
-  paymentMethod: z.enum([PaymentMethod.E_TRANSFER, PaymentMethod.DIRECT_DEPOSIT]).optional(),
+  paymentMethod: z.nativeEnum(PaymentMethod).optional(),
   eTransferEmail: z.string().email().optional(),
   bankTransitNumber: z.string().optional(),
   bankInstitutionNumber: z.string().optional(),
@@ -65,5 +42,4 @@ export const registerUserSchema = z.object({
 });
 
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
-// For compatibility with existing code
 export type CreateUser = RegisterUserInput;
