@@ -1,9 +1,9 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 import { Button } from '../../../components/buttons/Button.style';
-import SectionHeading from '../../../components/section-heading/SectionHeading';
 import TestimonialsSwiper from '../../../components/swiper/testimonials-swiper/TestimonialsSwiper';
 import { TestimonialsHeading, TestimonialsWrapper, TestimonialContiner } from '../../../features/home/testimonials/Testimonials.style';
+import SectionHeading from '../../components/section-heading/SectionHeading';
 
 const Testimonials = () => {
   return (

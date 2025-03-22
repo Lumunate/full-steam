@@ -10,7 +10,7 @@ import {
   FeedbackHeadingTypography,
   FeedbackParaTypography,
   FeedbackIconHead,
-} from './Feedback.style';
+} from '../../../../features/feedback/Feedback.style';
 export default function FeedbackPage() {
   return (
     <FeedbackContainer>

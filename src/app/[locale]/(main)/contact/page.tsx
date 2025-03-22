@@ -12,7 +12,7 @@ import {
   ContactLinksHead,
   ContactStyledLinkOne,
   ContactIconHead,
-} from './Contact.style';
+} from '../../../../features/contact/Contact.style';
 
 export default function ContactPage() {
   return (

@@ -3,12 +3,13 @@ import Image from 'next/image';
 
 import { Button } from '@/components/buttons/Button.style';
 import { AppContentWrapper } from '@/components/common/Global.style';
-import SectionDescription from '@/components/section-description/SectionDescription';
-import SectionHeading from '@/components/section-heading/SectionHeading';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
+import SectionHeading from '@/features/components/section-heading/SectionHeading';
 
 import { NewServiceWrapper, HeroDesriptionHolder } from './NewService.style';
 import { ServiceCheckList } from './NewService.style';
+import { SectionDescriptionText } from '../Home.style';
+
 const checkList =[
   'Express interest in daycare spots in your area',
   'Be the first to know when spots become available',
@@ -26,10 +27,12 @@ const NewService: React.FC = () => {
         <Box >
 
           <SectionHeading text='New Service' align="start" marginBottom="23px" />
-          <SectionMainHeading text="Find Your Child's" span="Perfect Daycare Spot" />
+          <SectionMainHeading text="Find Your Child's " span="Perfect Daycare Spot" />
           <HeroDesriptionHolder>
 
-            <SectionDescription  text="Struggling to find reliable daycare? Join our waitlist service to be notified when spots become available in your area." />
+            <SectionDescriptionText>
+              Struggling to find reliable daycare? Join our waitlist service to be notified when spots become available in your area.
+            </SectionDescriptionText>  
             <Box sx={{margin: '40px 0'}}>
 
               {checkList.map((item, index) => ( 
@@ -39,7 +42,6 @@ const NewService: React.FC = () => {
                 </ServiceCheckList>
               ))}
             </Box>
-           
             <Button
               special
               fontSize="16px"

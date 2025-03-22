@@ -5,19 +5,26 @@ interface SectionHeadingProps {
   text: string;
   span?: string;     
   color? :string; 
+  text2?: string;
+  center?: boolean;
+  marginbottom?: string;
 }
 
 const SectionMainHeading: React.FC<SectionHeadingProps> = ({ 
   text, 
   span = '',
-  color = 'black'
+  color = 'black',
+  text2 = '',
+  center = false,
+  marginbottom = '18px'
 }) => {
   return (
-    <MainHeadingTypography variant="h2" color={color} >
+    <MainHeadingTypography marginbottom ={marginbottom} center={center} variant="h2" color={color} >
       {text}
-      <MainHeadingSpan>
+      <MainHeadingSpan variant='p'>
         {span}
       </MainHeadingSpan>
+      {text2}
     </MainHeadingTypography>
 
   );
