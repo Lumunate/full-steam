@@ -4,7 +4,9 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { useSnackbar } from '@/contexts/SnackbarContext';
+
+import { useSnackbar } from '@/components/snackbar';
+
 import { DropZone, Input, UploadContainer } from './FileUpload.style';
 import {
   CloudinaryUploadResponse,
@@ -12,220 +14,192 @@ import {
   UploadStatus,
 } from './FileUpload.types';
 import { SignatureResponse } from '../../types/SignatureResponse';
+
 const FileUpload: React.FC<FileUploadProps> = ({
-  maxFileSize = 5 * 1024 * 1024,
-  maxFiles = 1,
+  maxFileSize = 10 * 1024 * 1024, // 10MB default
+  maxFiles = 5,
   hoist = () => { },
   reset,
-  acceptTypes = 'image/*',
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [, setUploadProgress] = useState<{ [key: string]: number }>({});
   const { showSnackbar } = useSnackbar();
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
   useEffect(() => {
     if (reset) {
       setFiles([]);
       setUploadStatus(null);
       setUploadProgress({});
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-        setPreviewUrl(null);
-      }
-      hoist('');
+      hoist(''); // Clear the hoisted value
     }
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [reset, hoist, previewUrl]);
-  const validateFiles = useCallback(
-    (fileList: File[]): { isValid: boolean; error?: string } => {
-      const hasInvalidType = fileList.some(
-        file => !file.type.match(acceptTypes),
-      );
-      if (hasInvalidType) {
-        return { isValid: false, error: `Only ${acceptTypes.replace('*', '')} files are allowed` };
-      }
-      const hasInvalidSize = fileList.some(file => file.size > maxFileSize);
-      if (hasInvalidSize) {
-        return {
-          isValid: false,
-          error: `Files must be smaller than ${maxFileSize / (1024 * 1024)}MB`,
-        };
-      }
-      if (files.length + fileList.length > maxFiles) {
-        return {
-          isValid: false,
-          error: `Maximum ${maxFiles} files allowed`,
-        };
-      }
-      return { isValid: true };
-    },
-    [acceptTypes, maxFileSize, maxFiles, files.length]
-  );
-  const getSignature = async (file: File): Promise<SignatureResponse> => {
-    try {
-      const response = await axios.post('/api/upload-url', {
-        fileName: file.name,
-        fileType: file.type,
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error getting upload signature:', error);
-      throw new Error('Failed to get upload authorization');
+  }, [reset, hoist]);
+
+  const validateFiles = (
+    fileList: File[],
+  ): { isValid: boolean; error?: string } => {
+    const hasInvalidType = fileList.some(
+      file => file.type !== 'application/pdf',
+    );
+
+    if (hasInvalidType) {
+      return { isValid: false, error: 'Only PDF files are allowed' };
     }
+
+    const hasInvalidSize = fileList.some(file => file.size > maxFileSize);
+
+    if (hasInvalidSize) {
+      return {
+        isValid: false,
+        error: `Files must be smaller than ${maxFileSize / (1024 * 1024)}MB`,
+      };
+    }
+
+    if (files.length + fileList.length > maxFiles) {
+      return {
+        isValid: false,
+        error: `Maximum ${maxFiles} files allowed`,
+      };
+    }
+
+    return { isValid: true };
   };
+
+  const getSignature = async (file: File): Promise<SignatureResponse> => {
+    const response = await axios.post('/api/upload-url', {
+      fileName: file.name,
+      fileType: file.type,
+    });
+
+    return response.data;
+  };
+
   const uploadFile = async (
     file: File,
     signature: SignatureResponse,
   ): Promise<CloudinaryUploadResponse> => {
     const formData = new FormData();
+
     formData.append('file', file);
     formData.append('api_key', signature.apiKey);
     formData.append('timestamp', signature.timestamp.toString());
     formData.append('signature', signature.signature);
-    formData.append('folder', signature.folder || 'profile_pictures');
-    if (signature.publicId) {
-      formData.append('public_id', signature.publicId);
+    formData.append('resource_type', 'auto');
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${signature.cloudName}/auto/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Upload failed');
     }
-    formData.append('resource_type', 'image');
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${signature.cloudName}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        },
-      );
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Cloudinary upload failed:', errorData);
-        throw new Error(`Upload failed: ${errorData.error?.message || response.statusText}`);
-      }
-      return response.json();
-    } catch (error) {
-      console.error('Error during file upload:', error);
-      throw error;
-    }
+
+    return response.json();
   };
+
   const onDragOver = useCallback((e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
     e.stopPropagation();
   }, []);
+
   const onDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>): void => {
       e.preventDefault();
       e.stopPropagation();
+
       const droppedFiles = Array.from(e.dataTransfer.files);
       const validation = validateFiles(droppedFiles);
+
       if (!validation.isValid) {
         setUploadStatus({
           type: 'error',
           message: validation.error || 'Validation failed',
         });
-        showSnackbar({
-          message: validation.error || 'Validation failed',
-          severity: 'error',
-        });
+
         return;
       }
-      if (droppedFiles[0] && droppedFiles[0].type.startsWith('image/')) {
-        const objectUrl = URL.createObjectURL(droppedFiles[0]);
-        if (previewUrl) {
-          URL.revokeObjectURL(previewUrl);
-        }
-        setPreviewUrl(objectUrl);
-      }
-      setFiles(prevFiles => {
-        if (maxFiles === 1) {
-          return droppedFiles;
-        }
-        return [...prevFiles, ...droppedFiles];
-      });
+
+      setFiles(prevFiles => [...prevFiles, ...droppedFiles]);
       setUploadStatus(null);
     },
-    [validateFiles, previewUrl, showSnackbar, maxFiles],
+    [files.length],
   );
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (!e.target.files) return;
+
     const selectedFiles = Array.from(e.target.files);
     const validation = validateFiles(selectedFiles);
+
     if (!validation.isValid) {
       setUploadStatus({
         type: 'error',
         message: validation.error || 'Validation failed',
       });
-      showSnackbar({
-        message: validation.error || 'Validation failed',
-        severity: 'error',
-      });
+
       return;
     }
-    if (selectedFiles[0] && selectedFiles[0].type.startsWith('image/')) {
-      const objectUrl = URL.createObjectURL(selectedFiles[0]);
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-      setPreviewUrl(objectUrl);
-    }
-    setFiles(prevFiles => {
-      if (maxFiles === 1) {
-        return selectedFiles;
-      }
-      return [...prevFiles, ...selectedFiles];
-    });
+
+    setFiles(prevFiles => [...prevFiles, ...selectedFiles]);
     setUploadStatus(null);
   };
+
   const uploadToCloudinary = async (): Promise<void> => {
     setUploading(true);
     setUploadStatus(null);
+
     try {
       if (!files[0]) {
         return;
       }
+
       const signature = await getSignature(files[0]);
       const uploadedUrls: string[] = [];
+
       for (const file of files) {
         try {
+          // Initialize progress for this file
           setUploadProgress(prev => ({
             ...prev,
             [file.name]: 0,
           }));
+
           const result = await uploadFile(file, signature);
+
           uploadedUrls.push(result.secure_url);
+
+          // Set progress to 100 for completed file
           setUploadProgress(prev => ({
             ...prev,
             [file.name]: 100,
           }));
+        } catch {
           showSnackbar({
-            message: 'Image uploaded successfully',
-            severity: 'success',
+            title: 'Upload Error',
+            message: `Failed to upload ${file.name}`,
           });
-        } catch (error) {
-          console.error(`Upload error for ${file.name}:`, error);
-          showSnackbar({
-            message: `Failed to upload ${file.name}. Please try again.`,
-            severity: 'error',
-          });
-          setUploadStatus({
-            type: 'error',
-            message: error instanceof Error ? error.message : 'Failed to upload file',
-          });
-          return;
+          throw new Error(`Failed to upload ${file.name}`);
         }
       }
+
       setUploadStatus({
         type: 'success',
         message: `Successfully uploaded ${uploadedUrls.length} files`,
         urls: uploadedUrls,
       });
+
+      // hoist upwards into parent
       if (uploadedUrls[0]) {
         hoist(uploadedUrls[0]);
       }
+
+      // setFiles([]);
+      setUploadProgress({});
     } catch (error) {
       setUploadStatus({
         type: 'error',
@@ -236,11 +210,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
       setUploading(false);
     }
   };
+
   useEffect(() => {
     if (files.length > 0) {
       uploadToCloudinary();
     }
   }, [files]);
+
   return (
     <UploadContainer>
       {uploading ? (
@@ -256,20 +232,20 @@ const FileUpload: React.FC<FileUploadProps> = ({
           }}
         >
           <CircularProgress
-            size={24}
+            size={2}
             color={'primary'}
-            sx={{ mr: 2 }}
+            sx={{ mr: 2, color: '#ccc' }}
           />
-          <Typography>Uploading...</Typography>
         </Box>
       ) : (
         <DropZone onDragOver={onDragOver} onDrop={onDrop}>
           <Input
             type='file'
-            accept={acceptTypes}
+            accept='.pdf'
             onChange={handleFileSelect}
             id='file-input'
           />
+
           <label htmlFor='file-input'>
             <Button
               disableRipple
@@ -285,29 +261,29 @@ const FileUpload: React.FC<FileUploadProps> = ({
               }}
             >
               {uploadStatus?.type === 'error' ? (
-                <Stack alignItems="center">
-                  <ErrorIcon sx={{ color: 'error.main', mb: 1 }} />
+                <Stack>
+                  <ErrorIcon sx={{ mr: 2, color: 'black' }} />
                   <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
-                    There was an error uploading your file. Please try again.
+                    There seems to be an error with the file you are trying to upload.
                   </Typography>
                 </Stack>
               ) : uploadStatus?.type === 'success' ? (
-                <Stack alignItems="center">
-                  <DoneAllIcon sx={{ color: 'success.main', mb: 1 }} />
+                <Stack>
+                  <DoneAllIcon sx={{ mr: 2, color: 'black' }} />
                   <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
                     File Uploaded Successfully
                   </Typography>
                 </Stack>
               ) : (
-                <Stack alignItems="center">
+                <Stack>
                   <UploadIcon
                     sx={{
-                      color: 'primary.main',
-                      mb: 1
+                      margin: '0 auto',
+                      transform: 'translate(-14px, -2px)',
                     }}
                   />
                   <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
-                    Drag & drop or click to upload profile picture
+                    Browse and choose the files you want to upload from your computer
                   </Typography>
                 </Stack>
               )}
@@ -315,23 +291,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
           </label>
         </DropZone>
       )}
-      {}
-      {previewUrl && (
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Box 
-            component="img"
-            src={previewUrl}
-            alt="Preview"
-            sx={{
-              maxWidth: '100%', 
-              maxHeight: '200px', 
-              borderRadius: '8px',
-              objectFit: 'contain'
-            }}
-          />
-        </Box>
-      )}
     </UploadContainer>
   );
 };
+
 export default FileUpload;

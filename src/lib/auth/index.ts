@@ -1,3 +1,3 @@
-import { authOptions } from './auth-options';
+import { options } from './auth-options';
 
-export { authOptions };
+export { options };

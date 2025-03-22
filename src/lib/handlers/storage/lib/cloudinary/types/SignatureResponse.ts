@@ -1,10 +1,7 @@
 
-
 export interface SignatureResponse {
-  apiKey: string;
-  timestamp: number;
   signature: string;
+  timestamp: number;
   cloudName: string;
-  publicId?: string;
-  folder?: string; 
+  apiKey: string;
 }

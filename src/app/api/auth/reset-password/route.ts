@@ -1,24 +1,42 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-import { forgotPassword } from '@/services/AuthService';
+import handleErrors from '@/lib/handlers/errors';
+import { forgotPassword, resetPassword } from '@/services/AuthService';
+import { passwordResetSchema } from '@/types/auth/password-reset';
+import { resetPasswordSchema } from '@/types/auth/reset-password';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json();
-    console.log(`Password reset requested for email: ${email}`);
+    const body = await request.json();
+    const { email } = resetPasswordSchema.parse(body);
 
     await forgotPassword(email);
 
-    // For security reasons, always return success even if email doesn't exist
-    return NextResponse.json({ 
-      message: 'If a user with that email exists, a password reset link has been sent.',
-    });
-  } catch (error: any) {
-    console.error('Failed to request password reset:', error);
-    
-    // Still return a 200 for security (don't reveal if email exists)
-    return NextResponse.json({ 
-      message: 'If a user with that email exists, a password reset link has been sent.',
-    });
+    return NextResponse.json(
+      { message: 'Password reset email sent successfully' },
+      { status: 200 },
+    );
+  } catch (error: unknown) {
+    return handleErrors(error);
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { password } = passwordResetSchema.parse(body);
+    const query = request.nextUrl.searchParams;
+    const token = query.get('token');
+    const identifier = query.get('identifier');
+
+    const data = await resetPassword(
+      token as string,
+      identifier as string,
+      password,
+    );
+
+    return NextResponse.json({ ...data }, { status: 200 });
+  } catch (error: unknown) {
+    return handleErrors(error);
   }
 }

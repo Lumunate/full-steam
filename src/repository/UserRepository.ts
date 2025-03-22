@@ -1,264 +1,129 @@
-import { prisma } from '@/lib/prisma';
-import { Prisma, User } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
-/**
- * Find a user by their ID
- */
-export async function findUserById(id: string) {
-  return prisma.user.findUnique({
+import { prisma } from '@/lib/prisma';
+import { CreateUser, RegisterUserInput, Role } from '@/types/auth/register-user';
+
+type User = {
+  id: string;
+  [key: string]: any;
+};
+
+export async function findUser(id: string) {
+  return prisma.user.findUniqueOrThrow({
     where: { id },
   });
 }
 
-/**
- * Find a user by their email
- */
+export async function findUserByUsername(username: string) {
+  return prisma.user.findUniqueOrThrow({
+    where: { username },
+  });
+}
+
 export async function findUserByEmail(email: string) {
-  return prisma.user.findUnique({
+  return prisma.user.findUniqueOrThrow({
     where: { email },
   });
 }
 
-/**
- * Create a new user
- */
-export async function createUser(data: Prisma.UserCreateInput): Promise<User> {
+export async function createUser(data: CreateUser) {
+  const birthDate = new Date(data.dateOfBirth);
+
   return prisma.user.create({
-    data,
+    data: {
+      role: data.role || Role.USER,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      dateOfBirth: birthDate,
+      gender: data.gender,
+      email: data.email,
+      password: data.password,
+      phoneNumber: data.phoneNumber,
+      address: data.address || '',
+      city: data.city || '',
+      postalCode: data.postalCode || '',
+    },
   });
 }
 
-/**
- * Update user profile
- */
-export async function updateUserProfile(
-  userId: string,
-  data: Prisma.UserUpdateInput
-) {
-  return prisma.user.update({
-    where: { id: userId },
-    data,
+export async function registerUser(data: RegisterUserInput) {
+  const dateOfBirth = new Date(data.dateOfBirth);
+  
+  const hourlyRate = data.hourlyRate ? new Decimal(data.hourlyRate) : null;
+
+  return prisma.user.create({
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      city: data.city,
+      postalCode: data.postalCode,
+      password: data.password,
+      gender: data.gender,
+      dateOfBirth: dateOfBirth,
+      role: data.role,
+      agreeToTerms: data.agreeToTerms,
+      image: data.image,
+      shortBio: data.shortBio,
+      hourlyRate: hourlyRate,
+      governmentIdDocumentUrl: data.governmentIdDocumentUrl,
+      policeCheckDocumentUrl: data.policeCheckDocumentUrl,
+      paymentMethod: data.paymentMethod,
+      eTransferEmail: data.eTransferEmail,
+      bankTransitNumber: data.bankTransitNumber,
+      bankInstitutionNumber: data.bankInstitutionNumber,
+      bankAccountNumber: data.bankAccountNumber,
+      additionalInformation: data.additionalInformation,
+      paymentCardName: data.paymentCardName,
+      paymentCardNumber: data.paymentCardNumber,
+      paymentCardExpiry: data.paymentCardExpiry,
+      paymentCardCvv: data.paymentCardCvv,
+      savePaymentCard: data.savePaymentCard,
+      isApproved: data.role !== Role.HELPER, 
+    },
   });
 }
 
-/**
- * Update user password
- */
+export async function findAllUsers() {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      dateOfBirth: true,
+      gender: true,
+      phoneNumber: true,
+      email: true,
+      role: true,
+    },
+  });
+}
+
 export async function updatePassword(
   userId: string,
   hashedPassword: string,
-  resetTokenId?: string
+  tokenId: string,
 ) {
-  const updateData: Prisma.UserUpdateInput = {
-    password: hashedPassword,
-  };
+  const [updatedUser] = await prisma.$transaction([
+    prisma.user.update({
+      where: { id: userId },
+      data: {
+        password: hashedPassword,
+      },
+    }),
+    prisma.verificationRequest.delete({
+      where: { id: tokenId },
+    }),
+  ]);
 
-  // If a reset token ID is provided, clear it
-  if (resetTokenId) {
-    updateData.resetToken = null;
-    updateData.resetTokenExpiry = null;
-  }
+  return updatedUser;
+}
 
+export const updateUser = async (userId: string, data: Partial<User>) => {
   return prisma.user.update({
     where: { id: userId },
-    data: updateData,
+    data,
   });
-}
-
-/**
- * Toggle user approval status
- */
-export async function toggleUserApproval(userId: string, isApproved: boolean) {
-  return prisma.user.update({
-    where: { id: userId },
-    data: { isApproved },
-  });
-}
-
-/**
- * Toggle user active status
- */
-export async function toggleUserActiveStatus(userId: string, isActive: boolean) {
-  return prisma.user.update({
-    where: { id: userId },
-    data: { isActive },
-  });
-}
-
-/**
- * Get all users (for admin)
- */
-export async function getAllUsers() {
-  return prisma.user.findMany({
-    where: {
-      isAdmin: false, // Don't show admin users
-    },
-    select: {
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true,
-      phone: true,
-      address: true,
-      city: true,
-      postalCode: true,
-      additionalInfo: true,
-      profilePicture: true, // Include profile picture
-      role: true, // Include role
-      isApproved: true,
-      isActive: true,
-      createdAt: true,
-      children: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          age: true,
-          specialNotes: true,
-        },
-      },
-      services: {
-        select: {
-          childcare: true,
-          mealPreparation: true,
-          lightHousekeeping: true,
-          tutoring: true,
-          petMinding: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-}
-
-/**
- * Get user details by ID (for admin)
- */
-export async function getUserDetailsById(userId: string) {
-  return prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      email: true,
-      phone: true,
-      address: true,
-      city: true,
-      postalCode: true,
-      additionalInfo: true,
-      profilePicture: true, // Include profile picture
-      role: true, // Include role
-      isApproved: true,
-      isActive: true,
-      createdAt: true,
-      children: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          age: true,
-          specialNotes: true,
-        },
-      },
-      services: {
-        select: {
-          childcare: true,
-          mealPreparation: true,
-          lightHousekeeping: true,
-          tutoring: true,
-          petMinding: true,
-        },
-      },
-      paymentInfo: {
-        select: {
-          id: true,
-          nameOnCard: true,
-          cardNumber: true,
-          expiryDate: true,
-          cvv: true,
-          saveCard: true,
-        }
-      }
-    },
-  });
-}
-
-/**
- * Get user profile (for dashboard)
- */
-export async function getUserProfile(userId: string) {
-  return prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      email: true,
-      phone: true,
-      address: true,
-      city: true,
-      postalCode: true,
-      additionalInfo: true,
-      profilePicture: true, // Include profile picture
-      role: true, // Include role
-      dateOfBirth: true, // Include dateOfBirth
-      children: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          age: true,
-          specialNotes: true,
-        },
-      },
-      services: {
-        select: {
-          childcare: true,
-          mealPreparation: true,
-          lightHousekeeping: true,
-          tutoring: true,
-          petMinding: true,
-        },
-      },
-      paymentInfo: {
-        select: {
-          id: true,
-          nameOnCard: true,
-          cardNumber: true,
-          expiryDate: true,
-          cvv: true,
-          saveCard: true,
-        }
-      },
-      updateRequests: {
-        where: {
-          OR: [
-            { status: "PENDING" },
-            { 
-              status: { in: ["APPROVED", "REJECTED"] },
-              createdAt: {
-                gte: new Date(new Date().setDate(new Date().getDate() - 7)) // Last 7 days
-              }
-            }
-          ]
-        },
-        select: {
-          id: true,
-          requestType: true,
-          status: true,
-          createdAt: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
-  });
-}
+};

@@ -1,107 +1,76 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { compare } from 'bcryptjs';
-import { NextAuthOptions, Session } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { NextAuthOptions } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 
-import { prisma } from '../prisma';
+import { prisma } from '@/lib/prisma';
+
 import AuthError, { AuthErrorType } from '../handlers/errors/types/AuthError';
 
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string;
-      email: string;
-      name: string;
-      isAdmin: boolean;
-    };
-  }
-}
-
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: 'jwt',
-    maxAge: 24 * 60 * 60, // 24 hours
-  },
-  pages: {
-    signIn: '/',
-    error: '/?error=auth',
-  },
+export const options: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
+    Credentials({
+      id: 'credentials',
       name: 'Credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-    // Update the authorize function inside auth-options.ts
-async authorize(credentials) {
-  if (!credentials?.email || !credentials?.password) {
-    throw new Error('Email and password are required');
-  }
+      authorize: async credentials => {
+        if (!credentials?.email || !credentials?.password) {
+          throw new AuthError(AuthErrorType.MISSING_FIELDS, 400);
+        }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: credentials.email,
-    },
-  });
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email as string,
+          },
+        });
 
-  if (!user) {
-    throw new Error('User not found');
-  }
+        if (!user) {
+          throw new AuthError(AuthErrorType.USER_NOT_FOUND, 404);
+        }
 
-  const isPasswordValid = await compare(
-    credentials.password,
-    user.password
-  );
+        const isValidPassword =
+          (credentials.password as string) === user.password;
 
-  if (!isPasswordValid) {
-    throw new Error('Invalid credentials');
-  }
+        if (!isValidPassword) {
+          throw new AuthError(AuthErrorType.INVALID_CREDENTIALS, 401);
+        }
 
-  // Check if user is approved, except for admin
-  if (!user.isApproved && !user.isAdmin) {
-    throw new Error('Your account is pending approval. Please check your email for updates.');
-  }
-
-  return {
-    id: user.id,
-    email: user.email,
-    name: `${user.firstName} ${user.lastName}`,
-    isAdmin: user.isAdmin,
-    role: user.isAdmin ? 'admin' : 'family', // Add role property
-  };
-}
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.username,
+          role: user.role,
+        };
+      },
     }),
   ],
- // Update these callbacks in the authOptions to properly set isAdmin
-callbacks: {
-  async jwt({ token, user }) {
-    // On first sign in, add user info to token
-    if (user) {
-      console.log("Setting JWT token with user:", user);
-      token.id = user.id;
-      token.email = user.email;
-      token.name = user.name;
-      token.isAdmin = !!user.isAdmin;
-    }
-    return token;
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt',
   },
-  async session({ session, token }) {
-    console.log("Creating session from token:", token);
-    // Add user ID and admin status to session
-    if (token && session.user) {
-      session.user.id = token.id as string;
-      session.user.email = token.email as string;
-      session.user.name = token.name as string;
-      session.user.isAdmin = !!token.isAdmin;
-    }
-    return session;
-  },
-},
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+      }
 
-  debug: process.env.NODE_ENV === 'development',
-  secret: process.env.NEXTAUTH_SECRET,
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = {
+        ...session.user,
+        id: token.id as string,
+        role: token.role as string,
+        email: token.email as string,
+        name: token.name as string,
+      };
+
+      return session;
+    },
+  },
 };
-
-
