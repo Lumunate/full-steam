@@ -4,19 +4,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, CircularProgress, FormHelperText, InputLabel, MenuItem, Rating } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
-import DatePicker from 'react-datepicker';
+// import DatePicker from 'react-datepicker';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { feedbackSchema } from '@/app/[locale]/(main)/feedback/FeedbackSchema';
 import { useSnackbar } from '@/components/snackbar';
+import { useSubmitFeedbackForm } from '@/hooks/useFeedbackForm';
+import { feedbackSchema } from '@/types/feedback';
 
 import { FeedbackFormContainer } from './FeedbackFrom.style';
 import { Button } from '../../components/buttons/Button.style';
-import { CustomFormControl, StyledSelectField, StyledTextField, CustomInputLabel } from '../../components/form/Form.style';
-
-import { useSubmitFeedbackForm } from '@/hooks/useFeedbackForm';
+import { CustomFormControl, StyledSelectField, StyledTextField, CustomInputLabel } from '../../components/form/text-field.style';
 
 const defaultValues: IFeedback = {
   name: '',
@@ -152,7 +151,7 @@ export default function FeedbackForm() {
                     inputfontsize='18px'
                     fullWidth
                     IconComponent={() => (
-                      <Image src='/icons/down.svg' alt='Custom Dropdown Icon' width={7} height={8} />
+                      <Image src='/icons/arrow-down.svg' alt='Custom Dropdown Icon' width={7} height={8} />
                     )}
                     MenuProps={{
                       disableScrollLock: true,

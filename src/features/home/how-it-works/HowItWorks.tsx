@@ -6,12 +6,12 @@ import {Box} from '@mui/material';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { AppContentWrapper } from '@/components/common/Global.style';
-import ProcessCard from '@/components/process-cards/ProcessCards';
-import SectionDescription from '@/components/section-description/SectionDescription';
-import SectionHeading from '@/components/section-heading/SectionHeading';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
+import SectionHeading from '@/features/components/section-heading/SectionHeading';
+import ProcessCard from '@/features/home/components/process-cards/ProcessCards';
 
 import { ProcessMain, ProcessWrapper } from './HowItWorks.style';
+import { SectionDescriptionText } from '../Home.style';
 
 const processSteps = [
 
@@ -46,7 +46,9 @@ const HowItWorks: React.FC = () => {
             <SectionHeading text="Process" align="start" marginBottom="23px" />
             <SectionMainHeading text="How It Works" />
 
-            <SectionDescription  text="Getting started with Full Steam Ahead is simple. Here's how you can find the perfect Mom Helper for your family."  />
+            <SectionDescriptionText>
+              Getting started with Full Steam Ahead is simple. Here&apos;s how you can find the perfect Mom Helper for your family.
+            </SectionDescriptionText>  
           </Box>
 
           {/* <Swiper

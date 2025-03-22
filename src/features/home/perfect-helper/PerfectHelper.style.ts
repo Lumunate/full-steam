@@ -5,7 +5,7 @@ import { Box,  styled, Typography } from '@mui/material';
 export const PerfectHelperWrapper = styled(Box)({
   background: `url('/home/perfect-helper/perfect-helper.png')`,
   width: '100%',
-  minHeight: 'calc(50vh )',
+  minHeight: 'calc(60vh )',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   position: 'relative'
@@ -32,6 +32,7 @@ export const ContentWrapper = styled(Box)({
 
 export const HelperTypography = styled(Typography)({
   fontSize: '18px',
-  color: '#fff'
+  color: '#fff',
+  textAlign: 'center'
   
 });

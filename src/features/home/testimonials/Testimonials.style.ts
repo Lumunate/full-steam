@@ -4,7 +4,7 @@ import { styled, Typography, Box,  } from '@mui/material';
 
 export const TestimonialsWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
-  padding: '150px 0 120px',
+  padding: '0 0 120px',
   textAlign: 'center',
   overflow: 'hidden',
   [theme.breakpoints.down('lg')]: {
@@ -18,7 +18,7 @@ export const TestimonialsWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const TestimonialContiner = styled(Box)(({ theme }) => ({
+export const TestimonialContiner = styled(Box)(() => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',

@@ -2,7 +2,7 @@
 
 import { Box, List, ListItem, styled, Typography } from '@mui/material';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { FC } from 'react';
 
 const FooterMain = styled(Box)({
@@ -22,7 +22,6 @@ const BoxLink = styled(Box)({
   width: '261px',
   justifyContent: 'flex-start',
   padding: '0',
-
 });
 
 const LinkHeading = styled(Typography)({
@@ -66,14 +65,12 @@ const FooterLower = styled(Box)({
 });
 
 const FooterLeft = styled(Box)({
-
   display: 'flex',
   flexDirection: 'column',
   gap: '19px',
   width: '261px',
-
 });
-const FooterWrapper = styled(Box)(({ theme }) =>({
+const FooterWrapper = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
@@ -87,7 +84,7 @@ const FooterWrapper = styled(Box)(({ theme }) =>({
   },
 }));
 
-const FooterLinksContainer = styled(List)(({ theme }) =>({
+const FooterLinksContainer = styled(List)(({ theme }) => ({
   display: 'flex',
   alignItems: 'flex-start',
   [theme.breakpoints.down('sm')]: {
@@ -97,22 +94,22 @@ const FooterLinksContainer = styled(List)(({ theme }) =>({
   },
 }));
 
-const FooterLogoHead = styled(Link)(({ theme }) =>({
+const FooterLogoHead = styled(Link)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  
+
   [theme.breakpoints.down('sm')]: {
-    width: '50%'
+    width: '50%',
   },
 }));
 
-const FooterMediaIcons = styled(List)(({ theme }) =>({
+const FooterMediaIcons = styled(List)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   [theme.breakpoints.down('sm')]: {
     width: '150px',
     justifyContent: 'center',
-    transform: 'translateY(-46px)'
+    transform: 'translateY(-46px)',
   },
 }));
 
@@ -128,7 +125,8 @@ const FooterMediaItem = styled(ListItem)(({ theme }) => ({
     paddingLeft: '6px',
   },
   '& img:hover': {
-    filter: 'brightness(0) saturate(100%) invert(0%) sepia(5%) saturate(7500%) hue-rotate(228deg) brightness(106%) contrast(106%)',
+    filter:
+      'brightness(0) saturate(100%) invert(0%) sepia(5%) saturate(7500%) hue-rotate(210deg) brightness(106%) contrast(106%)',
     transform: 'scale(1.2)',
     transition: 'transform 0.3s ease',
   },
@@ -143,6 +141,7 @@ const FooterTypography = styled(Typography)(() => ({
 
 const FooterCopyRight = styled(Typography)(() => ({
   fontSize: '16px',
+  fontFamily: 'Urbanist',
   fontWeight: 400,
   color: '#fff',
   letterSpacing: '1px',
@@ -174,79 +173,104 @@ const FooterCopyRight = styled(Typography)(() => ({
 
 const Footer: FC = () => {
   const pages = [
-    { heading: 'Services', links: [
-
-      'Child Care', 'Meal Preparation', 'Housekeeping' , 'Tutoring' , 'Elderly Check-in' , 'Daycare Matching'
-    ]
-    } ,
-    { heading: 'Companay' , links: [
-
-      'About' , 'Become a Mom Helper' , 'Join as a family'
-    ] },
-    { heading: 'Legal', links: [
-
-      'Privacy Policy' , 'Terms of Service'
-    ] },
+    {
+      heading: 'Services',
+      links: [
+        { text: 'Child Care', href: '/child-care' },
+        { text: 'Meal Preparation', href: '/meal-preparation' },
+        { text: 'Housekeeping', href: '/housekeeping' },
+        { text: 'Tutoring', href: '/tutoring' },
+        { text: 'Elderly Check-in', href: '/elderly-check-in' },
+        { text: 'Daycare Matching', href: '/daycare-matching' },
+      ],
+    },
+    {
+      heading: 'Company',
+      links: [
+        { text: 'About', href: '/about' },
+        { text: 'Become a Mom Helper', href: '/registeration-mom-helper' },
+        { text: 'Join as a family', href: '/registeration-mom' },
+      ],
+    },
+    {
+      heading: 'Legal',
+      links: [
+        { text: 'Privacy Policy', href: '/privacy-policy' },
+        { text: 'Terms of Service', href: '/terms-of-service' },
+      ],
+    },
   ];
 
   return (
     <>
       <FooterMain>
-        <FooterContainer> 
+        <FooterContainer>
           <FooterWrapper>
             <FooterUpper>
               <FooterLeft>
-
                 <FooterLogoHead href={'/'}>
-                  <Image src={'/footer/logo-small.svg'} width={120} height={65} alt="Logo" />
+                  <Image
+                    src={'/footer/white-logo.png'}
+                    width={211}
+                    height={89}
+                    alt='Logo'
+                  />
                 </FooterLogoHead>
 
                 <FooterTypography>
-              Connecting families with certified Mom Helpers for on-demand assistance.
+                  Connecting families with certified Mom Helpers for on-demand
+                  assistance.
                 </FooterTypography>
-                <FooterTypography>
-              support@fullst3am.com
-                </FooterTypography>
+                <FooterTypography>support@fullst3am.com</FooterTypography>
               </FooterLeft>
 
               <FooterLinksContainer>
-                {pages.map((page, index) => (
-                    
-                  <BoxLink key={index}>
-                    <LinkHeading>
-                      {page.heading}
-                    </LinkHeading>
+                {pages.map((page, pageIndex) => (
+                  <BoxLink key={pageIndex}>
+                    <LinkHeading>{page.heading}</LinkHeading>
                     <FooterLinksList>
                       {page.links.map((link, index) => (
-                        <FooterListItem key={index} >
-                          {link}
-                        </FooterListItem>
-                      ))
-                      }
+                        <Link key={index} href={link.href}>
+                          <FooterListItem>{link.text}</FooterListItem>
+                        </Link>
+                      ))}
                     </FooterLinksList>
-
                   </BoxLink>
                 ))}
               </FooterLinksContainer>
             </FooterUpper>
 
             <FooterLower>
-
-              <FooterCopyRight>© 2025 Full St3am Ahead Inc. All rights reserved.
+              <FooterCopyRight>
+                © 2025 Full St3am Ahead Inc. All rights reserved.
               </FooterCopyRight>
               <FooterMediaIcons>
                 <FooterMediaItem>
-                  <Image src={'/footer/twitter.svg'} width={26} height={26} alt='twitter' />
+                  <Image
+                    src={'/footer/twitter.svg'}
+                    width={26}
+                    height={26}
+                    alt='twitter'
+                  />
                 </FooterMediaItem>
                 <FooterMediaItem>
-                  <Image src={'/footer/linked-in.svg'} width={22} height={22} alt='linked-in' />
+                  <Image
+                    src={'/footer/linked-in.svg'}
+                    width={22}
+                    height={22}
+                    alt='linked-in'
+                  />
                 </FooterMediaItem>
                 <FooterMediaItem>
-                  <Image src={'/footer/github.svg'} width={22} height={22} alt='github' />
+                  <Image
+                    src={'/footer/github.svg'}
+                    width={22}
+                    height={22}
+                    alt='github'
+                  />
                 </FooterMediaItem>
               </FooterMediaIcons>
             </FooterLower>
-
           </FooterWrapper>
         </FooterContainer>
       </FooterMain>

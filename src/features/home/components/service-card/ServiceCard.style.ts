@@ -1,6 +1,5 @@
 'use client';
 
-
 import { styled, Box, Typography } from '@mui/material';
 
 export const CardContainer = styled(Box)(({background}) => ({
@@ -16,8 +15,8 @@ export const CardContainer = styled(Box)(({background}) => ({
   position: 'relative',
 
 }));
-export const CardHeading = styled(Typography)(() => ({
-  fontSize: '33px',
+export const CardHeading = styled(Typography)(({fontSize}) => ({
+  fontSize: fontSize ? fontSize : '33px',
   fontWeight: 600,
   color: '#005782',
   textWrap: 'nowrap'

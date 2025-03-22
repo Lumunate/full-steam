@@ -9,6 +9,7 @@ interface ButtonProps extends ButtonBaseProps {
   fontSize?: string; 
   width?: string;
   height?: string;
+  padding?: string;
 }
 
 export const Button = styled(ButtonBase, {
@@ -19,20 +20,20 @@ export const Button = styled(ButtonBase, {
     prop !== 'width' &&
     prop !== 'height',
 })<ButtonProps>(
-  ({ theme, special = false, borderRadius = '8px', fontSize = '16px', width = '96px', height = '37px' }) => ({
-    padding: '11px 30px',
+  ({ theme, special = false, borderRadius = '8px', fontSize = '16px', width = '96px', height = '37px' , padding = '11px 30px' }) => ({
+    padding: padding || '11px 30px',
     display: 'flex',
     flexDirection: 'row',
+    fontFamily: 'Urbanist',
     gap:'6px',
     fontWeight: 400,
     width: width,
     height: height,
-    fontFamily: 'Lato, sans-serif',
     fontSize: fontSize,
     color: special ? 'white' : 'black',
     backgroundColor: special ? '#37B5FF' : 'white',
     textAlign: 'center',
-    border: special ? 'none' : '1px solid #B3B3B3',
+    border: special ? '1px solid #37B5FF' : '1px solid #B3B3B3',
     borderRadius: borderRadius,
     boxShadow: special ? '0 4px 14px 0 rgba(0,0,0,0.17)' : 'none',
     transition: 'all 0.3s ease-in-out',
@@ -40,7 +41,7 @@ export const Button = styled(ButtonBase, {
     whiteSpace: 'nowrap',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: special ? '#1A3375' : '',
+      backgroundColor: special ? '#005782' : '',
     },
     '&:disabled': {
       backgroundColor: '#fffbfb', 

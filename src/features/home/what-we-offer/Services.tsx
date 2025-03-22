@@ -1,8 +1,8 @@
 
 import { AppContentWrapper } from '@/components/common/Global.style';
-import SectionHeading from '@/components/section-heading/SectionHeading';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
-import ServiceCard from '@/components/service-card/ServiceCard';
+import SectionHeading from '@/features/components/section-heading/SectionHeading';
+import ServiceCard from '@/features/home/components/service-card/ServiceCard';
 
 import { ServiceWrapper, WhatWeOfferCards } from './ServicesWrapper.style';
 

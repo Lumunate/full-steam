@@ -9,7 +9,7 @@ import { useSnackbar } from '@/components/snackbar';
 import { contactSchema, IContact } from '@/types/contact';
 
 import { Button } from '../../components/buttons/Button.style';
-import { StyledTextField } from '../../components/form/Form.style';
+import { StyledTextField } from '../../components/form/text-field.style';
 import { ContactFormContainer } from '../../features/contact/ContactForm.style';
 import { useSubmitContactForm } from '../../hooks/useContactForm';
 

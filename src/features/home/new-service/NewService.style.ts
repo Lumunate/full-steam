@@ -71,7 +71,7 @@ export const HeroContent = styled(CommonHeroTypography)(({ theme }) => ({
 
 export const NewServiceWrapper = styled(Box)({
   width: '100%',
-  minHeight: 'calc(100vh + 135px)',
+  minHeight: 'calc(100vh)',
   position: 'relative',
   display: 'flex', 
   alignItems: 'center'

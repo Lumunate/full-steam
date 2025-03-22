@@ -1,4 +1,14 @@
-import { AppBar, Box, Drawer, List, ListItem, Menu, styled, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  Menu,
+  styled,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -22,7 +32,6 @@ export const CommonMenu = styled(Menu)({
     fontSize: '1.6rem',
     textTransform: 'capitalize',
     lineHeight: '27.75px',
-    fontFamily: 'Lato, sans-serif',
     borderRadius: '4px',
     padding: '4px',
     justifyContent: 'center',
@@ -89,27 +98,28 @@ export const NavbarDrawer = styled(Drawer)({
   },
 });
 
-export const NavbarLinkWrapper = styled(ListItem)<{ smallSR?: boolean }>(({ theme, smallSR }) => ({
-  margin: smallSR ? '12px 0' : '0 36px',
-  textAlign: smallSR ? 'start' : 'center',
-  padding: '0',
-  [theme.breakpoints.down(1400)]: {
-    margin: smallSR ? '12px 0' : '0 24px',
-  },
-  [theme.breakpoints.down('xl')]: {
-    margin: smallSR ? '12px 0' : '0 18px',
-  },
-  [theme.breakpoints.down('lg')]: {
-    margin: smallSR ? '12px 0' : '0 10px',
-  },
-}));
+export const NavbarLinkWrapper = styled(ListItem)<{ smallSR?: boolean }>(
+  ({ theme, smallSR }) => ({
+    margin: smallSR ? '12px 0' : '0 36px',
+    textAlign: smallSR ? 'start' : 'center',
+    padding: '0',
+    [theme.breakpoints.down(1400)]: {
+      margin: smallSR ? '12px 0' : '0 24px',
+    },
+    [theme.breakpoints.down('xl')]: {
+      margin: smallSR ? '12px 0' : '0 18px',
+    },
+    [theme.breakpoints.down('lg')]: {
+      margin: smallSR ? '12px 0' : '0 10px',
+    },
+  }),
+);
 
-export const NavbarLink = styled(Link)({
+export const NavbarLink = styled(Typography)({
   color: '#000',
   fontWeight: 400,
   fontSize: '16px',
   textTransform: 'capitalize',
-  fontFamily: 'Lato, sans-serif',
   '&:hover': {
     color: '#37B5FF',
     transition: 'all 0.3s ease',
@@ -121,7 +131,6 @@ export const NavTypography = styled(Typography)({
   fontWeight: 400,
   fontSize: '15px',
   textTransform: 'capitalize',
-  fontFamily: 'Lato, sans-serif',
   marginBottom: '28px',
 });
 
@@ -133,7 +142,8 @@ export const SmallScreenList = styled(List)({
 export const DropdownMenuWrapper = styled(Box)({});
 
 export const IconHeadBlack = styled(Image)({
-  filter: 'brightness(0) saturate(100%) invert(0%) sepia(5%) saturate(7500%) hue-rotate(228deg) brightness(106%) contrast(106%)',
+  filter:
+    'brightness(0) saturate(100%) invert(0%) sepia(5%) saturate(7500%) hue-rotate(228deg) brightness(106%) contrast(106%)',
 });
 
 export const DropdownIcon = styled(Image)<{ open?: boolean }>(({ open }) => ({
@@ -147,4 +157,25 @@ export const AvatarDropdownMenuWrapper = styled(Box)({
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
+});
+
+export const SignUpDropDown = styled(Box)(({ val }) => ({
+  background: '#FCFDFF',
+  color: 'black',
+  display: val ? 'flex' : 'none',
+  flexDirection: 'column',
+  gap: '10px',
+  borderRadius: '15px',
+  alignItems: 'center',
+  boxShadow: '0px 4px 37.4px 0px #00000038',
+  padding: '18px 12px',
+  transition: 'all .3s ease-in',
+  position: 'absolute',
+  top: '42px',
+}));
+
+export const SignUpWrapper = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
 });

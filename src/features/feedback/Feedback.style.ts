@@ -35,7 +35,6 @@ export const FeedbackIconHead = styled(Box)(({ theme }) => ({
 
 export const FeedbackHeadingTypography = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
-  fontFamily: 'Jost, sans-serif',
   color: '#1F1F1F',
   fontSize: '50px',
   textTransform: 'uppercase',
@@ -55,8 +54,7 @@ export const FeedbackHeadingTypography = styled(Typography)(({ theme }) => ({
 }));
 
 export const FeedbackParaTypography = styled(Typography)(({ theme }) => ({
-  fontWeight: 500,
-  fontFamily: 'Lato, sans-serif',
+  fontWeight: 400,
   color: '#000000',
   fontSize: '16px',
   marginBottom: '30px',

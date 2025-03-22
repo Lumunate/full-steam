@@ -26,3 +26,12 @@ export const AppContentWrapper = styled(Box)<AppContentWrapperProps>(({ theme, w
     padding: '0 20px',
   },
 }));
+
+export const FlexBox = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '200px 0' ,
+  justifyContent: 'center',
+  width: '100%'
+});

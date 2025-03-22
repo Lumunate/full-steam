@@ -8,6 +8,7 @@ interface ServiceCardProps {
   description: string;      
   imgSrc: string;
 background: string;
+fontsize?: string;
 
 }
 
@@ -15,12 +16,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   heading,
   description,
   imgSrc,
-  background
+  background,
+  fontsize = '33px'
 }) => {
   return (
     <CardContainer background={background}>
       <CardContent>
-        <CardHeading variant='h3'>{heading}</CardHeading>
+        <CardHeading fontSize={fontsize} variant='h3'>{heading}</CardHeading>
         <CardDescription variant='p' >{description}</CardDescription>
       </CardContent>
 
@@ -28,7 +30,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
       <CardImageContainer>
 
-        <Image src={imgSrc} alt={heading} width={200} height={200}  />
+        <Image src={imgSrc} alt={heading} width={220} height={220}  />
       </CardImageContainer>
     </CardContainer>
   );
