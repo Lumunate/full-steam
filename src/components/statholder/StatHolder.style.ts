@@ -22,13 +22,11 @@ export const StatHolderHeading = styled(Typography)(() => ({
   fontSize: '18px',
   fontFamily: 'Lato, sans-serif',
   fontWeight: 500,
-  margin: 0
-  
+  margin: 0,
 }));
 export const StatHolderPara = styled(Typography)(() => ({
   fontSize: '14px',
   fontFamily: 'Lato, sans-serif',
   fontWeight: 400,
-  margin: 0
-    
+  margin: 0,
 }));

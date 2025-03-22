@@ -6,26 +6,34 @@ import type { ButtonBaseProps } from '@mui/material';
 interface ButtonProps extends ButtonBaseProps {
   special?: boolean;
   borderRadius?: string;
-  fontSize?: string; 
+  fontSize?: string;
   width?: string;
   height?: string;
   padding?: string;
 }
 
 export const Button = styled(ButtonBase, {
-  shouldForwardProp: (prop) =>
+  shouldForwardProp: prop =>
     prop !== 'special' &&
     prop !== 'borderRadius' &&
     prop !== 'fontSize' &&
     prop !== 'width' &&
     prop !== 'height',
 })<ButtonProps>(
-  ({ theme, special = false, borderRadius = '8px', fontSize = '16px', width = '96px', height = '37px' , padding = '11px 30px' }) => ({
+  ({
+    theme,
+    special = false,
+    borderRadius = '8px',
+    fontSize = '16px',
+    width = '96px',
+    height = '37px',
+    padding = '11px 30px',
+  }) => ({
     padding: padding || '11px 30px',
     display: 'flex',
     flexDirection: 'row',
     fontFamily: 'Urbanist',
-    gap:'6px',
+    gap: '6px',
     fontWeight: 400,
     width: width,
     height: height,
@@ -44,7 +52,7 @@ export const Button = styled(ButtonBase, {
       backgroundColor: special ? '#005782' : '',
     },
     '&:disabled': {
-      backgroundColor: '#fffbfb', 
+      backgroundColor: '#fffbfb',
       color: '#B3B3B3',
       cursor: 'cursor-not-allowed',
       border: '1px solid #D3D3D3',
@@ -60,5 +68,5 @@ export const Button = styled(ButtonBase, {
       width: '100px !important',
       height: '34px !important',
     },
-  })
+  }),
 );

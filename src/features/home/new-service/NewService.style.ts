@@ -13,7 +13,7 @@ export const ServiceCheckList = styled(ListItem)({
   marginBottom: '14px',
   display: 'flex',
   gap: '10px',
-  color: '#005782'
+  color: '#005782',
 });
 
 export const HeroHeading = styled(CommonHeroTypography)(({ theme }) => ({
@@ -65,16 +65,15 @@ export const HeroContent = styled(CommonHeroTypography)(({ theme }) => ({
   },
   [theme.breakpoints.down(400)]: {
     fontSize: '12px',
-  }
-
+  },
 }));
 
 export const NewServiceWrapper = styled(Box)({
   width: '100%',
   minHeight: 'calc(100vh)',
   position: 'relative',
-  display: 'flex', 
-  alignItems: 'center'
+  display: 'flex',
+  alignItems: 'center',
 });
 
 export const HeroImage = styled(Image)({
@@ -84,9 +83,7 @@ export const HeroImage = styled(Image)({
 });
 
 export const HeroDesriptionHolder = styled(Box)({
-
   maxWidth: '560px',
-
 });
 export const ButtonsContianer = styled(Box)({
   display: 'flex',
@@ -107,17 +104,18 @@ export const HeroImageOverlay = styled(Box)({
   left: 0,
   width: '100%',
   height: '100%',
-  background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.46) 100%)',
-  filter: 'drop-shadow(0px 4px 20.8px rgba(0, 0, 0, 0.55)'
+  background:
+    'linear-gradient(0deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.46) 100%)',
+  filter: 'drop-shadow(0px 4px 20.8px rgba(0, 0, 0, 0.55)',
 });
 
-export const HeroContentContainer = styled(Box)(({ theme }) =>({
+export const HeroContentContainer = styled(Box)(({ theme }) => ({
   padding: '265px 0 349px',
   display: 'flex',
   alignItems: 'end',
   [theme.breakpoints.down('lg')]: {
     padding: '180px 0 300px',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   [theme.breakpoints.down('sm')]: {
     padding: '160px 0 280px',

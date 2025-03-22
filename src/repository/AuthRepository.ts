@@ -34,6 +34,6 @@ export async function validateVerificationToken(
 
   if (verificationRequest.expires < new Date())
     throw new AuthError(AuthErrorType.TOKEN_EXPIRED, 401);
-  
+
   return verificationRequest;
 }

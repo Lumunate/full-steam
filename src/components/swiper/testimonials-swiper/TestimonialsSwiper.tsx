@@ -19,7 +19,7 @@ import {
   TestimonialsInfoHead,
   TestimonialAvatar,
   TestimonialsStarsHead,
-  QuotationImageHead
+  QuotationImageHead,
 } from '../../../components/swiper/testimonials-swiper/TestimonialsSwiper.style';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -30,7 +30,7 @@ interface Testimonial {
   name: string;
   subject: string;
   feedback: string;
-  date: string; 
+  date: string;
   stars: number;
 }
 
@@ -60,12 +60,24 @@ const TestimonialsSwiper: FC = () => {
 
   return (
     <TestimonialsSwiperWrapper>
-      <TestimonialsNavigationWrapper positionLeft='50%' width='300px'>
+      <TestimonialsNavigationWrapper left='50%' width='300px'>
         <Box className='swiper-button-prev'>
-          <Image src='/icons/prev.svg' alt='Prev' width={14} height={11} loading='lazy' />
+          <Image
+            src='/icons/prev.svg'
+            alt='Prev'
+            width={14}
+            height={11}
+            loading='lazy'
+          />
         </Box>
-        <Box className='swiper-button-next'sx={{position: 'absolute'}} >
-          <Image src='/icons/next.svg' alt='Next' width={14} height={11} loading='lazy' />
+        <Box className='swiper-button-next' sx={{ position: 'absolute' }}>
+          <Image
+            src='/icons/next.svg'
+            alt='Next'
+            width={14}
+            height={11}
+            loading='lazy'
+          />
         </Box>
       </TestimonialsNavigationWrapper>
 
@@ -83,11 +95,14 @@ const TestimonialsSwiper: FC = () => {
         }}
         loop={true}
         pagination={{ clickable: true }}
-        navigation={{ prevEl: '.swiper-button-prev', nextEl: '.swiper-button-next' }}
-        onSwiper={(swiper) => {
+        navigation={{
+          prevEl: '.swiper-button-prev',
+          nextEl: '.swiper-button-next',
+        }}
+        onSwiper={swiper => {
           swiperRef.current = swiper;
         }}
-        modules={[EffectCoverflow, Pagination, Navigation]} 
+        modules={[EffectCoverflow, Pagination, Navigation]}
       >
         {testimonialsData?.map((testimonial: Testimonial, index: number) => (
           <SwiperSlide key={index}>
@@ -95,10 +110,7 @@ const TestimonialsSwiper: FC = () => {
               <Box>
                 <TestimonialsInfoHead>
                   <TestimonialsAvatarNameWrapper>
-                    <TestimonialAvatar
-                      alt={testimonial.name}
-                      src={''}
-                    />
+                    <TestimonialAvatar alt={testimonial.name} src={''} />
                     <Box>
                       <TestimonialsCardHeading variant='h6'>
                         {testimonial.name}
@@ -112,7 +124,7 @@ const TestimonialsSwiper: FC = () => {
                     <Image
                       src='/icons/quotation.svg'
                       alt='quotation-icon'
-                      layout='fill' 
+                      layout='fill'
                       loading='lazy'
                     />
                   </QuotationImageHead>
@@ -124,7 +136,6 @@ const TestimonialsSwiper: FC = () => {
                   {testimonial.feedback}
                 </TestimonialsCardPara>
               </Box>
-            
             </TestimonialsCard>
           </SwiperSlide>
         ))}

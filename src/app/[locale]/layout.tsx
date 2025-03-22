@@ -7,9 +7,9 @@ import { routing } from '@/i18n/routing';
 type ParamsWithLocale = Promise<{ locale: any }>;
 
 export default async function RootLayout({
-  children, params,
-}: Readonly<{ children: React.ReactNode, params: ParamsWithLocale }>) {
-
+  children,
+  params,
+}: Readonly<{ children: React.ReactNode; params: ParamsWithLocale }>) {
   const { locale } = await params;
 
   if (!routing.locales.includes(locale)) {

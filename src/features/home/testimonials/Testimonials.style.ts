@@ -1,6 +1,6 @@
 'use client';
 
-import { styled, Typography, Box,  } from '@mui/material';
+import { styled, Typography, Box } from '@mui/material';
 
 export const TestimonialsWrapper = styled(Box)(({ theme }) => ({
   width: '100%',

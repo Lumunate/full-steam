@@ -1,17 +1,13 @@
 'use client';
 
-import {
-  Box,
-  styled,
-  Typography
-} from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import Link from 'next/link';
 
 export const ContactContainer = styled(Box)(({ theme }) => ({
   padding: '150px 0 100px',
   minHeight: 'calc(100vh - 109px)',
-  display: 'flex', 
-  flexDirection: 'column', 
+  display: 'flex',
+  flexDirection: 'column',
   justifyContent: 'center',
   [theme.breakpoints.down('lg')]: {
     padding: '150px 0 80px',
@@ -24,11 +20,11 @@ export const ContactContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const ContactIconHead = styled(Box)( ({ theme }) => ({
+export const ContactIconHead = styled(Box)(({ theme }) => ({
   position: 'absolute',
   left: '-50px',
   top: '-60px',
-  
+
   [theme.breakpoints.down('lg')]: {
     left: '-20px',
   },
@@ -83,7 +79,7 @@ export const ContactParaTypography = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down(576)]: {
     fontSize: '12px',
-  }
+  },
 }));
 
 export const ContactStyledLinkOne = styled(Link)(({ theme }) => ({
@@ -101,5 +97,5 @@ export const ContactStyledLinkOne = styled(Link)(({ theme }) => ({
   },
   [theme.breakpoints.down(576)]: {
     fontSize: '12px',
-  }
+  },
 }));

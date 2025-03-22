@@ -6,8 +6,8 @@ export default function HomePage() {
 
   return (
     <Paper>
-      <Typography variant="h1">{t('title')}</Typography>
-      <Typography variant="body1">{t('about')}</Typography>
+      <Typography variant='h1'>{t('title')}</Typography>
+      <Typography variant='body1'>{t('about')}</Typography>
     </Paper>
   );
 }

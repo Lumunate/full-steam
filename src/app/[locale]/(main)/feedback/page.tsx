@@ -15,19 +15,29 @@ export default function FeedbackPage() {
   return (
     <FeedbackContainer>
       <AppContentWrapper>
-        <Grid container columns={24} sx={{ px:{xs: '0', md: '40px'}, maxWidth: '900px', mx: 'auto' }}>
-          <Grid size={{ xs: 24}} sx={{  position: 'relative' }}>
+        <Grid
+          container
+          columns={24}
+          sx={{ px: { xs: '0', md: '40px' }, maxWidth: '900px', mx: 'auto' }}
+        >
+          <Grid size={{ xs: 24 }} sx={{ position: 'relative' }}>
             <FeedbackHeadingTypography variant='h1'>
-            Your Feedback Matters!
+              Your Feedback Matters!
             </FeedbackHeadingTypography>
             <FeedbackParaTypography variant='body1'>
-            Help us improve by sharing your experience!
+              Help us improve by sharing your experience!
             </FeedbackParaTypography>
             <FeedbackIconHead>
-              <Image src={'/arrow.svg'} width={26} height={21} alt='icon' loading="lazy" />
+              <Image
+                src={'/arrow.svg'}
+                width={26}
+                height={21}
+                alt='icon'
+                loading='lazy'
+              />
             </FeedbackIconHead>
           </Grid>
-          <Grid size={{ xs: 24}}>
+          <Grid size={{ xs: 24 }}>
             <Box sx={{ maxWidth: '715px', mx: 'auto' }}>
               <FeedbackForm />
             </Box>

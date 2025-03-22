@@ -98,19 +98,19 @@ export const NavbarDrawer = styled(Drawer)({
   },
 });
 
-export const NavbarLinkWrapper = styled(ListItem)<{ smallSR?: boolean }>(
-  ({ theme, smallSR }) => ({
-    margin: smallSR ? '12px 0' : '0 36px',
-    textAlign: smallSR ? 'start' : 'center',
+export const NavbarLinkWrapper = styled(ListItem)<{ smallsr?: boolean }>(
+  ({ theme, smallsr }) => ({
+    margin: smallsr ? '12px 0' : '0 36px',
+    textAlign: smallsr ? 'start' : 'center',
     padding: '0',
     [theme.breakpoints.down(1400)]: {
-      margin: smallSR ? '12px 0' : '0 24px',
+      margin: smallsr ? '12px 0' : '0 24px',
     },
     [theme.breakpoints.down('xl')]: {
-      margin: smallSR ? '12px 0' : '0 18px',
+      margin: smallsr ? '12px 0' : '0 18px',
     },
     [theme.breakpoints.down('lg')]: {
-      margin: smallSR ? '12px 0' : '0 10px',
+      margin: smallsr ? '12px 0' : '0 10px',
     },
   }),
 );
@@ -159,7 +159,7 @@ export const AvatarDropdownMenuWrapper = styled(Box)({
   cursor: 'pointer',
 });
 
-export const SignUpDropDown = styled(Box)(({ val }) => ({
+export const SignUpDropDown = styled(Box)<{ val: boolean }>(({ val }) => ({
   background: '#FCFDFF',
   color: 'black',
   display: val ? 'flex' : 'none',
@@ -172,6 +172,8 @@ export const SignUpDropDown = styled(Box)(({ val }) => ({
   transition: 'all .3s ease-in',
   position: 'absolute',
   top: '42px',
+  opacity: val ? 1 : 0,
+  pointerEvents: val ? 'auto' : 'none',
 }));
 
 export const SignUpWrapper = styled(Box)({

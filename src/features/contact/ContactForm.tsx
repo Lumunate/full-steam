@@ -24,21 +24,28 @@ const defaultValues: IContact = {
 export default function ContactForm() {
   const { showSnackbar } = useSnackbar();
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<IContact>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<IContact>({
     resolver: zodResolver(contactSchema),
-    defaultValues
+    defaultValues,
   });
 
   const { mutate: submitForm, isPending } = useSubmitContactForm();
-  const onSubmit: SubmitHandler<IContact> = async (data) => {
+  const onSubmit: SubmitHandler<IContact> = async data => {
     submitForm(data, {
       onSuccess: () => {
         showSnackbar({ message: 'Form submitted successfully!' });
         reset();
       },
       onError: () => {
-        showSnackbar({ message: 'Failed to submit Contact Form. Please try again later!' });
-      }
+        showSnackbar({
+          message: 'Failed to submit Contact Form. Please try again later!',
+        });
+      },
     });
   };
 
@@ -49,71 +56,71 @@ export default function ContactForm() {
           <Grid container columns={24} columnSpacing={4} rowSpacing={2}>
             <Grid size={{ xs: 24, md: 12 }}>
               <StyledTextField
-                label="Name"
-                variant="standard"
+                label='Name'
+                variant='standard'
                 fullWidth
-                margin="normal"
+                margin='normal'
                 error={!!errors.name}
                 helperText={errors.name?.message}
                 {...register('name')}
-                inputfontsize="20px"
-                labelfontsize="14px"
+                inputfontsize='20px'
+                labelfontsize='14px'
               />
             </Grid>
             <Grid size={{ xs: 24, md: 12 }}>
               <StyledTextField
-                label="Last Name"
-                variant="standard"
+                label='Last Name'
+                variant='standard'
                 fullWidth
-                margin="normal"
+                margin='normal'
                 error={!!errors.lastName}
                 helperText={errors.lastName?.message}
                 {...register('lastName')}
-                inputfontsize="20px"
-                labelfontsize="14px"
+                inputfontsize='20px'
+                labelfontsize='14px'
               />
             </Grid>
             <Grid size={{ xs: 24, md: 12 }}>
               <StyledTextField
-                label="Email"
-                variant="standard"
+                label='Email'
+                variant='standard'
                 fullWidth
-                margin="normal"
+                margin='normal'
                 error={!!errors.email}
                 helperText={errors.email?.message}
                 {...register('email')}
-                inputfontsize="20px"
-                labelfontsize="14px"
+                inputfontsize='20px'
+                labelfontsize='14px'
               />
             </Grid>
             <Grid size={{ xs: 24, md: 12 }}>
               <StyledTextField
-                label="Phone"
-                variant="standard"
+                label='Phone'
+                variant='standard'
                 fullWidth
-                margin="normal"
+                margin='normal'
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
                 {...register('phone')}
-                inputfontsize="20px"
-                labelfontsize="14px"
+                inputfontsize='20px'
+                labelfontsize='14px'
               />
             </Grid>
             <Grid size={{ xs: 24, md: 24 }}>
               <StyledTextField
-                label="Message"
-                variant="standard"
+                label='Message'
+                variant='standard'
                 fullWidth
-                margin="normal"
+                margin='normal'
                 error={!!errors.message}
                 helperText={errors.message?.message}
                 {...register('message')}
-                inputfontsize="20px"
-                labelfontsize="14px"
+                inputfontsize='20px'
+                labelfontsize='14px'
               />
             </Grid>
           </Grid>
-          <Box sx={{mt: {xs: '30px', lg: '60px'}}}>
+          <Box sx={{ mt: { xs: '30px', lg: '60px' } }}>
             <Button
               type='submit'
               special

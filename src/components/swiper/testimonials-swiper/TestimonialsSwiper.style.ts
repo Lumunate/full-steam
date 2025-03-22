@@ -8,7 +8,9 @@ const BaseBoxFlex = styled(Box)({
   alignItems: 'center',
 });
 
-export const TestimonialsSwiperWrapper = styled(Box)<{aboutSwiperOpen?: boolean }>(({theme, aboutSwiperOpen }) => ({
+export const TestimonialsSwiperWrapper = styled(Box)<{
+  aboutSwiperOpen?: boolean;
+}>(({ theme, aboutSwiperOpen }) => ({
   width: '100%',
   height: '100% !important',
   overflow: 'hidden',
@@ -18,16 +20,17 @@ export const TestimonialsSwiperWrapper = styled(Box)<{aboutSwiperOpen?: boolean 
     padding: '50px 0 !important',
     position: 'relative',
   },
-  '& .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-prev):not(.swiper-slide-next)': {
-    visibility: 'hidden !important',
-    opacity: '0 !important',
-    transition: 'all 0.3s ease !important',
-  },
-  '& .swiper-wrapper':{
+  '& .swiper-slide:not(.swiper-slide-active):not(.swiper-slide-prev):not(.swiper-slide-next)':
+    {
+      visibility: 'hidden !important',
+      opacity: '0 !important',
+      transition: 'all 0.3s ease !important',
+    },
+  '& .swiper-wrapper': {
     height: '100% !important',
   },
   '& .swiper-slide': {
-    maxWidth: aboutSwiperOpen ? '100%': '556px',
+    maxWidth: aboutSwiperOpen ? '100%' : '556px',
     width: '100% !important',
     transition: 'all 0.3s ease !important',
     minHeight: '426px !important',
@@ -48,28 +51,33 @@ export const TestimonialsSwiperWrapper = styled(Box)<{aboutSwiperOpen?: boolean 
   },
 }));
 
-export const TestimonialsCard = styled(Box)<{isSpace?: boolean,}>(({ theme, isSpace }) => ({
-  backgroundColor: '#FCFDFF',
-  padding: '53.5px 27px',
-  borderRadius: '20px',
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-  height: '100%',
-  textAlign: 'left',
-  minHeight: '450px',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  margin: isSpace ? '15px' : '0',
-  [theme.breakpoints.down('sm')]: {
-    padding: '27px 9px',
-    height: '100% !important',
-    minHeight: '324px',
-  },
-}));
+export const TestimonialsCard = styled(Box)<{ isSpace?: boolean }>(
+  ({ theme, isSpace }) => ({
+    backgroundColor: '#FCFDFF',
+    padding: '53.5px 27px',
+    borderRadius: '20px',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+    height: '100%',
+    textAlign: 'left',
+    minHeight: '450px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    margin: isSpace ? '15px' : '0',
+    [theme.breakpoints.down('sm')]: {
+      padding: '27px 9px',
+      height: '100% !important',
+      minHeight: '324px',
+    },
+  }),
+);
 
-export const TestimonialsNavigationWrapper = styled(Box)<{ positionLeft: string; width: string }>(({ positionLeft, width }) => ({
+export const TestimonialsNavigationWrapper = styled(Box)<{
+  left: string;
+  width: string;
+}>(({ left, width }) => ({
   position: 'absolute',
-  left: positionLeft,
+  left: left,
   right: '0',
   transform: 'translateX(-150px)',
   bottom: '15px',
@@ -89,7 +97,7 @@ export const TestimonialsCardHeading = styled(BaseTextStyle)(({ theme }) => ({
   fontWeight: 700,
   [theme.breakpoints.down('sm')]: {
     fontSize: '10px',
-  }
+  },
 }));
 
 export const TestimonialsOccupationPara = styled(BaseTextStyle)({
@@ -105,7 +113,7 @@ export const TestimonialsCardPara = styled(BaseTextStyle)(({ theme }) => ({
   marginTop: '29px',
   [theme.breakpoints.down('sm')]: {
     fontSize: '12px',
-  }
+  },
 }));
 
 export const TestimonialsParaTwo = styled(BaseTextStyle)({
@@ -122,7 +130,7 @@ export const TestimonialAvatar = styled(Avatar)(({ theme }) => ({
     width: 39,
     height: 39,
     marginRight: '10px',
-  }
+  },
 }));
 
 export const TestimonialsDateHead = styled(Box)({
@@ -148,8 +156,8 @@ export const TrustpilotImage = styled(Link)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: 80,
     height: 48,
-    marginRight:'25px',
-  }
+    marginRight: '25px',
+  },
 }));
 
 export const QuotationImageHead = styled(Box)(({ theme }) => ({
@@ -160,5 +168,5 @@ export const QuotationImageHead = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: 38,
     height: 29,
-  }
+  },
 }));

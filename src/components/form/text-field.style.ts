@@ -1,12 +1,17 @@
 'use client';
 
-import { FormControl, MenuItem, Select, styled, TextField } from '@mui/material';
+import {
+  FormControl,
+  MenuItem,
+  Select,
+  styled,
+  TextField,
+} from '@mui/material';
 
 export const StyledTextField = styled(TextField)<{
   inputfontsize?: string;
   labelfontsize?: string;
 }>(({ theme, inputfontsize = '14px', labelfontsize = '12px' }) => ({
-
   [theme.breakpoints.down('sm')]: {
     marginTop: '6px',
   },
@@ -25,7 +30,7 @@ export const StyledTextField = styled(TextField)<{
   },
   '& .MuiInputBase-input.MuiInput-input': {
     fontWeight: 600,
-    fontSize: inputfontsize, 
+    fontSize: inputfontsize,
   },
   '& .MuiFormHelperText-root.Mui-error ': {
     fontSize: '10px',
@@ -47,10 +52,10 @@ export const StyledTextField = styled(TextField)<{
 export const CustomFormControl = styled(FormControl)<{
   labelfontsize?: string;
 }>(({ labelfontsize = '10px' }) => ({
-  '& .MuiInputLabel-root':{
+  '& .MuiInputLabel-root': {
     color: '#818181',
     fontWeight: 600,
-    fontSize: labelfontsize, 
+    fontSize: labelfontsize,
     textTransform: 'capitalize',
   },
 
@@ -58,16 +63,16 @@ export const CustomFormControl = styled(FormControl)<{
     fontSize: '10px',
   },
 
-  '& .MuiInputLabel-root.Mui-focused':{
+  '& .MuiInputLabel-root.Mui-focused': {
     color: '#818181',
-    fontSize: labelfontsize, 
-  }
+    fontSize: labelfontsize,
+  },
 }));
 
 export const StyledSelectField = styled(Select)<{
   inputfontsize?: string;
   labelfontsize?: string;
-}>(({ inputfontsize = '14px'}) => ({
+}>(({ inputfontsize = '14px' }) => ({
   textAlign: 'start',
   fontWeight: 600,
   fontSize: inputfontsize,
@@ -98,14 +103,13 @@ export const StyledSelectField = styled(Select)<{
 export const CustomInputLabel = styled(MenuItem)({
   color: '#818181',
   fontWeight: 600,
-  fontSize: '16px', 
+  fontSize: '16px',
   textTransform: 'capitalize',
   padding: '0',
   background: 'none',
   '&:hover ': {
-    background: 'none'
+    background: 'none',
   },
-
 });
 
 export const StyledFormControl = styled(FormControl)({

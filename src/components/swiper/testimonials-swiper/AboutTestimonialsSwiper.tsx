@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, } from '@mui/material';
+import { Box } from '@mui/material';
 import Image from 'next/image';
 import { FC, useEffect, useRef } from 'react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
@@ -21,7 +21,7 @@ import {
   TestimonialsStarsHead,
   TestimonialsDateHead,
   QuotationImageHead,
-  TrustpilotImage
+  TrustpilotImage,
 } from './TestimonialsSwiper.style';
 import testimonialsData from '../../swiper/testimonials-swiper/testimonialsData.json';
 
@@ -64,16 +64,20 @@ const AboutTestimonialsSwiper: FC = () => {
 
   return (
     <TestimonialsSwiperWrapper aboutSwiperOpen={true}>
-      <TestimonialsNavigationWrapper positionLeft='50%' width='300px' sx={{
-        marginTop: '20px',
-      }}>
+      <TestimonialsNavigationWrapper
+        positionLeft='50%'
+        width='300px'
+        sx={{
+          marginTop: '20px',
+        }}
+      >
         <Box className='swiper-button-prev'>
           <Image src='/icons/prev.svg' alt='Prev' width={14} height={11} />
         </Box>
         <Box className='swiper-button-next'>
           <Image src='/icons/next.svg' alt='Next' width={14} height={11} />
         </Box>
-      </TestimonialsNavigationWrapper >
+      </TestimonialsNavigationWrapper>
 
       <Swiper
         grabCursor={true}
@@ -81,10 +85,13 @@ const AboutTestimonialsSwiper: FC = () => {
         spaceBetween={0}
         loop={true}
         pagination={{ clickable: true }}
-        navigation={{ prevEl: '.swiper-button-prev', nextEl: '.swiper-button-next' }}
+        navigation={{
+          prevEl: '.swiper-button-prev',
+          nextEl: '.swiper-button-next',
+        }}
         observer={true}
         observeParents={true}
-        onSwiper={(swiper) => {
+        onSwiper={swiper => {
           swiperRef.current = swiper;
         }}
         modules={[EffectCoverflow, Pagination, Navigation]}
@@ -93,13 +100,9 @@ const AboutTestimonialsSwiper: FC = () => {
           <SwiperSlide key={index}>
             <TestimonialsCard isSpace={true}>
               <Box>
-                <TestimonialsInfoHead
-                >
+                <TestimonialsInfoHead>
                   <TestimonialsAvatarNameWrapper>
-                    <TestimonialAvatar
-                      alt={testimonial.name}
-                      src={''}
-                    />
+                    <TestimonialAvatar alt={testimonial.name} src={''} />
                     <Box>
                       <TestimonialsCardHeading variant='h6'>
                         {testimonial.name}
@@ -125,7 +128,9 @@ const AboutTestimonialsSwiper: FC = () => {
                   {renderStars(testimonial.stars)}
                 </TestimonialsStarsHead>
                 <TestimonialsCardPara variant='body1' sx={{ mb: '16px' }}>
-                  {testimonial.feedback.length > 300 ? `${testimonial.feedback.substring(0, 300)}...` : testimonial.feedback}
+                  {testimonial.feedback.length > 300
+                    ? `${testimonial.feedback.substring(0, 300)}...`
+                    : testimonial.feedback}
                 </TestimonialsCardPara>
               </Box>
               <TestimonialsDateHead>
@@ -137,7 +142,10 @@ const AboutTestimonialsSwiper: FC = () => {
                     {testimonial.feedbackDate}
                   </TestimonialsParaTwo>
                 </Box>
-                <TrustpilotImage href={'https://www.trustpilot.com/'} target='_blank'>
+                <TrustpilotImage
+                  href={'https://www.trustpilot.com/'}
+                  target='_blank'
+                >
                   <Image
                     src='/home/trustpilot.svg'
                     alt='trustpilot-icon'
@@ -146,7 +154,6 @@ const AboutTestimonialsSwiper: FC = () => {
                   />
                 </TrustpilotImage>
               </TestimonialsDateHead>
-
             </TestimonialsCard>
           </SwiperSlide>
         ))}

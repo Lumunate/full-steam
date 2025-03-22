@@ -1,18 +1,15 @@
 'use client';
 
-import { Avatar, Box, IconButton, MenuItem } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { Box } from '@mui/material';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
-import { SignUpWrapper } from './Navbar.style';
+
 import { Link } from '@/i18n/routing';
 
+import { SignUpWrapper } from './Navbar.style';
 import { SignUpDropDown } from './Navbar.style';
-
 import {
-  CommonMenu,
-  DropdownMenuWrapper,
   IconHeadBlack,
   NavbarButtonsContainer,
   NavbarContainer,
@@ -24,17 +21,9 @@ import {
   NavTypography,
   SmallScreenList,
   NavbarDrawer,
-  AvatarDropdownMenuWrapper,
-  DropdownIcon,
 } from './Navbar.style';
 import { Button } from '../../components/buttons/Button.style';
 import { AppContentWrapper } from '../../components/common/Global.style';
-// import { IStepOption } from '../../contexts/MultiStepperContext';
-// import LoginModal from '../../features/auth/login/LoginModal';
-// import SignUpModal from '../../features/auth/sign-up/SignUpModal';
-// import { educationLevelOptions } from '../../hooks/resources/useReferenceData';
-// import useMultiStepForm from '../../hooks/useMultiStepper';
-// import { EducationLevel } from '../../types/resources';
 
 const pages = [
   { name: 'Home', link: '/' },
@@ -44,65 +33,12 @@ const pages = [
 
 const Navbar: React.FC = () => {
   const [signUp, setSignUp] = useState(false);
-  const router = useRouter();
-  // const session = useSession();
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(
-    null,
-  );
   const [drawerOpen, setDrawerOpen] = useState(false);
-  // const [openLogin, setOpenLogin] = useState(false);
-  // const [openSignUp, setOpenSignUp] = useState(false);
-
-  // const {
-  //   selectOptionNavbar,
-  //   setCurrentStep,
-  // } = useMultiStepForm();
-
-  const open = Boolean(anchorEl);
-  const avatarOpen = Boolean(avatarAnchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAvatarAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  // const handleResourcesClick = (resource: IStepOption) => {
-  //   selectOptionNavbar('educationalResources', resource);
-
-  //   // const step = resource.value === EducationLevel.ENTRANCE_EXAMS ? 1.5 : 2;
-
-  //   setCurrentStep(step);
-
-  //   router.push('/resources');
-
-  //   handleClose();
-  // };
-
-  const handleAvatarClose = () => {
-    setAvatarAnchorEl(null);
-  };
-
-  const handleOpenLogin = () => {
-    // setOpenLogin(true);
-    // setOpenSignUp(false);
-  };
-
-  // const handleCloseLogin = () => setOpenLogin(false);
 
   const handleOpenSignUp = () => {
     setSignUp(!signUp);
   };
-
-  // const handleCloseSignUp = () => setOpenSignUp(false);
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -117,269 +53,122 @@ const Navbar: React.FC = () => {
     };
 
   return (
-    <>
-      <NavbarContainer position='fixed'>
-        <AppContentWrapper>
-          <NavbarContentWrapper>
-            <NavbarLogoHead href='/'>
-              <Image src={'/logo.svg'} width={160} height={65} alt='Logo' />
-            </NavbarLogoHead>
+    <NavbarContainer position='fixed'>
+      <AppContentWrapper>
+        <NavbarContentWrapper>
+          <NavbarLogoHead href='/'>
+            <Image src={'/logo.svg'} width={160} height={65} alt='Logo' />
+          </NavbarLogoHead>
 
-            <NavbarLinksContainer sx={{ display: { xs: 'none', lg: 'flex' } }}>
-              {pages.map((page, index) =>
-                page.name === 'Resources' ? (
-                  <DropdownMenuWrapper key={index}>
-                    <NavbarLinkWrapper>
-                      <NavbarLink
-                        id='fade-button'
-                        aria-controls={open ? 'fade-menu' : undefined}
-                        aria-haspopup='true'
-                        aria-expanded={open ? 'true' : undefined}
-                        href='/resources'
-                      >
-                        {page.name}
-                      </NavbarLink>
-                      <DropdownIcon
-                        src='/icons/down-black.svg'
-                        alt='dropdown-icon'
-                        sx={{ cursor: 'pointer' }}
-                        open={open}
-                        width={12}
-                        height={9}
-                        onClick={handleClick}
-                      />
-                    </NavbarLinkWrapper>
+          <NavbarLinksContainer sx={{ display: { xs: 'none', lg: 'flex' } }}>
+            {pages.map((page, index) => (
+              <NavbarLinkWrapper key={index}>
+                <Link href={page.link}>
+                  <NavbarLink>{page.name}</NavbarLink>
+                </Link>
+              </NavbarLinkWrapper>
+            ))}
+          </NavbarLinksContainer>
 
-                    <CommonMenu
-                      id='fade-menu'
-                      MenuListProps={{
-                        'aria-labelledby': 'fade-button',
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      disableScrollLock={true}
-                      transformOrigin={{
-                        horizontal: 'center',
-                        vertical: 'top',
-                      }}
-                      anchorOrigin={{
-                        horizontal: 'center',
-                        vertical: 'bottom',
-                      }}
-                      sx={{ transform: 'translate(-40px ,20px)' }}
-                    >
-                      {/* {educationLevelOptions.map((resource, idx) => (
-                        <MenuItem
-                          key={idx}
-                          sx={{ fontSize: '1.6rem' }}
-                          onClick={() => handleResourcesClick(resource)}
-                        >
-                          {resource.name}
-                        </MenuItem>
-                      ))} */}
-                    </CommonMenu>
-                  </DropdownMenuWrapper>
-                ) : (
-                  <NavbarLinkWrapper key={index} smallSR={false}>
-                    <Link href={page.link}>
-                      <NavbarLink>{page.name}</NavbarLink>
-                    </Link>
-                  </NavbarLinkWrapper>
-                ),
-              )}
-            </NavbarLinksContainer>
-
-            <NavbarButtonsContainer
-              sx={{ display: { xs: 'none', lg: 'flex' } }}
-            >
-              {/* Avatar Dropdown for logged-in user, were going to use it in future */}
-              {
-                // session.data ? (
-                //   <AvatarDropdownMenuWrapper>
-                //     <IconButton onClick={handleAvatarClick}>
-                //       <Avatar src="" alt="User Avatar" />
-                //     </IconButton>
-                //     <CommonMenu
-                //       id="avatar-menu"
-                //       anchorEl={avatarAnchorEl}
-                //       open={avatarOpen}
-                //       onClose={handleAvatarClose}
-                //       disableScrollLock={true}
-                //       transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                //       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                //     >
-                //       <MenuItem>
-                //         <strong style={{ textTransform: 'none' }}>{session.data?.user?.email}</strong>
-                //       </MenuItem>
-                //       {session?.data?.user?.role === 'ADMIN' && (
-                //         <MenuItem
-                //           onClick={() => {
-                //             router.push('/admin');
-                //           }}
-                //         > Admin</MenuItem>
-                //       )}
-                //       <MenuItem
-                //         onClick={() => {
-                //           signOut();
-                //         }}
-                //       >
-                //         Logout
-                //       </MenuItem>
-                //     </CommonMenu>
-                //   </AvatarDropdownMenuWrapper>
-                // ) : (
-                <>
-                  <Link href='/login?role=mom'>
-                    <Button
-                      fontSize='16px'
-                      borderRadius='8px'
-                      width='115px'
-                      height='37px'
-                      onClick={handleOpenLogin}
-                    >
-                      Login
-                    </Button>
-                  </Link>
-
-                  <SignUpWrapper>
-                    <Button
-                      special
-                      fontSize='16px'
-                      borderRadius='8px'
-                      width='115px'
-                      height='37px'
-                      onClick={handleOpenSignUp}
-                    >
-                      Sign Up
-                    </Button>
-                    <SignUpDropDown val={signUp}>
-                      <Link href='/registeration-mom'>Family</Link>
-                      <Link href='/registeration-mom-helper'>Mom Helper</Link>
-                    </SignUpDropDown>
-                  </SignUpWrapper>
-                </>
-                // )
-              }
-
-              {/* Test Login/Sign Up buttons */}
-            </NavbarButtonsContainer>
-
-            <IconButton
-              edge='start'
-              color='inherit'
-              aria-label='menu'
-              onClick={toggleDrawer(true)}
-              sx={{ display: { xs: 'block', lg: 'none' } }}
-            >
-              <Image
-                src='/icons/menu.svg'
-                alt='menu icon'
-                width={24}
-                height={24}
-                style={{ filter: 'brightness(0%)' }}
-              />
-            </IconButton>
-
-            <NavbarDrawer
-              anchor='right'
-              open={drawerOpen}
-              onClose={toggleDrawer(false)}
-              sx={{ display: { xs: 'block', lg: 'none' } }}
-            >
-              <Box
-                sx={{ maxWidth: 297, width: '90%', padding: '61px 58px' }}
-                role='presentation'
-                onClick={toggleDrawer(false)}
-                onKeyDown={toggleDrawer(false)}
-              >
-                <SmallScreenList>
-                  {pages?.map((page, index) => (
-                    <NavbarLinkWrapper key={index} smallSR>
-                      <NavbarLink href={page.link}>{page.name}</NavbarLink>
-                    </NavbarLinkWrapper>
-                  ))}
-                </SmallScreenList>
-                <Box sx={{ mt: 2 }}>
-                  <NavTypography>Follow Us</NavTypography>
-                  <Box
-                    sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}
-                  >
-                    <IconHeadBlack
-                      src='/icons/youtube.svg'
-                      alt='YouTube'
-                      width={17}
-                      height={12}
-                    />
-                    <IconHeadBlack
-                      src='/icons/instagram.svg'
-                      alt='Instagram'
-                      width={14}
-                      height={14}
-                    />
-                    <IconHeadBlack
-                      src='/icons/degree.svg'
-                      alt='degree'
-                      width={19}
-                      height={12}
-                    />
-                  </Box>
-                </Box>
-                <NavbarButtonsContainer
-                  sx={{ display: { xs: 'flex', lg: 'none' }, mt: '20px' }}
+          <NavbarButtonsContainer sx={{ display: { xs: 'none', lg: 'flex' } }}>
+            <>
+              <Link href='/login?role=mom'>
+                <Button
+                  fontSize='16px'
+                  borderRadius='8px'
+                  width='115px'
+                  height='37px'
                 >
-                  {/* {session.data ? (
-                    <Button
-                      special
-                      sx={{
-                        minWidth: '140px',
-                      }}
-                      onClick={handleOpenSignUp}
-                    >
-                      Your Account
-                    </Button>
-                  ) : (
-                    <>
-                      <Button
-                        fontSize="16px"
-                        borderRadius="8px"
-                        width="96px"
-                        height="37px"
-                        onClick={handleOpenLogin}
-                      >
-                        Login
-                      </Button>
+                  Login
+                </Button>
+              </Link>
 
-                      <Button
-                        special
-                        fontSize="16px"
-                        borderRadius="8px"
-                        width="96px"
-                        height="37px"
-                        onClick={handleOpenSignUp}
-                      >
-                        Sign Up
-                      </Button>
-                    </>
-                  )} */}
-                </NavbarButtonsContainer>
+              <SignUpWrapper>
+                <Button
+                  special
+                  fontSize='16px'
+                  borderRadius='8px'
+                  width='115px'
+                  height='37px'
+                  onClick={handleOpenSignUp}
+                >
+                  Sign Up
+                </Button>
+                <SignUpDropDown val={signUp}>
+                  <Link href='/registeration-mom'>Family</Link>
+                  <Link href='/registeration-mom-helper'>Mom Helper</Link>
+                </SignUpDropDown>
+              </SignUpWrapper>
+            </>
+          </NavbarButtonsContainer>
+
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='menu'
+            onClick={toggleDrawer(true)}
+            sx={{ display: { xs: 'block', lg: 'none' } }}
+          >
+            <Image
+              src='/icons/burger-menu.svg'
+              alt='menu icon'
+              width={24}
+              height={24}
+            />
+          </IconButton>
+
+          <NavbarDrawer
+            anchor='right'
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}
+            sx={{ display: { xs: 'block', lg: 'none' } }}
+          >
+            <Box
+              sx={{ maxWidth: 297, width: '90%', padding: '61px 58px' }}
+              role='presentation'
+              onClick={toggleDrawer(false)}
+              onKeyDown={toggleDrawer(false)}
+            >
+              <SmallScreenList>
+                {pages?.map((page, index) => (
+                  <NavbarLinkWrapper key={index} smallsr>
+                    <NavbarLink href={page.link}>{page.name}</NavbarLink>
+                  </NavbarLinkWrapper>
+                ))}
+              </SmallScreenList>
+              <Box sx={{ mt: 2 }}>
+                <NavTypography>Follow Us</NavTypography>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}
+                >
+                  <IconHeadBlack
+                    src='/footer/twitter.svg'
+                    alt='Twitter'
+                    width={17}
+                    height={12}
+                  />
+                  <IconHeadBlack
+                    src='/footer/linked-in.svg'
+                    alt='Linked In'
+                    width={14}
+                    height={14}
+                  />
+                  <IconHeadBlack
+                    src='/footer/github.svg'
+                    alt='Github'
+                    width={19}
+                    height={12}
+                  />
+                </Box>
               </Box>
-            </NavbarDrawer>
-          </NavbarContentWrapper>
-        </AppContentWrapper>
-      </NavbarContainer>
-
-      {/* <LoginModal
-        open={openLogin}
-        handleClose={handleCloseLogin}
-        onSwitchToSignUp={handleOpenSignUp}
-      />
-      <SignUpModal
-        open={openSignUp}
-        handleClose={handleCloseSignUp}
-        onSwitchToLogin={handleOpenLogin}
-      /> */}
-    </>
+              <NavbarButtonsContainer
+                sx={{ display: { xs: 'flex', lg: 'none' }, mt: '20px' }}
+              ></NavbarButtonsContainer>
+            </Box>
+          </NavbarDrawer>
+        </NavbarContentWrapper>
+      </AppContentWrapper>
+    </NavbarContainer>
   );
 };
 

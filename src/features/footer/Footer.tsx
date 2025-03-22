@@ -2,8 +2,9 @@
 
 import { Box, List, ListItem, styled, Typography } from '@mui/material';
 import Image from 'next/image';
-import { Link } from '@/i18n/routing';
 import { FC } from 'react';
+
+import { Link } from '@/i18n/routing';
 
 const FooterMain = styled(Box)({
   backgroundColor: '#37B5FF',
@@ -41,7 +42,6 @@ const FooterLinksList = styled(List)({
   color: '#fff',
 });
 const FooterListItem = styled(ListItem)({
-
   padding: '0',
 });
 
@@ -146,30 +146,6 @@ const FooterCopyRight = styled(Typography)(() => ({
   color: '#fff',
   letterSpacing: '1px',
 }));
-
-// const FooterLink = styled(Link)(({ theme }) => ({
-//   color: '#fff',
-//   fontWeight: 400,
-//   fontSize: '16px',
-//   textTransform: 'capitalize',
-//   fontStyle: 'normal',
-//   margin: '0 36px',
-//   whiteSpace: 'nowrap',
-//   [theme.breakpoints.down('md')]: {
-//     margin: '0 10px',
-//     fontSize: '13px',
-//   },
-//   [theme.breakpoints.down('sm')]: {
-//     margin: '10px 0',
-//     textAlign: 'end',
-//     width: '100%',
-//     fontSize: '15px',
-//   },
-//   '&:hover':{
-//     color: 'black',
-//     transition: 'all 0.3s ease',
-//   },
-// }));
 
 const Footer: FC = () => {
   const pages = [

@@ -2,17 +2,20 @@
 
 import { useQueryState } from 'nuqs';
 
+import { Button } from '@/components/buttons/Button.style';
+import { Link } from '@/i18n/routing';
+
 import {
   RadioContainer,
   StyledRadio,
   StyledLabel,
-} from '../form-styles/Froms.style';
-import { FormContainer } from '../form-styles/Froms.style';
-import { StyledInputField, StyledInputLabel } from '../form-styles/Froms.style';
-import { Button } from '@/components/buttons/Button.style';
-import { RegisterTypography } from '../form-styles/Froms.style';
-import Box from '@mui/material';
-import { Link } from '@/i18n/routing';
+} from '../../components/form/Froms.style';
+import { FormContainer } from '../../components/form/Froms.style';
+import {
+  StyledInputField,
+  StyledInputLabel,
+} from '../../components/form/Froms.style';
+import { RegisterTypography } from '../../components/form/Froms.style';
 
 export default function LoginForm() {
   const [value, setValue] = useQueryState('role', { defaultValue: 'mom' });
@@ -38,13 +41,20 @@ export default function LoginForm() {
 
       <FormContainer customwidth='630px'>
         <StyledInputLabel htmlFor='email'>Email</StyledInputLabel>
-        <StyledInputField type='email' id='email' name='email' fullWidth />
+        <StyledInputField
+          disableUnderline
+          type='email'
+          id='email'
+          name='email'
+          fullWidth
+        />
         <StyledInputLabel htmlFor='password'>Password</StyledInputLabel>
         <StyledInputField
           type='password'
           id='password'
           name='password'
           fullWidth
+          disableUnderline
         />
 
         <Link
@@ -72,7 +82,14 @@ export default function LoginForm() {
 
         <RegisterTypography>
           Don&apos;t have a account yet?
-          <Link href='/' style={{ color: '#00C8FF' }}>
+          <Link
+            href={
+              value === 'mom'
+                ? '/registeration-mom'
+                : '/registeration-mom-helper'
+            }
+            style={{ color: '#00C8FF' }}
+          >
             {' '}
             &nbsp;Register Now
           </Link>

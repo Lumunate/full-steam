@@ -57,7 +57,14 @@
     "import/order": [
       "error",
       {
-        "groups": ["builtin", "external", "internal", ["sibling", "parent"], "index", "unknown"],
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["sibling", "parent"],
+          "index",
+          "unknown"
+        ],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",
@@ -65,9 +72,15 @@
         }
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_" }
+    ],
     "newline-after-var": ["error", "always"],
-    "padding-line-between-statements": ["error", { "blankLine": "always", "prev": "*", "next": "return" }]
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "return" }
+    ]
   },
   "settings": {
     "import/resolver": {

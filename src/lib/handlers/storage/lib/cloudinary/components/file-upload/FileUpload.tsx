@@ -1,7 +1,13 @@
 import { CloudUpload as UploadIcon } from '@mui/icons-material';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ErrorIcon from '@mui/icons-material/Error';
-import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -18,7 +24,7 @@ import { SignatureResponse } from '../../types/SignatureResponse';
 const FileUpload: React.FC<FileUploadProps> = ({
   maxFileSize = 10 * 1024 * 1024, // 10MB default
   maxFiles = 5,
-  hoist = () => { },
+  hoist = () => {},
   reset,
 }) => {
   const [files, setFiles] = useState<File[]>([]);
@@ -263,14 +269,23 @@ const FileUpload: React.FC<FileUploadProps> = ({
               {uploadStatus?.type === 'error' ? (
                 <Stack>
                   <ErrorIcon sx={{ mr: 2, color: 'black' }} />
-                  <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
-                    There seems to be an error with the file you are trying to upload.
+                  <Typography
+                    variant='body2'
+                    sx={{ textTransform: 'none' }}
+                    color='text.secondary'
+                  >
+                    There seems to be an error with the file you are trying to
+                    upload.
                   </Typography>
                 </Stack>
               ) : uploadStatus?.type === 'success' ? (
                 <Stack>
                   <DoneAllIcon sx={{ mr: 2, color: 'black' }} />
-                  <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
+                  <Typography
+                    variant='body2'
+                    sx={{ textTransform: 'none' }}
+                    color='text.secondary'
+                  >
                     File Uploaded Successfully
                   </Typography>
                 </Stack>
@@ -282,8 +297,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
                       transform: 'translate(-14px, -2px)',
                     }}
                   />
-                  <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
-                    Browse and choose the files you want to upload from your computer
+                  <Typography
+                    variant='body2'
+                    sx={{ textTransform: 'none' }}
+                    color='text.secondary'
+                  >
+                    Browse and choose the files you want to upload from your
+                    computer
                   </Typography>
                 </Stack>
               )}

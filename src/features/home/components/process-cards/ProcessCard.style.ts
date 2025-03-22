@@ -10,12 +10,10 @@ export const ProcessCardContainer = styled(Box)({
 });
 
 export const ProcessCardNumber = styled(Typography)({
-
   fontSize: '117px',
   background: 'linear-gradient(180deg, #37B5FF 0%, #62C5FF 44%, #FFFFFF 100%)',
   WebkitBackgroundClip: 'text',
-  color: 'transparent'
-
+  color: 'transparent',
 });
 export const ProcessCardHeading = styled(Typography)({
   display: 'flex',
@@ -26,9 +24,8 @@ export const ProcessCardHeading = styled(Typography)({
   gap: '6px',
 });
 export const ProcessCardDescription = styled(Box)({
-  
   color: '#000',
   fontSize: '16px',
   fontWeight: 400,
-  marginTop: '12px'
+  marginTop: '12px',
 });

@@ -34,7 +34,7 @@ export const FeedbackFormContainer = styled(Box)(({ theme }) => ({
     fontWeight: 600,
     height: '36px !important',
     fontFamily: 'Jost, sans-serif !important',
-    marginTop: '15px'
+    marginTop: '15px',
   },
 
   '& .feedback-datepicker::placeholder': {
@@ -62,10 +62,10 @@ export const FeedbackFormContainer = styled(Box)(({ theme }) => ({
   '& .react-datepicker__header': {
     background: '#fff',
     borderBottom: '1px solid #e5e5e5',
-    padding: '10px 15px'
+    padding: '10px 15px',
   },
   '& .react-datepicker__day': {
-    fontSize: '10px'
+    fontSize: '10px',
   },
   '& .react-datepicker__day-names': {
     marginTop: '6px',
@@ -85,7 +85,7 @@ export const FeedbackFormContainer = styled(Box)(({ theme }) => ({
     fontWeight: 500,
   },
   '& .react-datepicker__month': {
-    margin: '10px 15px 20px'
+    margin: '10px 15px 20px',
   },
   '& .react-datepicker__week': {
     padding: '3px 0',
@@ -94,17 +94,18 @@ export const FeedbackFormContainer = styled(Box)(({ theme }) => ({
   },
   '& .react-datepicker-popper .react-datepicker__triangle': {
     stroke: 'none',
-    display: 'none'
+    display: 'none',
   },
-  '& .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle': {
-    fill: 'none',
-    color: 'none',
-  },
+  '& .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle':
+    {
+      fill: 'none',
+      color: 'none',
+    },
   '& .react-datepicker__navigation': {
-    top: '5px'
+    top: '5px',
   },
   '& .react-datepicker__navigation-icon::before': {
     borderColor: '#000',
-    borderWidth: '1px 1px 0 0'
+    borderWidth: '1px 1px 0 0',
   },
 }));

@@ -1,17 +1,13 @@
 'use client';
 
-import {
-  Box,
-  styled,
-  Typography
-} from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 
 export const FeedbackContainer = styled(Box)(({ theme }) => ({
   padding: '150px 0 100px',
   textAlign: 'center',
   minHeight: 'calc(100vh - 109px)',
-  display: 'flex', 
-  flexDirection: 'column', 
+  display: 'flex',
+  flexDirection: 'column',
   justifyContent: 'center',
   [theme.breakpoints.down('lg')]: {
     padding: '150px 0 80px',
@@ -63,5 +59,5 @@ export const FeedbackParaTypography = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down(576)]: {
     fontSize: '12px',
-  }
+  },
 }));

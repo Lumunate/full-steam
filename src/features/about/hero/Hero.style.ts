@@ -58,17 +58,16 @@ export const HeroContent = styled(CommonHeroTypography)(({ theme }) => ({
   },
   [theme.breakpoints.down(400)]: {
     fontSize: '12px',
-  }
-
+  },
 }));
 
 export const HeroWrapper = styled(Box)({
   width: '100%',
   minHeight: 'calc(100vh + 135px)',
   position: 'relative',
-  display: 'flex', 
+  display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 });
 
 export const HeroImage = styled(Image)({
@@ -78,9 +77,7 @@ export const HeroImage = styled(Image)({
 });
 
 export const HeroDesriptionHolder = styled(Box)({
-
   maxWidth: '560px',
-
 });
 export const ButtonsContianer = styled(Box)({
   display: 'flex',
@@ -101,17 +98,18 @@ export const HeroImageOverlay = styled(Box)({
   left: 0,
   width: '100%',
   height: '100%',
-  background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.46) 100%)',
-  filter: 'drop-shadow(0px 4px 20.8px rgba(0, 0, 0, 0.55)'
+  background:
+    'linear-gradient(0deg, rgba(0, 0, 0, 0.46) 0%, rgba(0, 0, 0, 0.46) 100%)',
+  filter: 'drop-shadow(0px 4px 20.8px rgba(0, 0, 0, 0.55)',
 });
 
-export const HeroContentContainer = styled(Box)(({ theme }) =>({
+export const HeroContentContainer = styled(Box)(({ theme }) => ({
   padding: '265px 0 349px',
   display: 'flex',
   alignItems: 'end',
   [theme.breakpoints.down('lg')]: {
     padding: '180px 0 300px',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   [theme.breakpoints.down('sm')]: {
     padding: '160px 0 280px',
@@ -144,7 +142,7 @@ export const HeroRightContentCont = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down('sm')]: {
     paddingRight: '0',
-    alignItems: 'start'
+    alignItems: 'start',
   },
 }));
 
@@ -159,10 +157,9 @@ export const HeroCard = styled(Box)<{ width?: number }>(({ theme, width }) => ({
   marginBottom: '10px',
   maxWidth: width ? `${width}px` : '100%',
   [theme.breakpoints.down('sm')]: {
-    width:'100%',
+    width: '100%',
     padding: '15px 10px',
   },
-
 }));
 
 export const HeroCardHeading = styled(CommonHeroTypography)(({ theme }) => ({
@@ -180,7 +177,7 @@ export const HeroCardHeading = styled(CommonHeroTypography)(({ theme }) => ({
   },
   [theme.breakpoints.down(400)]: {
     fontSize: '12px',
-  }
+  },
 }));
 
 export const HeroMediaHead = styled(Box)(({ theme }) => ({
@@ -209,25 +206,26 @@ export const SocialIconsWrapper = styled(Box)({
   gap: '21px',
 });
 
-export const HeroLink = styled(Link) ({
+export const HeroLink = styled(Link)({
   display: 'inline-block',
-  transition: 'transform 0.3s ease, filter 0.3s ease', 
+  transition: 'transform 0.3s ease, filter 0.3s ease',
   transform: 'rotate(-90deg)',
   '&:hover': {
-    filter: 'invert(54%) sepia(34%) saturate(2600%) hue-rotate(329deg) brightness(92%) contrast(101%)',
+    filter:
+      'invert(54%) sepia(34%) saturate(2600%) hue-rotate(329deg) brightness(92%) contrast(101%)',
     transform: 'scale(1.2) rotate(-90deg)',
   },
 });
-export const ConsultantLink = styled(Link) ({
-  display:'block',
-  '&:hover':{
-    color:'#DA9694',
+export const ConsultantLink = styled(Link)({
+  display: 'block',
+  '&:hover': {
+    color: '#DA9694',
   },
-  color:'white',
-  backgroundColor:'transparent',
-  transition: 'transform 0.3s ease, filter 0.3s ease', 
-  marginTop:'20px',
-  fontSize:'16px'
+  color: 'white',
+  backgroundColor: 'transparent',
+  transition: 'transform 0.3s ease, filter 0.3s ease',
+  marginTop: '20px',
+  fontSize: '16px',
 });
 
 export const HeroImageContainer = styled(Box)({

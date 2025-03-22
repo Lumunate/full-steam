@@ -6,9 +6,9 @@ export const HeroWrapper = styled(Box)({
   width: '100%',
   minHeight: 'calc(100vh + 135px)',
   position: 'relative',
-  display: 'flex', 
+  display: 'flex',
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 });
 
 export const ServiceCardGrid = styled(Box)({
@@ -16,6 +16,5 @@ export const ServiceCardGrid = styled(Box)({
 
   display: 'grid',
   gridTemplateColumns: 'repeat(3,1fr)',
-  gap: '20px'
-
+  gap: '20px',
 });
