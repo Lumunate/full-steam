@@ -1,7 +1,12 @@
-import { Role, User } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
 import { prisma } from '@/lib/prisma';
-import { CreateUser } from '@/types/auth/register-user';
+import { CreateUser, RegisterUserInput, Role } from '@/types/auth/register-user';
+
+type User = {
+  id: string;
+  [key: string]: any;
+};
 
 export async function findUser(id: string) {
   return prisma.user.findUniqueOrThrow({
@@ -22,19 +27,61 @@ export async function findUserByEmail(email: string) {
 }
 
 export async function createUser(data: CreateUser) {
-  const birthDate = new Date(data.birthDate);
+  const birthDate = new Date(data.dateOfBirth);
 
   return prisma.user.create({
     data: {
-      role: data.isAdmin ? Role.ADMIN : Role.USER,
+      role: data.role || Role.USER,
       firstName: data.firstName,
       lastName: data.lastName,
-      birthDate: birthDate,
+      dateOfBirth: birthDate,
       gender: data.gender,
       email: data.email,
       password: data.password,
       phoneNumber: data.phoneNumber,
-      username: data.username,
+      address: data.address || '',
+      city: data.city || '',
+      postalCode: data.postalCode || '',
+    },
+  });
+}
+
+export async function registerUser(data: RegisterUserInput) {
+  const dateOfBirth = new Date(data.dateOfBirth);
+  
+  const hourlyRate = data.hourlyRate ? new Decimal(data.hourlyRate) : null;
+
+  return prisma.user.create({
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      city: data.city,
+      postalCode: data.postalCode,
+      password: data.password,
+      gender: data.gender,
+      dateOfBirth: dateOfBirth,
+      role: data.role,
+      agreeToTerms: data.agreeToTerms,
+      image: data.image,
+      shortBio: data.shortBio,
+      hourlyRate: hourlyRate,
+      governmentIdDocumentUrl: data.governmentIdDocumentUrl,
+      policeCheckDocumentUrl: data.policeCheckDocumentUrl,
+      paymentMethod: data.paymentMethod,
+      eTransferEmail: data.eTransferEmail,
+      bankTransitNumber: data.bankTransitNumber,
+      bankInstitutionNumber: data.bankInstitutionNumber,
+      bankAccountNumber: data.bankAccountNumber,
+      additionalInformation: data.additionalInformation,
+      paymentCardName: data.paymentCardName,
+      paymentCardNumber: data.paymentCardNumber,
+      paymentCardExpiry: data.paymentCardExpiry,
+      paymentCardCvv: data.paymentCardCvv,
+      savePaymentCard: data.savePaymentCard,
+      isApproved: data.role !== Role.HELPER, 
     },
   });
 }
@@ -45,11 +92,10 @@ export async function findAllUsers() {
       id: true,
       firstName: true,
       lastName: true,
-      birthDate: true,
+      dateOfBirth: true,
       gender: true,
       phoneNumber: true,
       email: true,
-      username: true,
       role: true,
     },
   });

@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+oimport { Role } from '@prisma/client';
 
 import { handleAuthorizeUserSession } from './handle-authorize-user-session';
 import AuthError, { AuthErrorType } from '../errors/types/AuthError';
