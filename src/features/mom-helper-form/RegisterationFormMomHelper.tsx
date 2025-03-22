@@ -4,7 +4,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Snackbar, Input, Alert, Checkbox } from '@mui/material';
+import { Snackbar, Input, Alert, Checkbox,  MenuItem } from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -24,14 +24,17 @@ import {
   StyledInputLabel,
   GridBox,
   InputHolder,
-  GridBoxBordered,
-  BorderBox,
   ControlBox,
   StyledCheckBoxLabel,
   CardCaption,
   CheckFlex,
   CheckBoxTypography,
   ButtonContainer,
+  CertificateUploadBox,
+  CertificateBoxWrapper,
+  CertificateStyledInputLabel,
+  OptionalGridBox,
+  StyledSelect,
 } from '../../components/form/Froms.style';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -54,7 +57,6 @@ export default function RegsiterationFormMomHelper() {
     }, {}),
   );
 
-  // Handler to toggle checkbox checked state
   const handleCheckboxChange = (label: string) => {
     setCheckedState(prevState => ({
       ...prevState,
@@ -76,7 +78,6 @@ export default function RegsiterationFormMomHelper() {
     city: '',
     postcode: '',
     country: '',
-    cfmPassword: '',
   });
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -114,8 +115,7 @@ export default function RegsiterationFormMomHelper() {
         formData.city &&
         formData.postcode &&
         formData.country &&
-        formData.password &&
-        formData.cfmPassword
+        formData.password 
       );
     }
     if (currentStep === 2) {
@@ -135,12 +135,7 @@ export default function RegsiterationFormMomHelper() {
 
       return;
     }
-    if (formData.password !== formData.cfmPassword) {
-      setMessage('Password Do Not Match');
-      setOpen(true);
-
-      return;
-    }
+    
     if (isFormValid()) {
       setCurrentStep(currentStep + 1);
     }
@@ -154,7 +149,7 @@ export default function RegsiterationFormMomHelper() {
     <>
       <FormHeading>Personal Information</FormHeading>
       <FormDescription>
-        Tell us about your family so we can match you with the right Mom Helper.
+      Tell us about yourself so families can get to know you.
       </FormDescription>
       <ProfileBox>
         <ProfileWrapper>
@@ -211,20 +206,30 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleChange}
           />
         </InputHolder>
-      </GridBox>
-      <InputHolder>
-        <StyledInputLabel htmlFor='email'>Email</StyledInputLabel>
-        <StyledInputField
-          disableUnderline
-          type='email'
-          id='email'
-          name='email'
-          value={formData.email}
-          onChange={handleChange}
-          fullWidth
-        />
-      </InputHolder>
-      <GridBox>
+        <InputHolder>
+          <StyledInputLabel htmlFor='email'>Email</StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='email'
+            id='email'
+            name='email'
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+          />
+        </InputHolder>
+        <InputHolder>
+          <StyledInputLabel htmlFor='email'>Password</StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='password'
+            id='password'
+            name='password'
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </InputHolder>
+     
         <InputHolder>
           <StyledInputLabel htmlFor='phone'>Phone Number</StyledInputLabel>
           <StyledInputField
@@ -296,31 +301,19 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleChange}
           />
         </InputHolder>
-        <InputHolder>
-          <StyledInputLabel htmlFor='email'>Password</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='password'
-            id='password'
-            name='password'
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </InputHolder>
-        <InputHolder>
-          <StyledInputLabel htmlFor='cfmPassword'>
-            Confirm Password
-          </StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='password'
-            id='cfmPassword'
-            name='cfmPassword'
-            value={formData.cfmPassword}
-            onChange={handleChange}
-          />
-        </InputHolder>
+        
       </GridBox>
+      <InputHolder>
+        <StyledInputLabel htmlFor='country'>Short Bio</StyledInputLabel>
+        <StyledInputField
+          disableUnderline
+          type='text'
+          id='country'
+          name='country'
+          fullWidth
+          multiline
+        />
+      </InputHolder>
     </>
   );
 
@@ -328,65 +321,10 @@ export default function RegsiterationFormMomHelper() {
     <>
       <FormHeading>Children & Service Needs</FormHeading>
       <FormDescription>
-        Share information about your children and the services you need.
+      Share your qualifications and the services you can provide.
       </FormDescription>
-      <StyledInputLabel>Children</StyledInputLabel>
-      <GridBoxBordered>
-        <InputHolder>
-          <StyledInputLabel htmlFor='childNams'>Name</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='text'
-            id='childName'
-            name='childName'
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </InputHolder>
-        <InputHolder>
-          <StyledInputLabel htmlFor='childAge'>Age</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='text'
-            id='childAge'
-            name='childAge'
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </InputHolder>
-      </GridBoxBordered>
-      <InputHolder>
-        <StyledInputLabel htmlFor='specialNotes'>
-          Special Notes
-        </StyledInputLabel>
-        <StyledInputField
-          disableUnderline
-          type='text'
-          id='specialNotes'
-          name='specialNotes'
-          multiline
-        />
-      </InputHolder>
-      <Button
-        width='100%'
-        height='54px'
-        sx={{
-          color: '#005782',
-          fontSize: '18px',
-          fontWeight: 700,
-          marginTop: '16px',
-        }}
-      >
-        <Image
-          src='/registeration-mom/add.svg'
-          alt='add '
-          height={24}
-          width={24}
-        />
-        Add Another Child
-      </Button>
 
-      <StyledInputLabel>Services Needed</StyledInputLabel>
+      <StyledInputLabel>Services You can Provide</StyledInputLabel>
       <GridBox>
         {checkBoxLabels.map((box, index) => (
           <ControlBox
@@ -406,18 +344,41 @@ export default function RegsiterationFormMomHelper() {
           </ControlBox>
         ))}
       </GridBox>
-      <InputHolder>
-        <StyledInputLabel htmlFor='specialNotes2'>
-          Special Notes
-        </StyledInputLabel>
-        <StyledInputField
-          disableUnderline
-          type='text'
-          id='specialNotes2'
-          name='specialNotes2'
-          multiline
-        />
-      </InputHolder>
+
+      <StyledInputLabel>Hourly Rate</StyledInputLabel>
+      <CardCaption>Set your hourly rate. Youll receive 80% of the total bill*</CardCaption>
+      <StyledInputField
+        type='number'
+        disableUnderline
+        
+      />
+      <CertificateBoxWrapper>
+        <CertificateStyledInputLabel>Government Issued ID</CertificateStyledInputLabel>
+        <CertificateUploadBox>
+          <Image src='/registeration-mom/upload.svg' height={20} width={20} alt='Upload Icon' />
+          <StyledCheckBoxLabel>
+            Upload Certificate
+          </StyledCheckBoxLabel>
+        </CertificateUploadBox>
+      </CertificateBoxWrapper>
+      <CertificateBoxWrapper>
+        <CertificateStyledInputLabel>Police Vulnerable Sector Check</CertificateStyledInputLabel>
+        <CertificateUploadBox>
+          <Image src='/registeration-mom/upload.svg' height={20} width={20} alt='Upload Icon' />
+          <StyledCheckBoxLabel>
+            Upload Certificate
+          </StyledCheckBoxLabel>
+        </CertificateUploadBox>
+      </CertificateBoxWrapper>
+      <CertificateBoxWrapper>
+        <CertificateStyledInputLabel>First Aid Certification</CertificateStyledInputLabel>
+        <CertificateUploadBox>
+          <Image src='/registeration-mom/upload.svg' height={20} width={20} alt='Upload Icon' />
+          <StyledCheckBoxLabel>
+            Upload Certificate
+          </StyledCheckBoxLabel>
+        </CertificateUploadBox>
+      </CertificateBoxWrapper>
     </>
   );
 
@@ -425,74 +386,73 @@ export default function RegsiterationFormMomHelper() {
     <>
       <FormHeading>Payment Details</FormHeading>
       <FormDescription>
-        Add your payment method to easily book Mom Helpers.
+      How would you like to receive payments for your services?
       </FormDescription>
-      <StyledInputLabel>Payment Method</StyledInputLabel>
-      <BorderBox>
-        <InputHolder>
-          <StyledInputLabel htmlFor='expiryDate'>Name on Card</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='text'
-            id='cardName'
-            name='cardName'
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </InputHolder>
-        <InputHolder>
-          <StyledInputLabel htmlFor='expiryDate'>Card Number</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='text'
-            id='cardNumber'
-            name='cardNumber'
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </InputHolder>
-
-        <GridBox>
-          <InputHolder>
-            <StyledInputLabel htmlFor='expiryDate'>
-              Expiry Date
-            </StyledInputLabel>
-            <StyledInputField
-              disableUnderline
-              type='text'
-              id='expiryDate'
-              name='expiryDate'
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </InputHolder>
-          <InputHolder>
-            <StyledInputLabel htmlFor='cvv'>CVV</StyledInputLabel>
-            <StyledInputField
-              disableUnderline
-              type='number'
-              id='cvv'
-              name='cvv'
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </InputHolder>
-        </GridBox>
+     
+      <InputHolder>
+        <StyledInputLabel>Payment Method</StyledInputLabel>
+        <StyledSelect
+          labelId="select-label"
+          id="select"
+          fullWidth
+          
+        >
+          <MenuItem value={10} selected >Direct Deposit</MenuItem>
+          <MenuItem value={20}>COD</MenuItem>
+          <MenuItem value={30}>Credit Card</MenuItem>
+        </StyledSelect>
+      </InputHolder>
+      <InputHolder>
+        <StyledInputLabel htmlFor='tfrEmail'>Email for a e-Transfer</StyledInputLabel>
         <CardCaption>
-          Your card will be pre-authorized for payment when you book a Mom
-          Helper.
+        Payments will be sent to this email address.
         </CardCaption>
-      </BorderBox>
-
-      <CheckFlex>
-        <Checkbox
-          icon={<CheckBoxOutlineBlankIcon />}
-          checkedIcon={<CheckBoxIcon />}
+        <StyledInputField
+          disableUnderline
+          type='email'
+          id='tfrEmail'
+          name='tfrEmail'
         />
-        <CheckBoxTypography>
-          Save this card for future bookings
-        </CheckBoxTypography>
-      </CheckFlex>
+      </InputHolder>
+
+      <StyledInputLabel >
+          Direct Deposit Information (Optional)
+      </StyledInputLabel>
+
+      <OptionalGridBox>
+        <InputHolder>
+          <StyledInputLabel htmlFor='transitNumber'>
+              Transit Number
+          </StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='number'
+            id='transitNumber'
+            name='transitNumber'
+          />
+        </InputHolder>
+        <InputHolder>
+          <StyledInputLabel htmlFor='institutionNumber'>
+              Institutuon Number
+          </StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='number'
+            id='institutionNumber'
+            name='institutionNumber'
+          />
+        </InputHolder>
+        <InputHolder>
+          <StyledInputLabel htmlFor='accNumber'>Account Number</StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='number'
+            id='accNumber'
+            name='accNumber'
+          />
+        </InputHolder>
+      </OptionalGridBox>
+
       <CheckFlex>
         <Checkbox
           icon={<CheckBoxOutlineBlankIcon />}

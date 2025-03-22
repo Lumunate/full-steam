@@ -2,7 +2,7 @@ import { FlexBox } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
 import { SectionDescriptionText } from '@/features/home/Home.style';
-import RegsiterationFormMomHelper from '@/features/mom-helper-form/RegisterationFormFamily';
+import RegsiterationFormMomHelper from '@/features/mom-helper-form/RegisterationFormMomHelper';
 
 export default function LoginPage() {
   return (

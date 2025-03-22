@@ -8,8 +8,9 @@ import {
   Typography,
   Input,
   InputLabel,
+  Select,
 } from '@mui/material';
-import { border, display, styled } from '@mui/system';
+import {   styled } from '@mui/system';
 import Image from 'next/image';
 export const RadioContainer = styled(RadioGroup)({
   background: '#E7F7FF',
@@ -25,8 +26,8 @@ export const StyledRadio = styled(Radio)({
   display: 'none',
 });
 
-export const StyledLabel = styled(FormControlLabel)(
-  ({ theme, isselected }) => ({
+export const StyledLabel = styled(FormControlLabel)<{ isselected?: boolean }>(
+  ({  isselected }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -40,20 +41,44 @@ export const StyledLabel = styled(FormControlLabel)(
   }),
 );
 
-export const FormContainer = styled(Box)(({ customwidth, paddingBottom }) => ({
+export const CertificateUploadBox = styled(Box)({
+
+  background: '#EAF9FF',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap:'16px',
+  padding: '10px 20px',
+  borderRadius: '15px',
+  border: '1px solid #DFEAF2',
+  height: '62px'
+});
+
+export const FormContainer = styled(Box)<{ customwidth?: string; paddingBottom?: string }>(({ customwidth = '1200px', paddingBottom = '50px' }) => ({
   padding: '32px',
   borderRadius: '25px',
   boxShadow: '0px 3px 22.9px 0px #0000001A',
   marginTop: '32px',
-  width: customwidth ? customwidth : '1200px',
-  maxWidth: customwidth ? customwidth : '1200px',
-  paddingBottom: paddingBottom ? paddingBottom : '50px',
+  width: customwidth,
+  maxWidth: customwidth,
+  paddingBottom: paddingBottom,
 }));
 
 export const StyledInputField = styled(Input)({
   border: '1px solid #DFEAF2',
   borderRadius: '15px',
   padding: '22px',
+  fontSize: '15px',
+  fontWeight: 400,
+  color: '#005782',
+  width: '100%',
+});
+
+export const StyledSelect = styled(Select)({
+  border: '1px solid #DFEAF2',
+  borderRadius: '15px',
+  padding: '15px',
   fontSize: '15px',
   fontWeight: 400,
   color: '#005782',
@@ -103,11 +128,29 @@ export const GridBox = styled(Box)({
   gap: '0 37px',
 });
 
+export const OptionalGridBox =styled(GridBox)({
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gap: '0 20px',
+
+});
+
 export const BorderBox = styled(Box)({
   padding: '15px 25px',
   border: '1px solid #DFEAF2',
   borderRadius: '15px',
 });
+
+export const CertificateBoxWrapper = styled(BorderBox)({
+
+  padding: '15px',
+  marginTop: '16px'
+
+});
+
+export const CertificateStyledInputLabel = styled(StyledInputLabel)({
+  marginTop: '0px'
+});
+
 export const GridBoxBordered = styled(BorderBox)({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',

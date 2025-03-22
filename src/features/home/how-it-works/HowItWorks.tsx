@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
+import { Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
-import 'swiper/css';
-import 'swiper/css/pagination';
 import { AppContentWrapper } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
@@ -9,6 +9,10 @@ import ProcessCard from '@/features/home/components/process-cards/ProcessCards';
 
 import { ProcessMain, ProcessWrapper } from './HowItWorks.style';
 import { SectionDescriptionText } from '../Home.style';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+
 
 const processSteps = [
   {
@@ -62,9 +66,10 @@ const HowItWorks: React.FC = () => {
                 display: 'flex',
                 gap: '20px',
                 width: '50%',
-                overflowX: 'hidden',
+                overflow: 'hidden'
               }}
             >
+
               {processSteps.map((step, index) => (
                 <ProcessCard
                   key={index}
@@ -74,6 +79,7 @@ const HowItWorks: React.FC = () => {
                   logoSrc={step.logoSrc}
                 />
               ))}
+            
             </Box>
           </ProcessWrapper>
         </AppContentWrapper>
