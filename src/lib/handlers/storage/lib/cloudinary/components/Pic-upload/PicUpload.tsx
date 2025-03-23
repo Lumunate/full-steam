@@ -1,27 +1,25 @@
 import { CloudUpload as UploadIcon } from '@mui/icons-material';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ErrorIcon from '@mui/icons-material/Error';
 import {
   Box,
-  Button,
   CircularProgress,
-  Stack,
   Typography,
+  Avatar,
 } from '@mui/material';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useSnackbar } from '@/components/snackbar';
 
-import { DropZone, Input, UploadContainer } from './FileUpload.style';
+import { DropZone, Input } from './PicUpload.style';
 import {
   CloudinaryUploadResponse,
   FileUploadProps,
   UploadStatus,
-} from './FileUpload.types';
+} from './PicUpload.types';
 import { SignatureResponse } from '../../types/SignatureResponse';
 
-const FileUpload: React.FC<FileUploadProps> = ({
+const PicUpload: React.FC<FileUploadProps> = ({
   maxFileSize = 10 * 1024 * 1024, // 10MB default
   maxFiles = 5,
   hoist = () => {},
@@ -31,6 +29,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<UploadStatus | null>(null);
   const [, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [previewUrl, setPreviewUrl] = useState<string>('');
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -38,6 +37,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       setFiles([]);
       setUploadStatus(null);
       setUploadProgress({});
+      setPreviewUrl('');
       hoist(''); // Clear the hoisted value
     }
   }, [reset, hoist]);
@@ -45,12 +45,19 @@ const FileUpload: React.FC<FileUploadProps> = ({
   const validateFiles = (
     fileList: File[],
   ): { isValid: boolean; error?: string } => {
+    const allowedTypes = [
+      'image/jpeg', 
+      'image/jpg', 
+      'image/png', 
+      'image/gif'
+    ];
+
     const hasInvalidType = fileList.some(
-      file => file.type !== 'application/pdf',
+      file => !allowedTypes.includes(file.type),
     );
 
     if (hasInvalidType) {
-      return { isValid: false, error: 'Only PDF files are allowed' };
+      return { isValid: false, error: 'Only jpeg, jpg, png and gif images are allowed' };
     }
 
     const hasInvalidSize = fileList.some(file => file.size > maxFileSize);
@@ -92,11 +99,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
     formData.append('timestamp', signature.timestamp.toString());
     formData.append('signature', signature.signature);
 
-    // Use raw for PDFs
-    formData.append('resource_type', 'raw');
+    formData.append('resource_type', 'image');
 
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${signature.cloudName}/raw/upload`,
+      `https://api.cloudinary.com/v1_1/${signature.cloudName}/image/upload`,
       {
         method: 'POST',
         body: formData,
@@ -173,7 +179,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
       for (const file of files) {
         try {
-          // Initialize progress for this file
           setUploadProgress(prev => ({
             ...prev,
             [file.name]: 0,
@@ -183,7 +188,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
           uploadedUrls.push(result.secure_url);
 
-          // Set progress to 100 for completed file
           setUploadProgress(prev => ({
             ...prev,
             [file.name]: 100,
@@ -203,8 +207,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
         urls: uploadedUrls,
       });
 
-      // hoist upwards into parent
+      // Set preview URL for display
       if (uploadedUrls[0]) {
+        setPreviewUrl(uploadedUrls[0]);
         hoist(uploadedUrls[0]);
       }
 
@@ -227,96 +232,127 @@ const FileUpload: React.FC<FileUploadProps> = ({
     }
   }, [files]);
 
+  // Function to reset the upload and start over
+  const handleReset = () => {
+    setFiles([]);
+    setUploadStatus(null);
+    setPreviewUrl('');
+  };
+
   return (
-    <UploadContainer>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {uploading ? (
         <Box
           sx={{
-            width: '100%',
-            height: '8rem',
+            width: 120,
+            height: 120,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             border: `2px dashed #ccc`,
-            borderRadius: '8px',
+            borderRadius: '50%',
           }}
         >
           <CircularProgress
-            size={24}
+            size={40}
             color={'primary'}
-            sx={{ mr: 2, color: '#ccc' }}
           />
         </Box>
-      ) : (
-        <DropZone onDragOver={onDragOver} onDrop={onDrop}>
-          <Input
-            type='file'
-            accept='.pdf'
-            onChange={handleFileSelect}
-            id='file-input'
+      ) : uploadStatus?.type === 'success' && previewUrl ? (
+        <Box sx={{ position: 'relative' }}>
+          <Avatar
+            src={previewUrl}
+            alt="Profile"
+            sx={{ 
+              width: 120, 
+              height: 120,
+              border: '2px solid #f0f0f0',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              cursor: 'pointer',
+            }}
+            onClick={() => handleFileSelect}
           />
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: -5,
+              right: -5,
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              padding: 0.5,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+              },
+            }}
+            onClick={handleReset}
+          >
+            <UploadIcon fontSize="small" />
+          </Box>
+        </Box>
+      ) : (
+        <Box>
+          <DropZone 
+            onDragOver={onDragOver} 
+            onDrop={onDrop}
+            sx={{
+              width: 120,
+              height: 120,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto',
+            }}
+          >
+            <Input
+              type='file'
+              accept='.jpg,.jpeg,.png,.gif'
+              onChange={handleFileSelect}
+              id='file-input'
+            />
 
-          <label htmlFor='file-input'>
-            <Button
-              disableRipple
-              component='span'
-              sx={{
-                padding: 0,
-                margin: 0,
-                width: '100%',
-                height: '8rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {uploadStatus?.type === 'error' ? (
-                <Stack>
-                  <ErrorIcon sx={{ mr: 2, color: 'black' }} />
-                  <Typography
-                    variant='body2'
-                    sx={{ textTransform: 'none' }}
-                    color='text.secondary'
-                  >
-                    There seems to be an error with the file you are trying to
-                    upload.
-                  </Typography>
-                </Stack>
-              ) : uploadStatus?.type === 'success' ? (
-                <Stack>
-                  <DoneAllIcon sx={{ mr: 2, color: 'black' }} />
-                  <Typography
-                    variant='body2'
-                    sx={{ textTransform: 'none' }}
-                    color='text.secondary'
-                  >
-                    File Uploaded Successfully
-                  </Typography>
-                </Stack>
-              ) : (
-                <Stack>
+            <label htmlFor='file-input' style={{ display: 'block', width: '100%', height: '100%' }}>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  borderRadius: '50%',
+                }}
+              >
+                {uploadStatus?.type === 'error' ? (
+                  <ErrorIcon sx={{ color: 'black', fontSize: 40 }} />
+                ) : (
                   <UploadIcon
                     sx={{
-                      margin: '0 auto',
-                      transform: 'translate(-14px, -2px)',
+                      color: 'text.secondary',
+                      fontSize: 40,
                     }}
                   />
-                  <Typography
-                    variant='body2'
-                    sx={{ textTransform: 'none' }}
-                    color='text.secondary'
-                  >
-                    Browse and choose the files you want to upload from your
-                    computer
-                  </Typography>
-                </Stack>
-              )}
-            </Button>
-          </label>
-        </DropZone>
+                )}
+              </Box>
+            </label>
+          </DropZone>
+          
+          <Typography 
+            variant='body2' 
+            align="center" 
+            color='text.secondary'
+            sx={{ mt: 1 }}
+          >
+            {uploadStatus?.type === 'error' 
+              ? uploadStatus.message 
+              : 'Upload profile photo'}
+          </Typography>
+        </Box>
       )}
-    </UploadContainer>
+    </Box>
   );
 };
 
-export default FileUpload;
+export default PicUpload;

@@ -4,12 +4,10 @@ import axios, { AxiosError } from 'axios';
 import { useSnackbar } from '@/components/snackbar';
 import { RegisterUserInput } from '@/types/auth/register-user';
 
-import { useCloudinaryUpload } from './useCloudinaryUpload';
-
 interface FileData {
-  governmentIdDocument?: File | null;
-  policeCheckDocument?: File | null;
-  profileImage?: File | null;
+  governmentIdDocument?: string | null;
+  policeCheckDocument?: string | null;
+  profileImage?: string | null;
 }
 
 type RegistrationInput = Omit<RegisterUserInput, 
@@ -28,45 +26,11 @@ interface UseUserRegistrationReturn {
 }
 
 export const useUserRegistration = (): UseUserRegistrationReturn => {
-  const { uploadFile } = useCloudinaryUpload();
   const { showSnackbar } = useSnackbar();
 
   const registerMutation = useMutation({
     mutationFn: async (userData: RegistrationInput) => {
-      const fileUploads = [];
-      let governmentIdDocumentUrl = '';
-      let policeCheckDocumentUrl = '';
-      let imageUrl = '';
-
-      if (userData.governmentIdDocument) {
-        fileUploads.push(
-          uploadFile(userData.governmentIdDocument).then(url => {
-            governmentIdDocumentUrl = url;
-          })
-        );
-      }
-
-      if (userData.policeCheckDocument) {
-        fileUploads.push(
-          uploadFile(userData.policeCheckDocument).then(url => {
-            policeCheckDocumentUrl = url;
-          })
-        );
-      }
-
-      if (userData.profileImage) {
-        fileUploads.push(
-          uploadFile(userData.profileImage).then(url => {
-            imageUrl = url;
-          })
-        );
-      }
-
-      if (fileUploads.length > 0) {
-        await Promise.all(fileUploads);
-      }
-
-      // Remove file objects from userData
+      // Get the document URLs from the form components
       const { 
         governmentIdDocument, 
         policeCheckDocument, 
@@ -76,12 +40,11 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
 
       const registrationData: RegisterUserInput = {
         ...restUserData,
-        ...(governmentIdDocumentUrl && { governmentIdDocumentUrl }),
-        ...(policeCheckDocumentUrl && { policeCheckDocumentUrl }),
-        ...(imageUrl && { image: imageUrl }),
+        ...(governmentIdDocument && { governmentIdDocumentUrl: governmentIdDocument }),
+        ...(policeCheckDocument && { policeCheckDocumentUrl: policeCheckDocument }),
+        ...(profileImage && { image: profileImage }),
       };
 
-      // Submit registration data to API
       const response = await axios.post('/api/user/register', registrationData);
 
       return response.data;
