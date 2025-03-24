@@ -4,7 +4,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Snackbar, Input, Alert, Checkbox,  MenuItem } from '@mui/material';
+import { Snackbar, Input, Alert, Checkbox, MenuItem } from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -115,7 +115,7 @@ export default function RegsiterationFormMomHelper() {
         formData.city &&
         formData.postcode &&
         formData.country &&
-        formData.password 
+        formData.password
       );
     }
     if (currentStep === 2) {
@@ -135,7 +135,7 @@ export default function RegsiterationFormMomHelper() {
 
       return;
     }
-    
+
     if (isFormValid()) {
       setCurrentStep(currentStep + 1);
     }
@@ -149,7 +149,7 @@ export default function RegsiterationFormMomHelper() {
     <>
       <FormHeading>Personal Information</FormHeading>
       <FormDescription>
-      Tell us about yourself so families can get to know you.
+        Tell us about yourself so families can get to know you.
       </FormDescription>
       <ProfileBox>
         <ProfileWrapper>
@@ -229,7 +229,7 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleChange}
           />
         </InputHolder>
-     
+
         <InputHolder>
           <StyledInputLabel htmlFor='phone'>Phone Number</StyledInputLabel>
           <StyledInputField
@@ -301,7 +301,6 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleChange}
           />
         </InputHolder>
-        
       </GridBox>
       <InputHolder>
         <StyledInputLabel htmlFor='country'>Short Bio</StyledInputLabel>
@@ -321,7 +320,7 @@ export default function RegsiterationFormMomHelper() {
     <>
       <FormHeading>Children & Service Needs</FormHeading>
       <FormDescription>
-      Share your qualifications and the services you can provide.
+        Share your qualifications and the services you can provide.
       </FormDescription>
 
       <StyledInputLabel>Services You can Provide</StyledInputLabel>
@@ -346,37 +345,50 @@ export default function RegsiterationFormMomHelper() {
       </GridBox>
 
       <StyledInputLabel>Hourly Rate</StyledInputLabel>
-      <CardCaption>Set your hourly rate. Youll receive 80% of the total bill*</CardCaption>
-      <StyledInputField
-        type='number'
-        disableUnderline
-        
-      />
+      <CardCaption>
+        Set your hourly rate. Youll receive 80% of the total bill*
+      </CardCaption>
+      <StyledInputField type='number' disableUnderline />
       <CertificateBoxWrapper>
-        <CertificateStyledInputLabel>Government Issued ID</CertificateStyledInputLabel>
+        <CertificateStyledInputLabel>
+          Government Issued ID
+        </CertificateStyledInputLabel>
         <CertificateUploadBox>
-          <Image src='/registeration-mom/upload.svg' height={20} width={20} alt='Upload Icon' />
-          <StyledCheckBoxLabel>
-            Upload Certificate
-          </StyledCheckBoxLabel>
+          <Image
+            src='/registeration-mom/upload.svg'
+            height={20}
+            width={20}
+            alt='Upload Icon'
+          />
+          <StyledCheckBoxLabel>Upload Certificate</StyledCheckBoxLabel>
         </CertificateUploadBox>
       </CertificateBoxWrapper>
       <CertificateBoxWrapper>
-        <CertificateStyledInputLabel>Police Vulnerable Sector Check</CertificateStyledInputLabel>
+        <CertificateStyledInputLabel>
+          Police Vulnerable Sector Check
+        </CertificateStyledInputLabel>
         <CertificateUploadBox>
-          <Image src='/registeration-mom/upload.svg' height={20} width={20} alt='Upload Icon' />
-          <StyledCheckBoxLabel>
-            Upload Certificate
-          </StyledCheckBoxLabel>
+          <Image
+            src='/registeration-mom/upload.svg'
+            height={20}
+            width={20}
+            alt='Upload Icon'
+          />
+          <StyledCheckBoxLabel>Upload Certificate</StyledCheckBoxLabel>
         </CertificateUploadBox>
       </CertificateBoxWrapper>
       <CertificateBoxWrapper>
-        <CertificateStyledInputLabel>First Aid Certification</CertificateStyledInputLabel>
+        <CertificateStyledInputLabel>
+          First Aid Certification
+        </CertificateStyledInputLabel>
         <CertificateUploadBox>
-          <Image src='/registeration-mom/upload.svg' height={20} width={20} alt='Upload Icon' />
-          <StyledCheckBoxLabel>
-            Upload Certificate
-          </StyledCheckBoxLabel>
+          <Image
+            src='/registeration-mom/upload.svg'
+            height={20}
+            width={20}
+            alt='Upload Icon'
+          />
+          <StyledCheckBoxLabel>Upload Certificate</StyledCheckBoxLabel>
         </CertificateUploadBox>
       </CertificateBoxWrapper>
     </>
@@ -386,27 +398,24 @@ export default function RegsiterationFormMomHelper() {
     <>
       <FormHeading>Payment Details</FormHeading>
       <FormDescription>
-      How would you like to receive payments for your services?
+        How would you like to receive payments for your services?
       </FormDescription>
-     
+
       <InputHolder>
         <StyledInputLabel>Payment Method</StyledInputLabel>
-        <StyledSelect
-          labelId="select-label"
-          id="select"
-          fullWidth
-          
-        >
-          <MenuItem value={10} selected >Direct Deposit</MenuItem>
+        <StyledSelect labelId='select-label' id='select' fullWidth>
+          <MenuItem value={10} selected>
+            Direct Deposit
+          </MenuItem>
           <MenuItem value={20}>COD</MenuItem>
           <MenuItem value={30}>Credit Card</MenuItem>
         </StyledSelect>
       </InputHolder>
       <InputHolder>
-        <StyledInputLabel htmlFor='tfrEmail'>Email for a e-Transfer</StyledInputLabel>
-        <CardCaption>
-        Payments will be sent to this email address.
-        </CardCaption>
+        <StyledInputLabel htmlFor='tfrEmail'>
+          Email for a e-Transfer
+        </StyledInputLabel>
+        <CardCaption>Payments will be sent to this email address.</CardCaption>
         <StyledInputField
           disableUnderline
           type='email'
@@ -415,14 +424,12 @@ export default function RegsiterationFormMomHelper() {
         />
       </InputHolder>
 
-      <StyledInputLabel >
-          Direct Deposit Information (Optional)
-      </StyledInputLabel>
+      <StyledInputLabel>Direct Deposit Information (Optional)</StyledInputLabel>
 
       <OptionalGridBox>
         <InputHolder>
           <StyledInputLabel htmlFor='transitNumber'>
-              Transit Number
+            Transit Number
           </StyledInputLabel>
           <StyledInputField
             disableUnderline
@@ -433,7 +440,7 @@ export default function RegsiterationFormMomHelper() {
         </InputHolder>
         <InputHolder>
           <StyledInputLabel htmlFor='institutionNumber'>
-              Institutuon Number
+            Institutuon Number
           </StyledInputLabel>
           <StyledInputField
             disableUnderline
@@ -443,7 +450,9 @@ export default function RegsiterationFormMomHelper() {
           />
         </InputHolder>
         <InputHolder>
-          <StyledInputLabel htmlFor='accNumber'>Account Number</StyledInputLabel>
+          <StyledInputLabel htmlFor='accNumber'>
+            Account Number
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='number'

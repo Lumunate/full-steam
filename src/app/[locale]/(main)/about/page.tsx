@@ -4,6 +4,11 @@ import ActionToday from '@/features/about/action-today/ActionToday';
 import DayCareSpot from '@/features/about/daycare-spot/DaycareSpot';
 import AboutHero from '@/features/about/hero/Hero';
 import WhyChooseFSA from '@/features/about/why-choose-fsa/WhyChooseFSA';
+
+export const metadata = {
+  title: 'FullSt3amAhead - About',
+};
+
 export default function Home() {
   return (
     <>

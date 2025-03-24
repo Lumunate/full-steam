@@ -8,10 +8,9 @@ export const MainHeadingTypography = styled(Typography)<{
 }>(({ color, center, marginbottom }) => ({
   fontSize: '56px',
   fontWeight: 700,
-  display: 'flex',
+  display: 'inline-block',
 
   color: color,
-  gap: '10px',
   textAlign: center ? 'center' : 'left',
   marginBottom: marginbottom ? marginbottom : '18px',
   zIndex: 10,

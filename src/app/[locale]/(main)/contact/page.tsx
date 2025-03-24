@@ -14,6 +14,13 @@ import {
   ContactIconHead,
 } from '../../../../features/contact/Contact.style';
 
+export const metadata = {
+  title: 'FullSt3amAhead - Contact Us',
+  icons: {
+    icon: '/companyicon.ico',
+  },
+};
+
 export default function ContactPage() {
   return (
     <ContactContainer>

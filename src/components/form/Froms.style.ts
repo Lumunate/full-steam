@@ -10,7 +10,7 @@ import {
   InputLabel,
   Select,
 } from '@mui/material';
-import {   styled } from '@mui/system';
+import { styled } from '@mui/system';
 import Image from 'next/image';
 export const RadioContainer = styled(RadioGroup)({
   background: '#E7F7FF',
@@ -27,7 +27,7 @@ export const StyledRadio = styled(Radio)({
 });
 
 export const StyledLabel = styled(FormControlLabel)<{ isselected?: boolean }>(
-  ({  isselected }) => ({
+  ({ isselected }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -42,20 +42,22 @@ export const StyledLabel = styled(FormControlLabel)<{ isselected?: boolean }>(
 );
 
 export const CertificateUploadBox = styled(Box)({
-
   background: '#EAF9FF',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  gap:'16px',
+  gap: '16px',
   padding: '10px 20px',
   borderRadius: '15px',
   border: '1px solid #DFEAF2',
-  height: '62px'
+  height: '62px',
 });
 
-export const FormContainer = styled(Box)<{ customwidth?: string; paddingBottom?: string }>(({ customwidth = '1200px', paddingBottom = '50px' }) => ({
+export const FormContainer = styled(Box)<{
+  customwidth?: string;
+  paddingBottom?: string;
+}>(({ customwidth = '1200px', paddingBottom = '50px' }) => ({
   padding: '32px',
   borderRadius: '25px',
   boxShadow: '0px 3px 22.9px 0px #0000001A',
@@ -128,10 +130,9 @@ export const GridBox = styled(Box)({
   gap: '0 37px',
 });
 
-export const OptionalGridBox =styled(GridBox)({
+export const OptionalGridBox = styled(GridBox)({
   gridTemplateColumns: 'repeat(3, 1fr)',
   gap: '0 20px',
-
 });
 
 export const BorderBox = styled(Box)({
@@ -141,14 +142,12 @@ export const BorderBox = styled(Box)({
 });
 
 export const CertificateBoxWrapper = styled(BorderBox)({
-
   padding: '15px',
-  marginTop: '16px'
-
+  marginTop: '16px',
 });
 
 export const CertificateStyledInputLabel = styled(StyledInputLabel)({
-  marginTop: '0px'
+  marginTop: '0px',
 });
 
 export const GridBoxBordered = styled(BorderBox)({

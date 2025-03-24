@@ -95,8 +95,15 @@ const Navbar: React.FC = () => {
                   Sign Up
                 </Button>
                 <SignUpDropDown val={signUp}>
-                  <Link href='/registeration-mom'>Family</Link>
-                  <Link href='/registeration-mom-helper'>Mom Helper</Link>
+                  <Link onClick={handleOpenSignUp} href='/registeration-mom'>
+                    Family
+                  </Link>
+                  <Link
+                    onClick={handleOpenSignUp}
+                    href='/registeration-mom-helper'
+                  >
+                    Mom Helper
+                  </Link>
                 </SignUpDropDown>
               </SignUpWrapper>
             </>
@@ -132,7 +139,9 @@ const Navbar: React.FC = () => {
               <SmallScreenList>
                 {pages?.map((page, index) => (
                   <NavbarLinkWrapper key={index} smallsr>
-                    <NavbarLink href={page.link}>{page.name}</NavbarLink>
+                    <Link href={page.link}>
+                      <NavbarLink>{page.name}</NavbarLink>
+                    </Link>
                   </NavbarLinkWrapper>
                 ))}
               </SmallScreenList>

@@ -13,7 +13,6 @@ import { SectionDescriptionText } from '../Home.style';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-
 const processSteps = [
   {
     heading: 'Create Your Account',
@@ -66,10 +65,9 @@ const HowItWorks: React.FC = () => {
                 display: 'flex',
                 gap: '20px',
                 width: '50%',
-                overflow: 'hidden'
+                overflow: 'hidden',
               }}
             >
-
               {processSteps.map((step, index) => (
                 <ProcessCard
                   key={index}
@@ -79,7 +77,6 @@ const HowItWorks: React.FC = () => {
                   logoSrc={step.logoSrc}
                 />
               ))}
-            
             </Box>
           </ProcessWrapper>
         </AppContentWrapper>

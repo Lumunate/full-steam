@@ -4,6 +4,13 @@ import SectionHeading from '@/features/components/section-heading/SectionHeading
 import { SectionDescriptionText } from '@/features/home/Home.style';
 import LoginForm from '@/features/login/LoginForm';
 
+export const metadata = {
+  title: 'FullSt3amAhead - Login',
+  icons: {
+    icon: '/companyicon.ico',
+  },
+};
+
 export default function LoginPage() {
   return (
     <FlexBox>

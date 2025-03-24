@@ -11,6 +11,14 @@ import {
   FeedbackParaTypography,
   FeedbackIconHead,
 } from '../../../../features/feedback/Feedback.style';
+
+export const metadata = {
+  title: 'FullSt3amAhead - Feedback',
+  icons: {
+    icon: '/companyicon.ico',
+  },
+};
+
 export default function FeedbackPage() {
   return (
     <FeedbackContainer>

@@ -4,6 +4,13 @@ import SectionHeading from '@/features/components/section-heading/SectionHeading
 import { SectionDescriptionText } from '@/features/home/Home.style';
 import RegsiterationFormMomHelper from '@/features/mom-helper-form/RegisterationFormMomHelper';
 
+export const metadata = {
+  title: 'Registeration - Mom Helper',
+  icons: {
+    icon: '/companyicon.ico',
+  },
+};
+
 export default function LoginPage() {
   return (
     <FlexBox>

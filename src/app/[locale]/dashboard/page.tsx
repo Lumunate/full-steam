@@ -1,13 +1,14 @@
-import { Paper, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
 
-export default function HomePage() {
-  const t = useTranslations('HomePage');
-
+import AnalysticsSection from '@/features/dashboard/dashboard-mom-helper/dashboard-overview/analysics/Analystics';
+import RecentMessgaes from '@/features/dashboard/dashboard-mom-helper/dashboard-overview/recent messages/RecentMessages';
+import UpcommingSessions from '@/features/dashboard/dashboard-mom-helper/dashboard-overview/upcomming-session/UpcommingsSessions';
+export default function DashBoardAdmin() {
   return (
-    <Paper>
-      <Typography variant='h1'>{t('title')}</Typography>
-      <Typography variant='body1'>{t('about')}</Typography>
-    </Paper>
+    <>
+
+      <AnalysticsSection />
+      <UpcommingSessions />
+      <RecentMessgaes />
+    </>
   );
 }
