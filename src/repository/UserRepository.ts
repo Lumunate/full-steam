@@ -116,3 +116,14 @@ export const updateUser = async (userId: string, data: Partial<User>) => {
     data,
   });
 };
+
+export async function toggleUserApproval(userId: string) {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: userId }
+  });
+  
+  return prisma.user.update({
+    where: { id: userId },
+    data: { isApproved: !user.isApproved }
+  });
+}

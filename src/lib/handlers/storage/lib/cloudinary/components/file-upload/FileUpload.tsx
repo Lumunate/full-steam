@@ -188,7 +188,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             ...prev,
             [file.name]: 100,
           }));
-        } catch (error) {
+        } catch  {
           showSnackbar({
             title: 'Upload Error',
             message: `Failed to upload ${file.name}`,

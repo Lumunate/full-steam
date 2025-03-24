@@ -3,8 +3,8 @@ import { hash } from 'bcryptjs';
 
 import AuthError, { AuthErrorType } from '@/lib/handlers/errors/types/AuthError';
 import ValidationError from '@/lib/handlers/errors/types/ValidationError';
-import { findUserByEmail, updateUser } from '@/repository/UserRepository';
 import * as UserRepository from '@/repository/UserRepository';
+import { toggleUserApproval as toggleApproval } from '@/repository/UserRepository';
 import { RegisterUserInput } from '@/types/auth/register-user';
 
 export async function registerUser(userData: RegisterUserInput) {
@@ -40,10 +40,14 @@ export async function registerUser(userData: RegisterUserInput) {
   
   return user;
 }
-export async function toggleUserApproval(userId: string) {
-  const user = await findUserByEmail(userId);
-
-  return updateUser(userId, {
-    isApproved: !user.isApproved,
-  });
+export async function toggleUserApproval(userId: string, currentUserRole: UserRole) {
+  // Verify permissions
+  if (currentUserRole !== UserRole.ADMIN && currentUserRole !== UserRole.SERVICE_MASTER) {
+    throw new AuthError(AuthErrorType.UNAUTHORIZED, 403);
+  }
+  
+  // Update user approval status
+  const updatedUser = await toggleApproval(userId);
+  
+  return updatedUser;
 }

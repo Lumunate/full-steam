@@ -49,7 +49,7 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
 
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       showSnackbar({
         type: 'success',
         title: 'Registration Successful',

@@ -12,13 +12,18 @@ export async function POST(request: NextRequest) {
     const user = await registerUser(validatedData as { email: string } & typeof validatedData);
     
     const { 
-      password, 
-      paymentCardNumber, 
-      paymentCardCvv, 
-      bankAccountNumber,
+      _password, 
+      _paymentCardNumber, 
+      _paymentCardCvv, 
+      _bankAccountNumber,
       ...safeUserData 
     } = user;
     
+    delete user.password;
+    delete user.paymentCardNumber;
+    delete user.paymentCardCvv;
+    delete user.bankAccountNumber;
+
     return NextResponse.json(
       { 
         message: 'User registered successfully', 

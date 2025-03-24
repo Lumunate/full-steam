@@ -192,7 +192,7 @@ const PicUpload: React.FC<FileUploadProps> = ({
             ...prev,
             [file.name]: 100,
           }));
-        } catch (error) {
+        } catch  {
           showSnackbar({
             title: 'Upload Error',
             message: `Failed to upload ${file.name}`,
@@ -213,7 +213,6 @@ const PicUpload: React.FC<FileUploadProps> = ({
         hoist(uploadedUrls[0]);
       }
 
-      // setFiles([]);
       setUploadProgress({});
     } catch (error) {
       setUploadStatus({
@@ -232,7 +231,6 @@ const PicUpload: React.FC<FileUploadProps> = ({
     }
   }, [files]);
 
-  // Function to reset the upload and start over
   const handleReset = () => {
     setFiles([]);
     setUploadStatus(null);

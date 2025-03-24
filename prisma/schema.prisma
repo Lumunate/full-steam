@@ -40,7 +40,6 @@ model User {
   gender                Gender
   dateOfBirth           DateTime
   agreeToTerms          Boolean         @default(false)
-  
   image                 String?
   
   role                  UserRole
