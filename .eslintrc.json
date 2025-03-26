@@ -65,8 +65,14 @@
         }
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "newline-after-var": ["error", "always"],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": ".*",
+        "argsIgnorePattern": ".*"
+      }
+    ],
+          "newline-after-var": ["error", "always"],
     "padding-line-between-statements": ["error", { "blankLine": "always", "prev": "*", "next": "return" }]
   },
   "settings": {

@@ -1,4 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { compare } from 'bcryptjs';
 import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -30,8 +31,10 @@ export const options: NextAuthOptions = {
           throw new AuthError(AuthErrorType.USER_NOT_FOUND, 404);
         }
 
-        const isValidPassword =
-          (credentials.password as string) === user.password;
+        const isValidPassword = await compare(
+          credentials.password as string,
+          user.password
+        );
 
         if (!isValidPassword) {
           throw new AuthError(AuthErrorType.INVALID_CREDENTIALS, 401);
@@ -40,7 +43,7 @@ export const options: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.username,
+          name: `${user.firstName} ${user.lastName}`,
           role: user.role,
         };
       },
