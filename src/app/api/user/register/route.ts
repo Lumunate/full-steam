@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 
 import handleErrors from '@/lib/handlers/errors';
 import AuthError, { AuthErrorType } from '@/lib/handlers/errors/types/AuthError';
 import * as UserRepository from '@/repository/UserRepository';
 import { registerUser } from '@/services/UserService';
 import { registerUserSchema } from '@/types/auth/register-user';
-import { ZodError } from 'zod';
 
 export async function POST(request: NextRequest) {
   try {

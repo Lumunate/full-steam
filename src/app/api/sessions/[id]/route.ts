@@ -9,17 +9,17 @@ import { getSessionById, updateSession, deleteSession } from '@/services/Session
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const sessionId = params.id;
-    const session = await SessionRepository.findSessionById(sessionId);
+    const { id } = await params; // Await the params to resolve the Promise
+    const session = await SessionRepository.findSessionById(id);
     
     if (!session) {
       throw new NotFoundError('Session not found');
     }
     
-    const result = await getSessionById(sessionId);
+    const result = await getSessionById(id);
 
     return NextResponse.json(result);
   } catch (error) {
@@ -29,21 +29,21 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Only admins and service masters can update sessions
     await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
     
-    const sessionId = params.id;
-    const session = await SessionRepository.findSessionById(sessionId);
+    const { id } = await params; // Await the params to resolve the Promise
+    const session = await SessionRepository.findSessionById(id);
     
     if (!session) {
       throw new NotFoundError('Session not found');
     }
     
     const body = await request.json();
-    const result = await updateSession(sessionId, body);
+    const result = await updateSession(id, body);
 
     return NextResponse.json(result);
   } catch (error) {
@@ -53,20 +53,20 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Only admins and service masters can delete sessions
     await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
     
-    const sessionId = params.id;
-    const session = await SessionRepository.findSessionById(sessionId);
+    const { id } = await params; // Await the params to resolve the Promise
+    const session = await SessionRepository.findSessionById(id);
     
     if (!session) {
       throw new NotFoundError('Session not found');
     }
     
-    const result = await deleteSession(sessionId);
+    const result = await deleteSession(id);
 
     return NextResponse.json(result);
   } catch (error) {

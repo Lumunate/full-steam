@@ -7,17 +7,18 @@ import { getServiceById } from '@/services/ServiceService';
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ Id: string }> }
+  
 ) {
   try {
-    const serviceId = params.id;
-    const service = await ServiceRepository.findServiceById(serviceId);
+    const { Id }:{Id: string} = await params; 
+    const service = await ServiceRepository.findServiceById(Id);
     
     if (!service) {
       throw new NotFoundError('Service not found');
     }
     
-    const result = await getServiceById(serviceId);
+    const result = await getServiceById(Id);
 
     return NextResponse.json(result);
   } catch (error) {

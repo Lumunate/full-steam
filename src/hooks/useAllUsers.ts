@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 
 import { useSnackbar } from '@/components/snackbar';
 import { SafeUser } from '@/types/auth/UserTypes';
-
 export const useAllUsers = () => {
   const { data: session } = useSession();
   const { showSnackbar } = useSnackbar();

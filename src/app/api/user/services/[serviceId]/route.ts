@@ -8,11 +8,16 @@ import { updateUserService, deleteUserService } from '@/services/UserServiceServ
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { serviceId: string } }
+  { params }: { params: Promise<{ serviceId: string }> }
+
+  // context: { params: { serviceId: string } }
 ) {
   try {
+    const { serviceId }:{serviceId: string} = await params; 
+
+    // const { ServiceId } = context;
     const user = await handleAuthorizeUserSession();
-    const serviceId = params.serviceId;
+    // const serviceId = params.serviceId;
     
     const userServices = await ServiceRepository.getUserServices(user.id);
     const serviceExists = userServices.some(us => us.serviceId === serviceId);
@@ -32,11 +37,11 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { serviceId: string } }
+  { params }: { params: Promise<{ serviceId: string }> }
 ) {
   try {
     const user = await handleAuthorizeUserSession();
-    const serviceId = params.serviceId;
+    const { serviceId }:{serviceId: string} = await params; 
     
     const userServices = await ServiceRepository.getUserServices(user.id);
     const serviceExists = userServices.some(us => us.serviceId === serviceId);

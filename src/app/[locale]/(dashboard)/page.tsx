@@ -1,5 +1,7 @@
 import { Paper, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import zipy from 'zipyai'; 
+zipy.init('3731bae4');
 
 export default function HomePage() {
   const t = useTranslations('HomePage');

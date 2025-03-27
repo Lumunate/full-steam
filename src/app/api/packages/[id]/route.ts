@@ -9,18 +9,17 @@ import { getPackageById, updatePackage, deletePackage } from '@/services/Package
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-
-    const packageId = params.id;
-    const packageData = await PackageRepository.findPackageById(packageId);
+    const { id } = await params; // Await the params to resolve the Promise
+    const packageData = await PackageRepository.findPackageById(id);
     
     if (!packageData) {
       throw new NotFoundError('Package not found');
     }
     
-    const result = await getPackageById(packageId);
+    const result = await getPackageById(id);
 
     return NextResponse.json(result);
   } catch (error) {
@@ -30,25 +29,25 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await handleAuthorizeUserSession();
-    const packageId = params.id;
+    const { id } = await params; 
     
     // Verify package exists 
-    const packageData = await PackageRepository.findPackageById(packageId);
+    const packageData = await PackageRepository.findPackageById(id);
     
     if (!packageData) {
       throw new NotFoundError('Package not found');
     }
-    // check ownership
+    // Check ownership
     if (packageData.userId !== user.id) {
       throw new AuthError(AuthErrorType.UNAUTHORIZED, 403);
     }
     
     const body = await request.json();
-    const result = await updatePackage(packageId, user.id, body);
+    const result = await updatePackage(id, user.id, body);
 
     return NextResponse.json(result);
   } catch (error) {
@@ -58,14 +57,14 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await handleAuthorizeUserSession();
-    const packageId = params.id;
+    const { id } = await params; 
     
     // Verify package exists and check ownership
-    const packageData = await PackageRepository.findPackageById(packageId);
+    const packageData = await PackageRepository.findPackageById(id);
     
     if (!packageData) {
       throw new NotFoundError('Package not found');
@@ -75,7 +74,7 @@ export async function DELETE(
       throw new AuthError(AuthErrorType.UNAUTHORIZED, 403);
     }
     
-    const result = await deletePackage(packageId);
+    const result = await deletePackage(id);
 
     return NextResponse.json(result);
   } catch (error) {
