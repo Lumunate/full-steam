@@ -10,14 +10,11 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ serviceId: string }> }
 
-  // context: { params: { serviceId: string } }
 ) {
   try {
     const { serviceId }:{serviceId: string} = await params; 
 
-    // const { ServiceId } = context;
     const user = await handleAuthorizeUserSession();
-    // const serviceId = params.serviceId;
     
     const userServices = await ServiceRepository.getUserServices(user.id);
     const serviceExists = userServices.some(us => us.serviceId === serviceId);
