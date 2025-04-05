@@ -1,10 +1,9 @@
+'use client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useSnackbar } from '@/components/snackbar';
-import { Package, PackageService, CreatePackageInput } from '@/types/packages';
-import { Service } from '@/types/services';
-import { Session } from '@/types/sessions';
+import { Package, CreatePackageInput } from '@/types/packages';
 
 export const usePackages = () => {
   const { showSnackbar } = useSnackbar();
@@ -15,7 +14,7 @@ export const usePackages = () => {
     queryFn: async () => {
       const response = await axios.get('/api/packages');
 
-      return response.data.packages;
+      return response.data;
     }
   });
 
@@ -23,7 +22,7 @@ export const usePackages = () => {
     mutationFn: async (data: CreatePackageInput) => {
       const response = await axios.post('/api/packages', data);
 
-      return response.data.package;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['packages'] });
@@ -50,7 +49,7 @@ export const usePackages = () => {
     mutationFn: async ({ id, data }: { id: string, data: Partial<CreatePackageInput> }) => {
       const response = await axios.patch(`/api/packages/${id}`, data);
 
-      return response.data.package;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['packages'] });

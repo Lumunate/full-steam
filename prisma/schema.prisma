@@ -29,12 +29,14 @@ model User {
   id                    String          @id @default(cuid())
   
   firstName             String
-  lastName              String
+  lastName              String?
+  username              String          @unique
   email                 String          @unique
   phoneNumber           String
   address               String
   city                  String
   postalCode            String
+  country               String
   password              String
   gender                Gender
   dateOfBirth           DateTime
@@ -54,6 +56,7 @@ model User {
   hourlyRate            Decimal?
   governmentIdDocumentUrl  String?
   policeCheckDocumentUrl   String?
+  firstAidCertificate   String?
   paymentMethod         PaymentMethod?
   eTransferEmail        String?
   bankTransitNumber     String?
@@ -156,4 +159,27 @@ model VerificationRequest {
   updatedAt   DateTime    @updatedAt
   
   @@unique([identifier, token])
+}
+// Feedback Entity
+model Feedback {
+  id          Int       @id @default(autoincrement())
+  name        String
+  lastName    String
+  relation    String
+  email       String
+  sessionDate DateTime? @db.Date
+  experience  String
+  feedback    String    @db.Text
+  createdAt   DateTime  @default(now())
+}
+
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String
+  email     String
+  phone     String
+  message   String
+  createdAt DateTime @default(now())
 }

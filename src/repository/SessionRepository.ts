@@ -3,8 +3,10 @@ import {  CreateSessionInput } from '@/types/sessions';
 
 export async function createSession(data: CreateSessionInput) {
   return prisma.session.create({
-    data
-  });
+    data: {
+      name: data.name,
+      duration: Number(data.duration)
+    }  });
 }
 
 export async function findAllSessions() {
@@ -24,8 +26,12 @@ export async function findSessionById(id: string) {
 export async function updateSession(id: string, data: Partial<CreateSessionInput>) {
   return prisma.session.update({
     where: { id },
-    data
-  });
+    data: {
+      ...(data.name && { name: data.name }),
+      ...(data.duration && { 
+        duration: Number(data.duration)
+      })
+    }  });
 }
 
 export async function deleteSession(id: string) {

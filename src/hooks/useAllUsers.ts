@@ -1,9 +1,11 @@
+'use client';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 
 import { useSnackbar } from '@/components/snackbar';
 import { SafeUser } from '@/types/auth/UserTypes';
+
 export const useAllUsers = () => {
   const { data: session } = useSession();
   const { showSnackbar } = useSnackbar();
@@ -16,7 +18,7 @@ export const useAllUsers = () => {
       try {
         const response = await axios.get('/api/user');
 
-        return response.data.users;
+        return response.data;
       } catch (error: any) {
         const errorMessage = error.response?.data?.message || 
                             error.response?.data?.error || 

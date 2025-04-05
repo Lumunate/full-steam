@@ -68,8 +68,8 @@
 "@typescript-eslint/no-unused-vars": [
       "error",
       {
-        "varsIgnorePattern": ".*",
-        "argsIgnorePattern": ".*"
+        "varsIgnorePattern": "_*",
+        "argsIgnorePattern": "_*"
       }
     ],
           "newline-after-var": ["error", "always"],

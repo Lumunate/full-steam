@@ -1,52 +1,68 @@
 import { UserRole } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
-import { CreateUser, RegisterUserInput } from '@/types/auth/register-user';
+import { RegisterUserInput } from '@/types/auth/register-user';
 
 type User = {
   id: string;
   [key: string]: any;
 };
 
+const templateUserInclude = {
+  children: true,
+  userServices: {
+    include: {
+      service: true,
+      session: true
+    }
+  },
+  packages: {
+    include: {
+      packageServices: {
+        include: {
+          service: true
+        }
+      },
+      session: true
+    }
+  }
+};
+
 export async function findUserById(id: string) {
   return prisma.user.findUnique({
     where: { id },
-    include: {
-      children: true,
-      userServices: {
-        include: {
-          service: true,
-          session: true
-        }
-      },
-      packages: {
-        include: {
-          packageServices: {
-            include: {
-              service: true
-            }
-          },
-          session: true
-        }
-      }
-    }
+    include: templateUserInclude
+  });
+}
+
+export async function findUserByEmail(email: string) {
+  return prisma.user.findUniqueOrThrow({
+    where: { email },
+    include: templateUserInclude
+  });
+}
+
+export async function findAllUsers() {
+  return prisma.user.findMany({
+    include: templateUserInclude
   });
 }
 
 export async function registerUser(data: RegisterUserInput) {
   const dateOfBirth = new Date(data.dateOfBirth as string);
-
   const hourlyRate = data.hourlyRate ? Number(data.hourlyRate) : null;
 
   return prisma.user.create({
     data: {
       firstName: data.firstName,
       lastName: data.lastName,
+      username: data.username,
       email: data.email,
       phoneNumber: data.phoneNumber,
       address: data.address,
       city: data.city,
       postalCode: data.postalCode,
+      country: data.country,
       password: data.password,
       gender: data.gender,
       dateOfBirth: dateOfBirth,
@@ -57,6 +73,7 @@ export async function registerUser(data: RegisterUserInput) {
       hourlyRate: hourlyRate,
       governmentIdDocumentUrl: data.governmentIdDocumentUrl,
       policeCheckDocumentUrl: data.policeCheckDocumentUrl,
+      firstAidCertificate: data.firstAidCertificate,
       paymentMethod: data.paymentMethod,
       eTransferEmail: data.eTransferEmail,
       bankTransitNumber: data.bankTransitNumber,
@@ -108,121 +125,5 @@ export async function toggleUserApproval(userId: string) {
   return prisma.user.update({
     where: { id: userId },
     data: { isApproved: !user.isApproved }
-  });
-}
-
-export async function findUserByEmail(email: string) {
-  return prisma.user.findUniqueOrThrow({
-    where: { email },
-    include: {
-      children: true,
-      userServices: {
-        include: {
-          service: true,
-          session: true
-        }
-      },
-      packages: {
-        include: {
-          packageServices: {
-            include: {
-              service: true
-            }
-          },
-          session: true
-        }
-      }
-    }
-  });
-}
-
-export async function findAllUsers() {
-  return prisma.user.findMany({
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      email: true,
-      phoneNumber: true,
-      address: true,
-      city: true,
-      postalCode: true,
-      gender: true,
-      dateOfBirth: true,
-      role: true,
-      image: true,
-      shortBio: true,
-      hourlyRate: true,
-      governmentIdDocumentUrl: true,
-      policeCheckDocumentUrl: true,
-      eTransferEmail: true,
-      bankTransitNumber: true,
-      bankInstitutionNumber: true,
-      bankAccountNumber: true,
-      additionalInformation: true,
-      paymentCardName: true,
-      paymentCardNumber: true,
-      paymentCardExpiry: true,
-      paymentCardCvv: true,
-      savePaymentCard: true,
-      createdAt: true,
-      isApproved: true,
-      isBlocked: true,
-      children: {
-        select: {
-          id: true,
-          name: true,
-          age: true,
-          specialNotes: true
-        }
-      },
-      userServices: {
-        select: {
-          id: true,
-          price: true,
-          notes: true,
-          service: {
-            select: {
-              id: true,
-              name: true,
-              description: true
-            }
-          },
-          session: {
-            select: {
-              id: true,
-              name: true,
-              duration: true
-            }
-          }
-        }
-      },
-      packages: {
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          notes: true,
-          packageServices: {
-            select: {
-              service: {
-                select: {
-                  id: true,
-                  name: true,
-                  description: true
-                }
-              }
-            }
-          },
-          session: {
-            select: {
-              id: true,
-              name: true,
-              duration: true
-            }
-          }
-        }
-      }
-    },
   });
 }

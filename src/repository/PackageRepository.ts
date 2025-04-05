@@ -91,6 +91,14 @@ export async function updatePackage(id: string, data: Partial<CreatePackageInput
 
 export async function deletePackage(id: string) {
   return prisma.package.delete({
-    where: { id }
+    where: { id },
+    include: {
+      packageServices: {
+        include: {
+          service: true
+        }
+      },
+      session: true
+    }
   });
 }

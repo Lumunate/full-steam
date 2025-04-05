@@ -1,3 +1,4 @@
+'use client';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
@@ -12,11 +13,10 @@ export const useCurrentUser = () => {
     queryFn: async () => {
       const response = await axios.get('/api/user/current');
 
-      return response.data.user;
+      return response.data;
     },
     enabled: status === 'authenticated',
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchOnWindowFocus: false,
+  
   });
 
   return {
