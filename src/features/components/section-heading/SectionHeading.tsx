@@ -9,8 +9,8 @@ interface SectionHeadingProps {
 }
 
 const CommonHeadingContainer = styled(Box)<{
-  align: string;
-  textSize: string;
+  align?: 'center' | 'start';
+  textSize?: string;
   marginBottom: string;
 }>(({ align, marginBottom, textSize }) => ({
   background: '#34BCFF33',
@@ -18,7 +18,7 @@ const CommonHeadingContainer = styled(Box)<{
   padding: '9px 17px',
   textAlign: align,
   width: textSize,
-  fontSize: '16px',
+  fontSize: textSize,
   marginBottom: marginBottom,
 }));
 
@@ -28,7 +28,7 @@ const CommonHeadingTypography = styled(Typography)(({ theme }) => ({
   fontFamily: 'Urbanist, sans-serif',
   fontStyle: 'normal',
   whiteSpace: 'nowrap',
-  textAlign: 'center',
+  textAlign: 'inherit',
   [theme.breakpoints.down('md')]: {
     fontSize: '1.6rem',
     maxWidth: '140px',
@@ -50,7 +50,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
       align={align}
       textSize={textSize}
     >
-      <CommonHeadingTypography variant='main'>{text}</CommonHeadingTypography>
+      <CommonHeadingTypography>{text}</CommonHeadingTypography>
     </CommonHeadingContainer>
   );
 };

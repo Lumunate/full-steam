@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Box,
-  CircularProgress,
+  // CircularProgress,
   FormHelperText,
   InputLabel,
   MenuItem,
@@ -11,14 +11,15 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
-// import DatePicker from 'react-datepicker';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller,
+  //  SubmitHandler, 
+  useForm } from 'react-hook-form';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { useSnackbar } from '@/components/snackbar';
-import { useSubmitFeedbackForm } from '@/hooks/useFeedbackForm';
-import { feedbackSchema } from '@/types/feedback';
+// import { useSnackbar } from '@/components/snackbar';
+// import { useSubmitFeedbackForm } from '@/hooks/useFeedbackForm';
+import { feedbackSchema, IFeedback } from '@/types/feedback';
 
 import { FeedbackFormContainer } from './FeedbackFrom.style';
 import { Button } from '../../components/buttons/Button.style';
@@ -34,48 +35,50 @@ const defaultValues: IFeedback = {
   lastName: '',
   course: '',
   sessionDate: new Date(),
-  experience: '4', // Default to 4 stars as string
+  experience: '4',
   feedback: '',
 };
 
 export default function FeedbackForm() {
-  const { showSnackbar } = useSnackbar();
+  // const { showSnackbar } = useSnackbar();
 
   const {
     control,
     register,
-    handleSubmit,
-    reset,
+    // handleSubmit,
+    // reset,
     formState: { errors },
   } = useForm<IFeedback>({
     resolver: zodResolver(feedbackSchema),
     defaultValues,
   });
 
-  const { mutate: submitForm, isLoading } = useSubmitFeedbackForm();
+  // const { mutate: submitForm, isLoading } = useSubmitFeedbackForm();
 
-  const onSubmit: SubmitHandler<IFeedback> = async data => {
-    // Convert the experience value to string before submitting (if it's not already a string)
-    const formattedData = {
-      ...data,
-      experience: String(data.experience),
-    };
+  // const onSubmit: SubmitHandler<IFeedback> = async data => {
+  // Convert the experience value to string before submitting (if it's not already a string)
+  // const formattedData = {
+  //   ...data,
+  //   experience: String(data.experience),
+  // };
 
-    submitForm(formattedData, {
-      onSuccess: () => {
-        showSnackbar('Form submitted successfully!');
-        reset();
-      },
-      onError: () => {
-        showSnackbar('Failed to submit Contact Form. Please try again later!');
-      },
-    });
-  };
+  // submitForm(formattedData, {
+  //   onSuccess: () => {
+  //     showSnackbar('Form submitted successfully!');
+  //     reset();
+  //   },
+  //   onError: () => {
+  //     showSnackbar('Failed to submit Contact Form. Please try again later!');
+  //   },
+  // });
+  // };
 
   return (
     <>
       <FeedbackFormContainer>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+        //  onSubmit={handleSubmit(onSubmit)}
+        >
           <Grid
             container
             columns={24}
@@ -90,9 +93,9 @@ export default function FeedbackForm() {
                 variant='standard'
                 fullWidth
                 margin='none'
-                error={!!errors.name}
-                helperText={errors.name?.message}
-                {...register('name')}
+                // error={!!errors.name}
+                // helperText={errors.name?.message}
+                // {...register('name')}
                 inputfontsize='18px'
                 labelfontsize='16px'
               />
@@ -103,9 +106,9 @@ export default function FeedbackForm() {
                 variant='standard'
                 fullWidth
                 margin='none'
-                error={!!errors.lastName}
-                helperText={errors.lastName?.message}
-                {...register('lastName')}
+                // error={!!errors.lastName}
+                // helperText={errors.lastName?.message}
+                // {...register('lastName')}
                 inputfontsize='18px'
                 labelfontsize='16px'
               />
@@ -116,7 +119,7 @@ export default function FeedbackForm() {
               fullWidth
               variant='standard'
               labelfontsize='16px'
-              error={!!errors.course}
+              // error={!!errors.course}
             >
               <InputLabel id='course'>Relation</InputLabel>
               <Controller
@@ -231,7 +234,7 @@ export default function FeedbackForm() {
             width='170px'
             height='41px'
           >
-            {isLoading ? <CircularProgress size={24} /> : 'Submit Feedback'}
+            {/* {isLoading ? <CircularProgress size={24} /> : 'Submit Feedback'} */}
           </Button>
         </form>
       </FeedbackFormContainer>

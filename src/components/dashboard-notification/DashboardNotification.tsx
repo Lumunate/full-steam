@@ -10,7 +10,8 @@ interface DashBoardNotificationProps {
   sessionEndTime?: string;
   buttonAction?: string;
   message?: string;
-  messageTime: string;
+  messageTime?: string;
+  submissionTime?: string;
 }
 
 const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
@@ -21,7 +22,8 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
   sessionEndTime = '',
   buttonAction = '',
   message ='',
-  messageTime = ''
+  messageTime = '',
+  submissionTime =''
 }) => {
   return (
     <DashBoardNotifcationBox>
@@ -42,6 +44,7 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
           <ClientRole>
           </ClientRole>
           <ClientRelatedTypography>
+            {submissionTime && `Submitted on ${submissionTime}`}
             {message}
             {sessionDay && sessionEndTime && sessionStartTime && `${sessionDay}, ${sessionStartTime.toUpperCase()}-${sessionEndTime.toUpperCase()}`}
           </ClientRelatedTypography>

@@ -46,7 +46,7 @@ export const ClientRelatedTypography = styled(Typography)({
 
 export const ClientRelatedActionButton = styled(
   Button,
-)<ClientRelatedActionButtonProps>(({ buttonAction }) => ({
+)<{buttonAction: string;}>(({ buttonAction }) => ({
   background:
     buttonAction === 'view-details'
       ? '#E5E7EB'

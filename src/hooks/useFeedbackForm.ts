@@ -1,10 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 import { IFeedback } from '../types/feedback';
+
 export const useSubmitFeedbackForm = () => {
   return useMutation({
     mutationFn: async (formData: IFeedback) => {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         throw new Error('Failed to send message');
@@ -16,10 +23,3 @@ export const useSubmitFeedbackForm = () => {
     onError: () => {},
   });
 };
-const response = await axios('/api/feedback', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(formData),
-});

@@ -15,11 +15,11 @@ interface SectionHeadingProps {
 const SpecialButton: React.FC<SectionHeadingProps> = ({
   text,
   position = false,
-  index,
+  index = 0,
   buttonBox,
 }) => {
   return (
-    <SpecialBtnAfter index={index} position={position}>
+    <SpecialBtnAfter index={index} position={position ? 'absolute' : 'static'}>
       {buttonBox && index && index % 2 === 1 ? (
         <Image
           alt='Button Icon'

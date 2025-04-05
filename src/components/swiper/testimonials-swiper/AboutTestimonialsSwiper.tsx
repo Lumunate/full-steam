@@ -65,7 +65,7 @@ const AboutTestimonialsSwiper: FC = () => {
   return (
     <TestimonialsSwiperWrapper aboutSwiperOpen={true}>
       <TestimonialsNavigationWrapper
-        positionLeft='50%'
+        left='50%'
         width='300px'
         sx={{
           marginTop: '20px',

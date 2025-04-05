@@ -40,35 +40,35 @@ export function handleErrors(error: unknown): NextResponse {
   if (error instanceof PrismaClientKnownRequestError) {
     // Handle Prisma errors
     switch (error.code) {
-      case 'P2002':
-        return NextResponse.json(
-          {
-            error: 'Conflict',
-            message: 'A record with this identifier already exists.',
-          },
-          { status: 409 },
-        );
+    case 'P2002':
+      return NextResponse.json(
+        {
+          error: 'Conflict',
+          message: 'A record with this identifier already exists.',
+        },
+        { status: 409 },
+      );
 
-      case 'P2025': {
-        const entityName = error.meta?.cause || 'Record';
+    case 'P2025': {
+      const entityName = error.meta?.cause || 'Record';
 
-        return NextResponse.json(
-          {
-            error: 'Not Found',
-            message: `${entityName} not found.`,
-          },
-          { status: 404 },
-        );
-      }
+      return NextResponse.json(
+        {
+          error: 'Not Found',
+          message: `${entityName} not found.`,
+        },
+        { status: 404 },
+      );
+    }
 
-      default:
-        return NextResponse.json(
-          {
-            error: 'Database Error',
-            message: 'An error occurred while accessing the database.',
-          },
-          { status: 500 },
-        );
+    default:
+      return NextResponse.json(
+        {
+          error: 'Database Error',
+          message: 'An error occurred while accessing the database.',
+        },
+        { status: 500 },
+      );
     }
   }
 

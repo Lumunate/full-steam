@@ -7,6 +7,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { Snackbar, Input, Alert, Checkbox } from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
+import { ChangeEvent } from 'react';
 
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
@@ -36,7 +37,7 @@ import {
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-const checkBoxLabels = [
+const checkBoxLabels: string[] = [
   'Child Care',
   'Meal Preparation',
   'Light Housekeeping',
@@ -45,16 +46,19 @@ const checkBoxLabels = [
   'Elderly Check-in',
 ];
 
+interface CheckedState {
+  [key: string]: boolean; 
+}
+
 export default function RegsiterationFormMom() {
-  const [checkedState, setCheckedState] = useState(
-    checkBoxLabels.reduce((acc, label) => {
-      acc[label] = false;
+  const [checkedState, setCheckedState] = useState<CheckedState>(
+    checkBoxLabels.reduce<CheckedState>((acc, label) => {
+      acc[label] = false; 
 
       return acc;
-    }, {}),
+    }, {})
   );
 
-  // Handler to toggle checkbox checked state
   const handleCheckboxChange = (label: string) => {
     setCheckedState(prevState => ({
       ...prevState,
@@ -81,8 +85,8 @@ export default function RegsiterationFormMom() {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  const handleFileChange = e => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
     if (file) {
       const fileUrl = URL.createObjectURL(file);
@@ -95,7 +99,7 @@ export default function RegsiterationFormMom() {
     document.getElementById('fileInput')?.click();
   };
 
-  const handleChange = e => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -180,7 +184,6 @@ export default function RegsiterationFormMom() {
           <Input
             type='file'
             id='fileInput'
-            accept='image/*'
             onChange={handleFileChange}
             style={{ display: 'none' }}
           />
@@ -390,9 +393,10 @@ export default function RegsiterationFormMom() {
       <GridBox>
         {checkBoxLabels.map((box, index) => (
           <ControlBox
-            checked={checkedState[box]}
+            checked={checkedState[box] ?? false}
             key={index}
-            sx={index > 1 && { marginTop: '19px' }}
+            
+            sx={index > 1 ?   { marginTop: '19px' } : undefined}
             onClick={() => handleCheckboxChange(box)}
           >
             <Checkbox

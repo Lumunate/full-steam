@@ -2,18 +2,20 @@
 
 import { styled, Box, Typography } from '@mui/material';
 
-export const CardContainer = styled(Box)(({ background }) => ({
-  background: background,
-  borderRadius: '16px',
-  padding: '48px 41px 51px 27px',
-  display: 'flex',
-  height: '393px',
-  width: '340px',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  position: 'relative',
-}));
-export const CardHeading = styled(Typography)(({ fontSize }) => ({
+export const CardContainer = styled(Box)<{ background: string }>(
+  ({ background }) => ({
+    background: background,
+    borderRadius: '16px',
+    padding: '48px 41px 51px 27px',
+    display: 'flex',
+    height: '393px',
+    width: '340px',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    position: 'relative',
+  })
+);
+export const CardHeading = styled(Typography)<{fontSize?: string}>(({ fontSize }) => ({
   fontSize: fontSize ? fontSize : '33px',
   fontWeight: 600,
   color: '#005782',

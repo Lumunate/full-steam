@@ -17,7 +17,10 @@ export const SpecialButtonContainer = styled(Box)(() => ({
   padding: '8px 16px 8px 8px',
 }));
 
-export const SpecialBtnAfter = styled(Box)(({ position, index }) => ({
+export const SpecialBtnAfter = styled(Box)<{
+  position?: string;
+  index: number;
+}>(({ position, index }) => ({
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',

@@ -30,7 +30,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         <CardHeading fontSize={fontsize} variant='h3'>
           {heading}
         </CardHeading>
-        <CardDescription variant='p'>{description}</CardDescription>
+        <CardDescription >{description}</CardDescription>
       </CardContent>
 
       <Image

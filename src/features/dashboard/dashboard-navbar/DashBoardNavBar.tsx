@@ -9,14 +9,15 @@ import { DashBoardOption, DashBoardOptions } from './DashBoardNavBar.style';
 import { DashBoardTypography } from './DashBoardNavBar.style';
 
 const links = [
-  { heading: 'Dashboard', imageUrl: '/dashboard/home.svg' },
-  { heading: 'Order Management', imageUrl: '/dashboard/calendar.svg' },
-  { heading: 'Earnings', imageUrl: '/dashboard/earnings.svg' },
-  { heading: 'Messages', imageUrl: '/dashboard/message.svg' },
-  { heading: 'Profile', imageUrl: '/dashboard/profile.svg' },
+  { heading: 'Dashboard', imageUrl: '/dashboard/home.svg' , link:'/dashboard' },
+  { heading: 'Order Management', imageUrl: '/dashboard/calendar.svg' , link:'/dashboard/order-mgmt' },
+  { heading: 'Earnings', imageUrl: '/dashboard/earnings.svg' ,  link:'/dashboard/earnings' },
+  { heading: 'Messages', imageUrl: '/dashboard/message.svg' , link:'/dashboard/messages' },
+  { heading: 'Profile', imageUrl: '/dashboard/profile.svg' , link:'/dashboard/profile'},
 ];
 
 export default function DashBoardNavBar() {
+
   return (
     <DashBoardNav>
       <Link href='/dashboard'>
@@ -24,15 +25,17 @@ export default function DashBoardNavBar() {
       </Link>
       <DashBoardOptions>
         {links.map((link, index) => (
-          <DashBoardOption key={index}>
-            <Image
-              src={link.imageUrl}
-              alt={link.heading}
-              height={14}
-              width={14}
-            />
-            <DashBoardTypography>{link.heading}</DashBoardTypography>
-          </DashBoardOption>
+          <Link href={link?.link} key={index} style={{width: '100%'}} >
+            <DashBoardOption >
+              <Image
+                src={link.imageUrl}
+                alt={link.heading}
+                height={14}
+                width={14}
+              />
+              <DashBoardTypography>{link.heading}</DashBoardTypography>
+            </DashBoardOption>
+          </Link>
         ))}
       </DashBoardOptions>
     </DashBoardNav>
