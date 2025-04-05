@@ -9,16 +9,13 @@ import { RegisterUserInput } from '@/types/auth/register-user';
 import { SafeUser } from '@/types/auth/UserTypes';
 
 import * as PackageService from './PackageService';
-
 export async function registerUser(userData: RegisterUserInput) {
   const hashedPassword = await hash(userData.password, 10);
-  
   const user = await UserRepository.registerUser({
     ...userData,
     password: hashedPassword,
   });
 
-  // add children
   if (userData.children && userData.children.length > 0 && userData.role === UserRole.USER) {
     await ChildRepository.createManyChildren(
       userData.children.map(child => ({
@@ -29,7 +26,6 @@ export async function registerUser(userData: RegisterUserInput) {
       }))
     );
   }
-  // add user services
   if (userData.userServices && userData.userServices.length > 0 &&
       (userData.role === UserRole.HELPER || userData.role === UserRole.USER)) {
     try {
@@ -55,8 +51,6 @@ export async function registerUser(userData: RegisterUserInput) {
       }))
     );
   }
-  
-  // add packages if provided
   if (userData.packages && userData.packages.length > 0 && 
       (userData.role === UserRole.HELPER || userData.role === UserRole.USER)) {
     try {
@@ -74,28 +68,22 @@ export async function registerUser(userData: RegisterUserInput) {
       handleErrors(error);
     }
   }
-  
+
   return user;
 }
-
 export async function getUserById(userId: string) {
   return UserRepository.findUserById(userId);
 }
-
 export async function getUserByEmail(email: string) {
   return UserRepository.findUserByEmail(email);
 }
-
 export async function getAllUsers() {
   const users = await UserRepository.findAllUsers();
 
-  return { users };
+  return  users ;
 }
-
 export async function getCurrentUser(email: string) {
   const user = await getUserByEmail(email);
-
-  // Filter out sensitive information
   const { 
     password, 
     paymentCardNumber, 
@@ -103,19 +91,15 @@ export async function getCurrentUser(email: string) {
     bankAccountNumber,
     ...safeUserData 
   } = user;
-
   const safeUser: SafeUser = {
     ...safeUserData
   };
 
-  return { user: safeUser };
+  return  safeUser ;
 }
-
 export async function toggleUserApproval(userId: string) {
   const updatedUser = await UserRepository.toggleUserApproval(userId);
 
-  return {
-    message: `User approval status toggled to ${updatedUser.isApproved}`,
-    isApproved: updatedUser.isApproved,
-  };
+  return updatedUser
+  ;
 }

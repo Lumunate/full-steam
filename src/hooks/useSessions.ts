@@ -1,3 +1,4 @@
+'use client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -13,7 +14,7 @@ export const useSessions = () => {
     queryFn: async () => {
       const response = await axios.get('/api/sessions');
 
-      return response.data.sessions;
+      return response.data;
     }
   });
 
@@ -21,7 +22,7 @@ export const useSessions = () => {
     mutationFn: async (data: CreateSessionInput) => {
       const response = await axios.post('/api/sessions', data);
 
-      return response.data.session;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sessions'] });
@@ -48,7 +49,7 @@ export const useSessions = () => {
     mutationFn: async ({ id, data }: { id: string, data: Partial<CreateSessionInput> }) => {
       const response = await axios.patch(`/api/sessions/${id}`, data);
 
-      return response.data.session;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sessions'] });

@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import {  CreateUserServiceInput } from '@/types/services';
-
+import {  CreateUserServiceInput , CreateServiceInput } from '@/types/services';
 export async function getAllActiveServices() {
   return prisma.service.findMany({
     where: {
@@ -115,6 +114,20 @@ export async function deleteUserService(userId: string, serviceId: string) {
   }
 
   return prisma.userService.delete({
-    where: { id: userService.id }
+    where: { id: userService.id },
+    include: {
+      service: true,
+      session: true
+    }
+  });
+}
+
+export async function createService(data: CreateServiceInput ) {
+  return prisma.service.create({
+    data: {
+      name: data.name,
+      description: data.description,
+      isActive: data.isActive ?? true
+    }
   });
 }

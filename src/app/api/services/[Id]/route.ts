@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import handleErrors from '@/lib/handlers/errors';
 import NotFoundError from '@/lib/handlers/errors/types/NotFoundError';
-import * as ServiceRepository from '@/repository/ServiceRepository';
+import * as ServiceService from '@/services/ServiceService';
 import { getServiceById } from '@/services/ServiceService';
 
 export async function GET(
@@ -12,7 +12,7 @@ export async function GET(
 ) {
   try {
     const { Id }:{Id: string} = await params; 
-    const service = await ServiceRepository.findServiceById(Id);
+    const service = await ServiceService.getServiceById(Id);
     
     if (!service) {
       throw new NotFoundError('Service not found');

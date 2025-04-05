@@ -7,7 +7,6 @@ import { getAllUsers } from '@/services/UserService';
 
 export async function GET(_req: NextRequest) {
   try {
-    // Only admins and service masters can view all users
     await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
     
     const result = await getAllUsers();

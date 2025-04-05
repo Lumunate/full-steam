@@ -1,12 +1,9 @@
+'use client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useSnackbar } from '@/components/snackbar';
-
-interface ToggleApprovalResponse {
-  message: string;
-  isApproved: boolean;
-}
+import { SafeUser } from '@/types/auth/UserTypes';
 
 export const useUserApproval = () => {
   const queryClient = useQueryClient();
@@ -14,7 +11,7 @@ export const useUserApproval = () => {
 
   return useMutation({
     mutationFn: async (userId: string) => {
-      const response = await axios.patch<ToggleApprovalResponse>(
+      const response = await axios.patch<SafeUser>(
         `/api/user/${userId}/approve`
       );
 

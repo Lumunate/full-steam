@@ -1,12 +1,13 @@
 import * as ServiceRepository from '@/repository/ServiceRepository';
+import {  CreateUserServiceInput } from '@/types/services';
 
 export async function getUserServices(userId: string) {
   const userServices = await ServiceRepository.getUserServices(userId);
 
-  return { userServices };
+  return  userServices ;
 }
 
-export async function createUserService(userId: string, data: any) {
+export async function createUserService(userId: string, data: CreateUserServiceInput) {
   const { serviceId, price, notes, sessionId } = data;
   
   const parsedPrice = price ? (typeof price === 'string' ? parseFloat(price) : price) : undefined;
@@ -19,13 +20,13 @@ export async function createUserService(userId: string, data: any) {
     sessionId
   });
   
-  return { userService };
+  return  userService ;
 }
 
-export async function updateUserService(userId: string, serviceId: string, data: any) {
+export async function updateUserService(userId: string, serviceId: string, data: Partial<CreateUserServiceInput>) {
   const { price, notes, sessionId } = data;
   
-  const parsedPrice = price ? (typeof price === 'string' ? parseFloat(price) : price) : undefined;
+  const parsedPrice = parseFloat(String(price));
   
   const updatedService = await ServiceRepository.updateUserService(userId, serviceId, {
     price: parsedPrice,
@@ -33,11 +34,11 @@ export async function updateUserService(userId: string, serviceId: string, data:
     sessionId
   });
   
-  return { userService: updatedService };
+  return updatedService;
 }
 
 export async function deleteUserService(userId: string, serviceId: string) {
-  await ServiceRepository.deleteUserService(userId, serviceId);
+  const deletedService = await ServiceRepository.deleteUserService(userId, serviceId);
 
-  return { message: 'Service removed successfully' };
+  return deletedService;
 }

@@ -7,15 +7,15 @@ import { toggleUserApproval } from '@/services/UserService';
 
 export async function PATCH(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ userId: string }> }
 ) 
 {
   try {
-    const { id } = await params; 
+    const { userId } = await params; 
 
     await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
     
-    const result = await toggleUserApproval(id);
+    const result = await toggleUserApproval(userId);
 
     return NextResponse.json(result);
   } catch (error) {

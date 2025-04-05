@@ -25,6 +25,7 @@ export const userServiceSchema = z.object({
 export const registerUserSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
+  username: z.string().min(3, 'Username must be at least 3 characters'),
   email: z.string().email('Invalid email address'),
   phoneNumber: z.string().min(10, 'Phone number must be at least 10 digits'),
   address: z.string().min(1, 'Address is required'),
@@ -42,11 +43,13 @@ export const registerUserSchema = z.object({
   role: z.nativeEnum(UserRole).default(UserRole.USER),
   
   // Optional fields
+  country: z.string(),
   image: z.string().optional(),
   shortBio: z.string().optional(),
   hourlyRate: z.number().optional(),
   governmentIdDocumentUrl: z.string().optional(),
   policeCheckDocumentUrl: z.string().optional(),
+  firstAidCertificate: z.string().optional(),
   paymentMethod: z.nativeEnum(PaymentMethod).optional(),
   eTransferEmail: z.string().email().optional(),
   bankTransitNumber: z.string().optional(),

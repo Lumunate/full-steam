@@ -1,9 +1,9 @@
+'use client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useSnackbar } from '@/components/snackbar';
-import { Service, UserService, CreateUserServiceInput } from '@/types/services';
-import { Session } from '@/types/sessions';
+import {  UserService, CreateUserServiceInput } from '@/types/services';
 
 export const useUserServices = () => {
   const { showSnackbar } = useSnackbar();
@@ -14,7 +14,7 @@ export const useUserServices = () => {
     queryFn: async () => {
       const response = await axios.get('/api/user/services');
 
-      return response.data.userServices;
+      return response.data;
     }
   });
 
@@ -22,7 +22,7 @@ export const useUserServices = () => {
     mutationFn: async (data: CreateUserServiceInput) => {
       const response = await axios.post('/api/user/services', data);
 
-      return response.data.userService;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userServices'] });
@@ -49,7 +49,7 @@ export const useUserServices = () => {
     mutationFn: async ({ serviceId, data }: { serviceId: string, data: Partial<Omit<CreateUserServiceInput, 'serviceId'>> }) => {
       const response = await axios.patch(`/api/user/services/${serviceId}`, data);
 
-      return response.data.userService;
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userServices'] });

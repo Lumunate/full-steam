@@ -4,69 +4,58 @@ import { NextRequest, NextResponse } from 'next/server';
 import { handleRBAC } from '@/lib/handlers/auth';
 import handleErrors from '@/lib/handlers/errors';
 import NotFoundError from '@/lib/handlers/errors/types/NotFoundError';
-import * as SessionRepository from '@/repository/SessionRepository';
-import { getSessionById, updateSession, deleteSession } from '@/services/SessionService';
-
+import * as SessionService from '@/services/SessionService';
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; // Await the params to resolve the Promise
-    const session = await SessionRepository.findSessionById(id);
-    
+    const { id } = await params; 
+    const session = await SessionService.getSessionById(id);
+
     if (!session) {
       throw new NotFoundError('Session not found');
     }
-    
-    const result = await getSessionById(id);
+    const result = await SessionService.getSessionById(id);
 
     return NextResponse.json(result);
   } catch (error) {
     return handleErrors(error);
   }
 }
-
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Only admins and service masters can update sessions
     await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
-    
-    const { id } = await params; // Await the params to resolve the Promise
-    const session = await SessionRepository.findSessionById(id);
-    
+    const { id } = await params; 
+    const session = await SessionService.getSessionById(id);
+
     if (!session) {
       throw new NotFoundError('Session not found');
     }
-    
     const body = await request.json();
-    const result = await updateSession(id, body);
+    const result = await SessionService.updateSession(id, body);
 
     return NextResponse.json(result);
   } catch (error) {
     return handleErrors(error);
   }
 }
-
 export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Only admins and service masters can delete sessions
     await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
-    
-    const { id } = await params; // Await the params to resolve the Promise
-    const session = await SessionRepository.findSessionById(id);
-    
+    const { id } = await params;
+    const session = await SessionService.getSessionById(id);
+
     if (!session) {
       throw new NotFoundError('Session not found');
     }
-    
-    const result = await deleteSession(id);
+    const result = await SessionService.deleteSession(id);
 
     return NextResponse.json(result);
   } catch (error) {
