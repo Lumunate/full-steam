@@ -1,8 +1,14 @@
+'use client';
 import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
 import { useSnackbar } from '@/components/snackbar';
 import { RegisterUserInput } from '@/types/auth/register-user';
+import { 
+  RegistrationInput, 
+  RegistrationState, 
+  UseUserRegistrationReturn 
+} from '@/types/hooks';
 
 interface FileData {
   governmentIdDocument?: string | null;
@@ -10,27 +16,11 @@ interface FileData {
   profileImage?: string | null;
 }
 
-type RegistrationInput = Omit<RegisterUserInput, 
-  'governmentIdDocumentUrl' | 'policeCheckDocumentUrl' | 'image'> & FileData;
-
-interface RegistrationState {
-  isLoading: boolean;
-  isSuccess: boolean;
-  error: string | null;
-  data: any | null;
-}
-
-interface UseUserRegistrationReturn {
-  register: (userData: RegistrationInput) => void;
-  registrationState: RegistrationState;
-}
-
 export const useUserRegistration = (): UseUserRegistrationReturn => {
   const { showSnackbar } = useSnackbar();
 
   const registerMutation = useMutation({
     mutationFn: async (userData: RegistrationInput) => {
-      // Get the document URLs from the form components
       const { 
         governmentIdDocument, 
         policeCheckDocument, 

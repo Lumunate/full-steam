@@ -9,23 +9,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = registerUserSchema.parse(body);
     
-    const user = await registerUser(validatedData as { email: string } & typeof validatedData);
+    const result = await registerUser(validatedData);
     
-    const { 
-      password, 
-      paymentCardNumber, 
-      paymentCardCvv, 
-      bankAccountNumber,
-      ...safeUserData 
-    } = user;
-
-    return NextResponse.json(
-      { 
-        message: 'User registered successfully', 
-        user: safeUserData 
-      }, 
-      { status: 201 }
-    );
+    return NextResponse.json(result, { status: 201 });
   } catch (error: unknown) {
     return handleErrors(error);
   }

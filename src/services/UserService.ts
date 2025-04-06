@@ -1,53 +1,105 @@
 import { UserRole } from '@prisma/client';
 import { hash } from 'bcryptjs';
 
-import AuthError, { AuthErrorType } from '@/lib/handlers/errors/types/AuthError';
-import ValidationError from '@/lib/handlers/errors/types/ValidationError';
+import handleErrors from '@/lib/handlers/errors';
+import * as ChildRepository from '@/repository/ChildRepository';
+import * as ServiceRepository from '@/repository/ServiceRepository';
 import * as UserRepository from '@/repository/UserRepository';
-import { toggleUserApproval as toggleApproval } from '@/repository/UserRepository';
 import { RegisterUserInput } from '@/types/auth/register-user';
+import { SafeUser } from '@/types/auth/UserTypes';
 
+import * as PackageService from './PackageService';
 export async function registerUser(userData: RegisterUserInput) {
-  try {
-    await UserRepository.findUserByEmail(userData.email);
-    throw new AuthError(AuthErrorType.EMAIL_ALREADY_EXISTS, 409);
-  } catch (error) {
-    if (error instanceof AuthError) {
-      throw error;
-    }
-  }
-  
-  if (userData.role === UserRole.SERVICE_MASTER || userData.role === UserRole.HELPER) {
-    if (!userData.governmentIdDocumentUrl) {
-      throw new ValidationError('Government ID document is required for this role');
-    }
-    
-    if (!userData.policeCheckDocumentUrl) {
-      throw new ValidationError('Police check document is required for this role');
-    }
-  }
-  
   const hashedPassword = await hash(userData.password, 10);
-  
-  const isApproved = userData.role !== UserRole.HELPER;
-  
-  // Create the user
   const user = await UserRepository.registerUser({
     ...userData,
     password: hashedPassword,
-    isApproved,
   });
-  
+
+  if (userData.children && userData.children.length > 0 && userData.role === UserRole.USER) {
+    await ChildRepository.createManyChildren(
+      userData.children.map(child => ({
+        userId: user.id,
+        name: child.name,
+        age: child.age,
+        specialNotes: child.specialNotes
+      }))
+    );
+  }
+  if (userData.userServices && userData.userServices.length > 0 &&
+      (userData.role === UserRole.HELPER || userData.role === UserRole.USER)) {
+    try {
+      await ServiceRepository.createManyUserServices(
+        userData.userServices.map(userService => ({
+          userId: user.id,
+          serviceId: userService.serviceId,
+          price: typeof userService.price === 'string' ? parseFloat(userService.price) : userService.price,
+          notes: userService.notes,
+          sessionId: userService.sessionId
+        }))
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+  } else if (userData.serviceIds && userData.serviceIds.length > 0 && 
+      (userData.role === UserRole.HELPER || userData.role === UserRole.USER)) {
+    await ServiceRepository.createManyUserServices(
+      userData.serviceIds.map(serviceId => ({
+        userId: user.id,
+        serviceId,
+        price: userData.hourlyRate ? Number(userData.hourlyRate) : 0
+      }))
+    );
+  }
+  if (userData.packages && userData.packages.length > 0 && 
+      (userData.role === UserRole.HELPER || userData.role === UserRole.USER)) {
+    try {
+      await PackageService.createManyPackages(
+        userData.packages.map(pkg => ({
+          name: pkg.name,
+          price: typeof pkg.price === 'string' ? parseFloat(pkg.price) : pkg.price,
+          userId: user.id,
+          notes: pkg.notes,
+          sessionId: pkg.sessionId,
+          serviceIds: pkg.serviceIds || []
+        }))
+      );
+    } catch (error) {
+      handleErrors(error);
+    }
+  }
+
   return user;
 }
-export async function toggleUserApproval(userId: string, currentUserRole: UserRole) {
-  // Verify permissions
-  if (currentUserRole !== UserRole.ADMIN && currentUserRole !== UserRole.SERVICE_MASTER) {
-    throw new AuthError(AuthErrorType.UNAUTHORIZED, 403);
-  }
-  
-  // Update user approval status
-  const updatedUser = await toggleApproval(userId);
-  
-  return updatedUser;
+export async function getUserById(userId: string) {
+  return UserRepository.findUserById(userId);
+}
+export async function getUserByEmail(email: string) {
+  return UserRepository.findUserByEmail(email);
+}
+export async function getAllUsers() {
+  const users = await UserRepository.findAllUsers();
+
+  return  users ;
+}
+export async function getCurrentUser(email: string) {
+  const user = await getUserByEmail(email);
+  const { 
+    password, 
+    paymentCardNumber, 
+    paymentCardCvv, 
+    bankAccountNumber,
+    ...safeUserData 
+  } = user;
+  const safeUser: SafeUser = {
+    ...safeUserData
+  };
+
+  return  safeUser ;
+}
+export async function toggleUserApproval(userId: string) {
+  const updatedUser = await UserRepository.toggleUserApproval(userId);
+
+  return updatedUser
+  ;
 }

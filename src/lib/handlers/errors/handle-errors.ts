@@ -1,4 +1,4 @@
-// import {PrismaClientKnownRequestError} from '@prisma/client/runtime/library';
+// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
@@ -34,7 +34,7 @@ export function handleErrors(error: unknown): NextResponse {
       { status: 400 },
     );
   }
-
+  
   if (error instanceof Prisma.PrismaClientKnownRequestError){
     // Handle Prisma errors
     switch (error.code) {
@@ -49,7 +49,7 @@ export function handleErrors(error: unknown): NextResponse {
 
     case 'P2025': {
       const entityName = error.meta?.cause || 'Record';
-
+      
       return NextResponse.json(
         {
           error: 'Not Found',

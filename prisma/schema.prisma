@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -30,12 +29,14 @@ model User {
   id                    String          @id @default(cuid())
   
   firstName             String
-  lastName              String
+  lastName              String?
+  username              String          @unique
   email                 String          @unique
   phoneNumber           String
   address               String
   city                  String
   postalCode            String
+  country               String
   password              String
   gender                Gender
   dateOfBirth           DateTime
@@ -55,6 +56,7 @@ model User {
   hourlyRate            Decimal?
   governmentIdDocumentUrl  String?
   policeCheckDocumentUrl   String?
+  firstAidCertificate   String?
   paymentMethod         PaymentMethod?
   eTransferEmail        String?
   bankTransitNumber     String?
@@ -70,6 +72,7 @@ model User {
   
   children              Child[]
   userServices          UserService[]
+  packages              Package[]
 }
 
 model Service {
@@ -81,18 +84,61 @@ model Service {
   updatedAt   DateTime      @updatedAt
   
   userServices UserService[]
+  packageServices PackageService[]
 }
 
 model UserService {
   id          String     @id @default(cuid())
   userId      String
   serviceId   String
+  price       Decimal    @default(0)
+  notes       String?
+  sessionId   String?
   createdAt   DateTime   @default(now())
   
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   service     Service    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  session     Session?   @relation(fields: [sessionId], references: [id])
   
   @@unique([userId, serviceId])
+}
+
+model Package {
+  id          String          @id @default(cuid())
+  name        String          
+  price       Decimal         
+  userId      String
+  notes       String?
+  sessionId   String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session     Session?        @relation(fields: [sessionId], references: [id])
+  packageServices PackageService[]
+}
+
+model PackageService {
+  id          String     @id @default(cuid())
+  packageId   String
+  serviceId   String
+  createdAt   DateTime   @default(now())
+  
+  package     Package    @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  service     Service    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  
+  @@unique([packageId, serviceId])
+}
+
+model Session {
+  id          String     @id @default(cuid())
+  name        String
+  duration    Int        // Duration in minutes
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  userServices UserService[]
+  packages     Package[]
 }
 
 model Child {
@@ -113,4 +159,27 @@ model VerificationRequest {
   updatedAt   DateTime    @updatedAt
   
   @@unique([identifier, token])
+}
+// Feedback Entity
+model Feedback {
+  id          Int       @id @default(autoincrement())
+  name        String
+  lastName    String
+  relation    String
+  email       String
+  sessionDate DateTime? @db.Date
+  experience  String
+  feedback    String    @db.Text
+  createdAt   DateTime  @default(now())
+}
+
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String
+  email     String
+  phone     String
+  message   String
+  createdAt DateTime @default(now())
 }
