@@ -7,10 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
+enum UserRole {
   SERVICE_MASTER
   ADMIN
   USER
+  HELPER
+}
+
+enum PaymentMethod {
+  E_TRANSFER
+  DIRECT_DEPOSIT
 }
 
 enum Gender {
@@ -20,30 +26,128 @@ enum Gender {
 }
 
 model User {
+  id String @id @default(cuid())
+
+  firstName    String
+  lastName     String?
+  username     String   @unique
+  email        String   @unique
+  phoneNumber  String
+  address      String
+  city         String
+  postalCode   String
+  country      String
+  password     String
+  gender       Gender
+  dateOfBirth  DateTime
+  agreeToTerms Boolean  @default(false)
+  image        String?
+
+  role       UserRole
+  isApproved Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  isDeleted  Boolean   @default(false)
+  isBlocked  Boolean   @default(false)
+  deletedAt  DateTime?
+  blockedAt  DateTime?
+
+  shortBio                String?
+  hourlyRate              Decimal?
+  governmentIdDocumentUrl String?
+  policeCheckDocumentUrl  String?
+  firstAidCertificate     String?
+  paymentMethod           PaymentMethod?
+  eTransferEmail          String?
+  bankTransitNumber       String?
+  bankInstitutionNumber   String?
+  bankAccountNumber       String?
+
+  additionalInformation String?
+  paymentCardName       String?
+  paymentCardNumber     String?
+  paymentCardExpiry     String?
+  paymentCardCvv        String?
+  savePaymentCard       Boolean @default(false)
+
+  children     Child[]
+  userServices UserService[]
+  packages     Package[]
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userServices    UserService[]
+  packageServices PackageService[]
+}
+
+model UserService {
   id        String   @id @default(cuid())
-  role      Role     @default(USER)
-  password  String
-  email     String   @unique
-  image     String?
+  userId    String
+  serviceId String
+  price     Decimal  @default(0)
+  notes     String?
+  sessionId String?
+  createdAt DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  session Session? @relation(fields: [sessionId], references: [id])
+
+  @@unique([userId, serviceId])
+}
+
+model Package {
+  id        String   @id @default(cuid())
+  name      String
+  price     Decimal
+  userId    String
+  notes     String?
+  sessionId String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  firstName   String
-  lastName    String
-  birthDate   DateTime
-  gender      Gender   @default(OTHER)
-  phoneNumber String
-  username    String   @unique
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session         Session?         @relation(fields: [sessionId], references: [id])
+  packageServices PackageService[]
+}
 
-  googleCalendarId   String?
-  googleRefreshToken String?
+model PackageService {
+  id        String   @id @default(cuid())
+  packageId String
+  serviceId String
+  createdAt DateTime @default(now())
 
-  isDeleted Boolean   @default(false)
-  isBlocked Boolean   @default(false)
-  deletedAt DateTime?
-  blockedAt DateTime?
+  package Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
-  @@map("users")
+  @@unique([packageId, serviceId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  name      String
+  duration  Int // Duration in minutes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userServices UserService[]
+  packages     Package[]
+}
+
+model Child {
+  id           String  @id @default(cuid())
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  age          Int
+  specialNotes String?
 }
 
 model VerificationRequest {
@@ -55,4 +159,27 @@ model VerificationRequest {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
+}
+
+// Feedback Entity
+model Feedback {
+  id          Int       @id @default(autoincrement())
+  name        String
+  lastName    String
+  relation    String
+  email       String
+  sessionDate DateTime? @db.Date
+  experience  String
+  feedback    String    @db.Text
+  createdAt   DateTime  @default(now())
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String
+  email     String
+  phone     String
+  message   String
+  createdAt DateTime @default(now())
 }
