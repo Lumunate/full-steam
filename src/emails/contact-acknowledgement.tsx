@@ -28,7 +28,7 @@ const ContactAcknowledgmentTemplate = ({
         <Container style={container}>
           <Section style={imgSection}>
             <Img
-              src={`https://res.cloudinary.com/dtra3fmqb/image/upload/v1743850449/211994244-removebg_y7cir3.svg`}
+              src={`https://res.cloudinary.com/dtra3fmqb/image/upload/v1743950638/211994244-removebg_hb66lr.png`}
               width="200"
               height="90"
               alt="Full Steam Ahead"
