@@ -9,7 +9,6 @@ const config = {
     '@emotion/react',
     '@emotion/styled',
   ],
-  optimizeFonts: false,
 };
 
 const withNextIntl = createNextIntlPlugin();
