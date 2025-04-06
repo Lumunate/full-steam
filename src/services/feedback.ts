@@ -48,7 +48,7 @@ export async function sendAcknowledgementEmail(email: string, data: FeedbackAckn
 
     const result = await emailService.sendRawEmail({
       to: email,
-      subject: 'Thank you for your feedback - Acemyexam',
+      subject: 'Thank you for your feedback - Full Steam Ahead',
       html: html,
       from: 'onboarding@resend.dev', 
       fromName: 'Full Steam Ahead',

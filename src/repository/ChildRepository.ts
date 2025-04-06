@@ -44,3 +44,8 @@ export async function deleteChild(id: string) {
 export async function createManyChildren(children: CreateChildInput[]) {
   return Promise.all(children.map(child => createChild(child)));
 }
+export async function deleteChildrenByUserId(userId: string) {
+  return prisma.child.deleteMany({
+    where: { userId }
+  });
+}

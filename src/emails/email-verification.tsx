@@ -5,7 +5,7 @@ export interface EmailVerificationProps {
   userName: string;
   identifier: string;
   token: string;
-  expiryTime?: string; 
+  expiryTime?: string; // Optional expiry time for the verification link
 }
 
 const baseUrl = process.env.VERCEL_URL ? process.env.VERCEL_URL : ''; 
@@ -22,7 +22,7 @@ const EmailVerificationTemplate = ({ userName, identifier, token, expiryTime }: 
         <Container style={container}>
           <Section style={imgSection}>
             <Img
-              src={`https://res.cloudinary.com/dtra3fmqb/image/upload/v1743850449/211994244-removebg_y7cir3.svg`}
+              src={`https://res.cloudinary.com/dtra3fmqb/image/upload/v1743950638/211994244-removebg_hb66lr.png`}
               width="200"
               height="90"
               alt="Full Steam Ahead"
