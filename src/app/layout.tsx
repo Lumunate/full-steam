@@ -14,7 +14,7 @@ export default function RootLayout({
   const queryClient = new QueryClient();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <body>
         <QueryClientProvider client={queryClient}>
           <SnackbarProvider>

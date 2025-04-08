@@ -1,56 +1,91 @@
-import { Role, User } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
-import { CreateUser } from '@/types/auth/register-user';
+import { RegisterUserInput } from '@/types/auth/register-user';
 
-export async function findUser(id: string) {
-  return prisma.user.findUniqueOrThrow({
+type User = {
+  id: string;
+  [key: string]: any;
+};
+
+const templateUserInclude = {
+  children: true,
+  userServices: {
+    include: {
+      service: true,
+      session: true
+    }
+  },
+  packages: {
+    include: {
+      packageServices: {
+        include: {
+          service: true
+        }
+      },
+      session: true
+    }
+  }
+};
+
+export async function findUserById(id: string) {
+  return prisma.user.findUnique({
     where: { id },
-  });
-}
-
-export async function findUserByUsername(username: string) {
-  return prisma.user.findUniqueOrThrow({
-    where: { username },
+    include: templateUserInclude
   });
 }
 
 export async function findUserByEmail(email: string) {
   return prisma.user.findUniqueOrThrow({
     where: { email },
-  });
-}
-
-export async function createUser(data: CreateUser) {
-  const birthDate = new Date(data.birthDate);
-
-  return prisma.user.create({
-    data: {
-      role: data.isAdmin ? Role.ADMIN : Role.USER,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      birthDate: birthDate,
-      gender: data.gender,
-      email: data.email,
-      password: data.password,
-      phoneNumber: data.phoneNumber,
-      username: data.username,
-    },
+    include: templateUserInclude
   });
 }
 
 export async function findAllUsers() {
   return prisma.user.findMany({
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      birthDate: true,
-      gender: true,
-      phoneNumber: true,
-      email: true,
-      username: true,
-      role: true,
+    include: templateUserInclude
+  });
+}
+
+export async function registerUser(data: RegisterUserInput) {
+  const dateOfBirth = new Date(data.dateOfBirth as string);
+  const hourlyRate = data.hourlyRate ? Number(data.hourlyRate) : null;
+
+  return prisma.user.create({
+    data: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      city: data.city,
+      postalCode: data.postalCode,
+      country: data.country,
+      password: data.password,
+      gender: data.gender,
+      dateOfBirth: dateOfBirth,
+      role: data.role,
+      agreeToTerms: data.agreeToTerms,
+      image: data.image,
+      shortBio: data.shortBio,
+      hourlyRate: hourlyRate,
+      governmentIdDocumentUrl: data.governmentIdDocumentUrl,
+      policeCheckDocumentUrl: data.policeCheckDocumentUrl,
+      firstAidCertificate: data.firstAidCertificate,
+      paymentMethod: data.paymentMethod,
+      eTransferEmail: data.eTransferEmail,
+      bankTransitNumber: data.bankTransitNumber,
+      bankInstitutionNumber: data.bankInstitutionNumber,
+      bankAccountNumber: data.bankAccountNumber,
+      additionalInformation: data.additionalInformation,
+      paymentCardName: data.paymentCardName,
+      paymentCardNumber: data.paymentCardNumber,
+      paymentCardExpiry: data.paymentCardExpiry,
+      paymentCardCvv: data.paymentCardCvv,
+      savePaymentCard: data.savePaymentCard,
+      isApproved: data.role !== UserRole.HELPER,
     },
   });
 }
@@ -81,3 +116,14 @@ export const updateUser = async (userId: string, data: Partial<User>) => {
     data,
   });
 };
+
+export async function toggleUserApproval(userId: string) {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: userId }
+  });
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { isApproved: !user.isApproved }
+  });
+}

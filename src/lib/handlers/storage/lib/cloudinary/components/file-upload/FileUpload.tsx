@@ -1,7 +1,13 @@
 import { CloudUpload as UploadIcon } from '@mui/icons-material';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ErrorIcon from '@mui/icons-material/Error';
-import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -18,7 +24,7 @@ import { SignatureResponse } from '../../types/SignatureResponse';
 const FileUpload: React.FC<FileUploadProps> = ({
   maxFileSize = 10 * 1024 * 1024, // 10MB default
   maxFiles = 5,
-  hoist = () => { },
+  hoist = () => {},
   reset,
 }) => {
   const [files, setFiles] = useState<File[]>([]);
@@ -85,10 +91,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
     formData.append('api_key', signature.apiKey);
     formData.append('timestamp', signature.timestamp.toString());
     formData.append('signature', signature.signature);
-    formData.append('resource_type', 'auto');
+
+    // Use raw for PDFs
+    formData.append('resource_type', 'raw');
 
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${signature.cloudName}/auto/upload`,
+      `https://api.cloudinary.com/v1_1/${signature.cloudName}/raw/upload`,
       {
         method: 'POST',
         body: formData,
@@ -96,7 +104,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
     );
 
     if (!response.ok) {
-      throw new Error('Upload failed');
+      const errorText = await response.text();
+
+      throw new Error(`Upload failed: ${response.status} ${errorText}`);
     }
 
     return response.json();
@@ -178,7 +188,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             ...prev,
             [file.name]: 100,
           }));
-        } catch {
+        } catch  {
           showSnackbar({
             title: 'Upload Error',
             message: `Failed to upload ${file.name}`,
@@ -232,7 +242,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           }}
         >
           <CircularProgress
-            size={2}
+            size={24}
             color={'primary'}
             sx={{ mr: 2, color: '#ccc' }}
           />
@@ -263,14 +273,23 @@ const FileUpload: React.FC<FileUploadProps> = ({
               {uploadStatus?.type === 'error' ? (
                 <Stack>
                   <ErrorIcon sx={{ mr: 2, color: 'black' }} />
-                  <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
-                    There seems to be an error with the file you are trying to upload.
+                  <Typography
+                    variant='body2'
+                    sx={{ textTransform: 'none' }}
+                    color='text.secondary'
+                  >
+                    There seems to be an error with the file you are trying to
+                    upload.
                   </Typography>
                 </Stack>
               ) : uploadStatus?.type === 'success' ? (
                 <Stack>
                   <DoneAllIcon sx={{ mr: 2, color: 'black' }} />
-                  <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
+                  <Typography
+                    variant='body2'
+                    sx={{ textTransform: 'none' }}
+                    color='text.secondary'
+                  >
                     File Uploaded Successfully
                   </Typography>
                 </Stack>
@@ -282,8 +301,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
                       transform: 'translate(-14px, -2px)',
                     }}
                   />
-                  <Typography variant='body2' sx={{ textTransform: 'none' }} color='text.secondary'>
-                    Browse and choose the files you want to upload from your computer
+                  <Typography
+                    variant='body2'
+                    sx={{ textTransform: 'none' }}
+                    color='text.secondary'
+                  >
+                    Browse and choose the files you want to upload from your
+                    computer
                   </Typography>
                 </Stack>
               )}

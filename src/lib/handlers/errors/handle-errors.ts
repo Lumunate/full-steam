@@ -1,4 +1,5 @@
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+// import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
@@ -34,7 +35,7 @@ export function handleErrors(error: unknown): NextResponse {
     );
   }
   
-  if (error instanceof PrismaClientKnownRequestError) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError){
     // Handle Prisma errors
     switch (error.code) {
     case 'P2002':

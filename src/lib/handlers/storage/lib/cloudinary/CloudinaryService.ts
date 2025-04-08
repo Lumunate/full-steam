@@ -16,20 +16,20 @@ export class CloudinaryService implements IFileStorageService {
    * @returns An object containing the upload URL and any required parameters
    */
   async generateUploadUrl(
-    fileName: string,
+    _fileName: string,
     _fileType: string,
   ): Promise<SignatureResponse> {
-    const publicId = `${Date.now()}-${fileName.replace(/\s+/g, '-')}`;
     const timestamp = Math.round(new Date().getTime() / 1000);
-
+  
+    // Important: Only include timestamp in the signature
     const signature = cloudinary.utils.api_sign_request(
       {
         timestamp,
-        public_id: publicId,
+        // Remove publicId from here
       },
       cloudinaryConfig.api_secret || '',
     );
-
+  
     return {
       signature,
       timestamp,
