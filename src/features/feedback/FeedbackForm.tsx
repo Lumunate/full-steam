@@ -33,6 +33,7 @@ import {
 const defaultValues: IFeedback = {
   name: '',
   lastName: '',
+  relation: '',
   course: '',
   sessionDate: new Date(),
   experience: '4',
