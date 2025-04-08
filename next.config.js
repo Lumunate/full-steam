@@ -9,4 +9,3 @@ const config = {
 const withNextIntl = createNextIntlPlugin();
 
 export default withNextIntl(config);
-
