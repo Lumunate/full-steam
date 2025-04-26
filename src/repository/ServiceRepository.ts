@@ -1,3 +1,4 @@
+import NotFoundError from '@/lib/handlers/errors/types/NotFoundError';
 import { prisma } from '@/lib/prisma';
 import {  CreateUserServiceInput , CreateServiceInput } from '@/types/services';
 export async function getAllActiveServices() {
@@ -88,7 +89,8 @@ export async function updateUserService(userId: string, serviceId: string, data:
   });
 
   if (!userService) {
-    throw new Error(`User service not found for userId ${userId} and serviceId ${serviceId}`);
+    throw new NotFoundError('User service not found');
+
   }
 
   return prisma.userService.update({
@@ -110,7 +112,7 @@ export async function deleteUserService(userId: string, serviceId: string) {
   });
 
   if (!userService) {
-    throw new Error(`User service not found for userId ${userId} and serviceId ${serviceId}`);
+    throw new NotFoundError('User service not found');
   }
 
   return prisma.userService.delete({
@@ -119,6 +121,20 @@ export async function deleteUserService(userId: string, serviceId: string) {
       service: true,
       session: true
     }
+  });
+}
+export async function deleteManyUserServices(serviceIds: string[]) {
+  return prisma.userService.deleteMany({
+    where: {
+      id: {
+        in: serviceIds
+      }
+    }
+  });
+}
+export async function deleteAllUserServices(userId: string) {
+  return prisma.userService.deleteMany({
+    where: { userId }
   });
 }
 

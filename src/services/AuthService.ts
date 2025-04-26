@@ -13,7 +13,7 @@ export async function forgotPassword(email: string) {
   const user = await findUserByEmail(email);
 
   if (!user) {
-    throw new AuthError(AuthErrorType.USER_NOT_FOUND, 404);
+    throw new AuthError(AuthErrorType.USER_NOT_FOUND, 401);
   }
 
   const resetToken = await createVerificationToken(
@@ -38,7 +38,7 @@ export async function resetPassword(
   );
 
   if (!user) {
-    throw new AuthError(AuthErrorType.USER_NOT_FOUND, 404);
+    throw new AuthError(AuthErrorType.USER_NOT_FOUND, 401);
   }
 
   return user;
