@@ -12,5 +12,6 @@ export const SectionDescriptionText = styled(Typography)<{
     fontWeight: 400,
     color: color || '#005782',
     textAlign: center ? 'center' : 'left',
+    position: 'relative',
   }),
 );

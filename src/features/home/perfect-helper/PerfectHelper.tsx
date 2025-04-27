@@ -27,7 +27,7 @@ const PerfectHelper: React.FC = () => {
               />
               <SectionDescriptionText color='white'>
                 Join thousands of families who have discovered the perfect
-                support system with Full Steam Ahead.
+                support system with Full St3am Ahead.
               </SectionDescriptionText>
             </ContentWrapper>
             <Box

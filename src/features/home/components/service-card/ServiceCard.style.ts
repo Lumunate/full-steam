@@ -19,7 +19,9 @@ export const CardHeading = styled(Typography)<{fontSize?: string}>(({ fontSize }
   fontSize: fontSize ? fontSize : '33px',
   fontWeight: 600,
   color: '#005782',
-  textWrap: 'nowrap',
+  lineHeight: '100%',
+  letterSpacing: '-1px',
+  marginBottom: '10px',
 }));
 export const CardDescription = styled(Typography)(() => ({
   fontSize: '16px',
