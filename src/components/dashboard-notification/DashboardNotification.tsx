@@ -1,6 +1,19 @@
 'use client';
 
-import { DashBoardNotifcationBox , ClientNameBox,ClientInfoBox, ClientName ,ClientDetailsBox ,ClientRelatedTypography ,ClientRole , ClientProfilePic ,ClientRelatedActionButton  } from './DashboardNotification.style';
+import {
+  DashBoardNotifcationBox,
+  ClientNameBox,
+  ClientInfoBox,
+  ClientName,
+  ClientDetailsBox,
+  ClientRelatedTypography,
+  ClientRole,
+  ClientProfilePic,
+  ClientRelatedActionButton,
+  ClientRoleTypography,
+  ViewDocumentTypography,
+  ButtonGroup
+} from './DashboardNotification.style';
 
 interface DashBoardNotificationProps {
   clientName: string;
@@ -12,6 +25,9 @@ interface DashBoardNotificationProps {
   message?: string;
   messageTime?: string;
   submissionTime?: string;
+  viewDocument?: boolean;
+  role?: string;
+  submissionDate?: string;
 }
 
 const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
@@ -21,9 +37,12 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
   sessionStartTime = '',
   sessionEndTime = '',
   buttonAction = '',
-  message ='',
+  message = '',
   messageTime = '',
-  submissionTime =''
+  submissionTime = '',
+  viewDocument = false,
+  role = '',
+  submissionDate = ''
 }) => {
   return (
     <DashBoardNotifcationBox>
@@ -37,27 +56,36 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
         <ClientDetailsBox>
           <ClientNameBox>
             <ClientName>{clientName}</ClientName>
-            <ClientRelatedTypography>
-              {messageTime}
-            </ClientRelatedTypography>
+            {role && <ClientRoleTypography>{role}</ClientRoleTypography>}
+            {messageTime && (
+              <ClientRelatedTypography>{messageTime}</ClientRelatedTypography>
+            )}
+            {submissionDate && (
+              <ClientRelatedTypography sx={{marginTop: '5px'}}>Submitted on {submissionDate}</ClientRelatedTypography>
+            )}
           </ClientNameBox>
-          <ClientRole>
-          </ClientRole>
+          <ClientRole></ClientRole>
           <ClientRelatedTypography>
             {submissionTime && `Submitted on ${submissionTime}`}
             {message}
-            {sessionDay && sessionEndTime && sessionStartTime && `${sessionDay}, ${sessionStartTime.toUpperCase()}-${sessionEndTime.toUpperCase()}`}
+            {sessionDay &&
+              sessionEndTime &&
+              sessionStartTime &&
+              `${sessionDay}, ${sessionStartTime.toUpperCase()}-${sessionEndTime.toUpperCase()}`}
           </ClientRelatedTypography>
         </ClientDetailsBox>
       </ClientInfoBox>
-
-      {buttonAction && (
-        <ClientRelatedActionButton buttonAction={buttonAction} width="125px">
-          {buttonAction.replace('-', ' ')}
-        </ClientRelatedActionButton>
-      )}
+      <ButtonGroup>
+        {viewDocument && (
+          <ViewDocumentTypography>View Document</ViewDocumentTypography>
+        )}
+        {buttonAction && (
+          <ClientRelatedActionButton buttonAction={buttonAction} width='125px'>
+            {buttonAction.replace('-', ' ')}
+          </ClientRelatedActionButton>
+        )}
+      </ButtonGroup>
     </DashBoardNotifcationBox>
-
   );
 };
 

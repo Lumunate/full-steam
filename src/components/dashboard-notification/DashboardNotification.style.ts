@@ -14,7 +14,15 @@ export const DashBoardNotifcationBox = styled(Box)({
 
 export const ClientNameBox = styled(Box)({
   display: 'flex',
+  flexDirection: 'column',
   gap: '8px'
+});
+
+export const ViewDocumentTypography = styled(Typography)({
+  fontSize: '16px',
+  color: '#00C8FF',
+  fontWeight: 500,
+  cursor: 'pointer',
 });
 
 export const ClientInfoBox = styled(Box)({
@@ -34,6 +42,7 @@ export const ClientName = styled(Typography)({
   fontSize: '16px',
   fontWeight: 500,
   color: '#000000',
+  lineHeight: '100%',
 });
 
 export const ClientRole = styled(Typography)({});
@@ -42,6 +51,14 @@ export const ClientRelatedTypography = styled(Typography)({
   fontSize: '14px',
   fontWeight: 400,
   color: '#6B7280',
+  lineHeight: '100%'
+});
+
+export const ClientRoleTypography = styled(Typography)({
+  color: '#005782',
+  fontSize: '16px',
+  fontWeight: 500,
+  lineHeight: '100%',
 });
 
 export const ClientRelatedActionButton = styled(
@@ -67,4 +84,10 @@ export const DashBoardSectionHeading = styled(Typography)({
   fontSize: '28px',
   fontWeight: 400,
   marginTop: '65px'
+});
+
+export const ButtonGroup = styled(Box)({
+  display: 'flex',
+  gap: '16px',
+  alignItems: 'center',
 });
