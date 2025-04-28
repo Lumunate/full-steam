@@ -5,7 +5,8 @@ export async function createSession(data: CreateSessionInput) {
   return prisma.session.create({
     data: {
       name: data.name,
-      duration: Number(data.duration)
+      duration: Number(data.duration),
+      bookingDate: data.bookingDate
     }  });
 }
 
@@ -30,6 +31,9 @@ export async function updateSession(id: string, data: Partial<CreateSessionInput
       ...(data.name && { name: data.name }),
       ...(data.duration && { 
         duration: Number(data.duration)
+      }),
+      ...(data.bookingDate !== undefined && { 
+        bookingDate: data.bookingDate
       })
     }  });
 }

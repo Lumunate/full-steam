@@ -20,7 +20,13 @@ export const useSessions = () => {
 
   const createMutation = useMutation({
     mutationFn: async (data: CreateSessionInput) => {
-      const response = await axios.post('/api/sessions', data);
+      const formattedData = {
+        ...data,
+        bookingDate: data.bookingDate instanceof Date ? data.bookingDate : 
+          data.bookingDate ? new Date(data.bookingDate) : undefined
+      };
+
+      const response = await axios.post('/api/sessions', formattedData);
 
       return response.data;
     },
@@ -47,7 +53,12 @@ export const useSessions = () => {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string, data: Partial<CreateSessionInput> }) => {
-      const response = await axios.patch(`/api/sessions/${id}`, data);
+      const formattedData = {
+        ...data,
+        bookingDate: data.bookingDate instanceof Date ? data.bookingDate : 
+          data.bookingDate ? new Date(data.bookingDate) : undefined
+      };
+      const response = await axios.patch(`/api/sessions/${id}`, formattedData);
 
       return response.data;
     },

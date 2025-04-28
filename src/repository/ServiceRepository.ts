@@ -52,7 +52,9 @@ export async function createUserService(data: CreateUserServiceInput) {
       data: {
         price: data.price ? data.price : undefined,
         notes: data.notes,
-        sessionId: data.sessionId
+        sessionId: data.sessionId,
+        rating: data.rating,
+        bookingDate: data.bookingDate
       },
       include: {
         service: true,
@@ -67,7 +69,9 @@ export async function createUserService(data: CreateUserServiceInput) {
       serviceId: data.serviceId,
       price: data.price ? data.price : undefined,
       notes: data.notes,
-      sessionId: data.sessionId
+      sessionId: data.sessionId,
+      rating: data.rating,
+      bookingDate: data.bookingDate
     },
     include: {
       service: true,
@@ -90,7 +94,6 @@ export async function updateUserService(userId: string, serviceId: string, data:
 
   if (!userService) {
     throw new NotFoundError('User service not found');
-
   }
 
   return prisma.userService.update({
@@ -121,6 +124,20 @@ export async function deleteUserService(userId: string, serviceId: string) {
       service: true,
       session: true
     }
+  });
+}
+export async function deleteManyUserServices(serviceIds: string[]) {
+  return prisma.userService.deleteMany({
+    where: {
+      id: {
+        in: serviceIds
+      }
+    }
+  });
+}
+export async function deleteAllUserServices(userId: string) {
+  return prisma.userService.deleteMany({
+    where: { userId }
   });
 }
 

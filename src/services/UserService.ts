@@ -97,6 +97,7 @@ export async function getCurrentUser(email: string) {
 
   return  safeUser ;
 }
+
 export async function toggleUserApproval(userId: string) {
   const updatedUser = await UserRepository.toggleUserApproval(userId);
 

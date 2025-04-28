@@ -8,7 +8,7 @@ export async function getUserServices(userId: string) {
 }
 
 export async function createUserService(userId: string, data: CreateUserServiceInput) {
-  const { serviceId, price, notes, sessionId } = data;
+  const { serviceId, price, notes, sessionId, rating, bookingDate } = data;
   
   const parsedPrice = price ? (typeof price === 'string' ? parseFloat(price) : price) : undefined;
   
@@ -17,21 +17,25 @@ export async function createUserService(userId: string, data: CreateUserServiceI
     serviceId,
     price: parsedPrice,
     notes,
-    sessionId
+    sessionId,
+    rating,
+    bookingDate
   });
   
-  return  userService ;
+  return userService;
 }
 
 export async function updateUserService(userId: string, serviceId: string, data: Partial<CreateUserServiceInput>) {
-  const { price, notes, sessionId } = data;
+  const { price, notes, sessionId, rating, bookingDate } = data;
   
-  const parsedPrice = parseFloat(String(price));
+  const parsedPrice = price ? parseFloat(String(price)) : undefined;
   
   const updatedService = await ServiceRepository.updateUserService(userId, serviceId, {
     price: parsedPrice,
     notes,
-    sessionId
+    sessionId,
+    rating,
+    bookingDate
   });
   
   return updatedService;
