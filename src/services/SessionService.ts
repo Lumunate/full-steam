@@ -8,16 +8,17 @@ export async function getAllSessions() {
 }
 
 export async function createSession(data: CreateSessionInput) {
-  const { name, duration } = data;
+  const { name, duration, bookingDate } = data;
   
-  const parsedDuration =  parseInt(String(duration)) ;
+  const parsedDuration = parseInt(String(duration));
   
   const session = await SessionRepository.createSession({
     name,
-    duration: parsedDuration
+    duration: parsedDuration,
+    bookingDate
   });
   
-  return  session ;
+  return session;
 }
 
 export async function getSessionById(sessionId: string) {
@@ -27,17 +28,17 @@ export async function getSessionById(sessionId: string) {
 }
 
 export async function updateSession(sessionId: string, data: CreateSessionInput) {
-  const { name, duration } = data;
+  const { name, duration, bookingDate } = data;
   
-  const parsedDuration = 
-    parseInt(String(duration))  ;
+  const parsedDuration = parseInt(String(duration));
   
   const session = await SessionRepository.updateSession(sessionId, {
     name,
-    duration: parsedDuration
+    duration: parsedDuration,
+    bookingDate
   });
   
-  return  session ;
+  return session;
 }
 
 export async function deleteSession(sessionId: string) {

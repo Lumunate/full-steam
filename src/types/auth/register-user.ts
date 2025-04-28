@@ -30,6 +30,7 @@ export const registerUserSchema = z.object({
   phoneNumber: z.string().min(10, 'Phone number must be at least 10 digits'),
   address: z.string().min(1, 'Address is required'),
   city: z.string().min(1, 'City is required'),
+  state: z.string().optional(),
   postalCode: z.string().min(1, 'Postal code is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   gender: z.nativeEnum(Gender, {
@@ -39,8 +40,10 @@ export const registerUserSchema = z.object({
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms and conditions',
   }),
-  
+  saveForFuture: z.boolean().optional().default(false),
   role: z.nativeEnum(UserRole).default(UserRole.USER),
+  proStatus: z.boolean().optional().default(false),
+  rating: z.number().optional(),
   
   // Optional fields
   country: z.string(),

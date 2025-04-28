@@ -2,6 +2,7 @@ import { Gender, PaymentMethod, UserRole } from '@prisma/client';
 import { z } from 'zod';
 
 import { childSchema, packageSchema, userServiceSchema } from './register-user';
+
 export const updateUserSchema = z.object({
   firstName: z.string().min(1, 'First name is required').optional(),
   lastName: z.string().min(1, 'Last name is required').optional(),
@@ -16,7 +17,11 @@ export const updateUserSchema = z.object({
     message: 'Gender is required',
   }).optional(),
   dateOfBirth: z.string().min(1, 'Date of birth is required').optional(),
+  saveForFuture: z.boolean().optional(),
   role: z.nativeEnum(UserRole).optional(),
+  proStatus: z.boolean().optional(),
+  rating: z.number().optional(),
+  
   country: z.string().optional(),
   image: z.string().optional(),
   shortBio: z.string().optional(),
@@ -35,9 +40,11 @@ export const updateUserSchema = z.object({
   paymentCardExpiry: z.string().optional(),
   paymentCardCvv: z.string().optional(),
   savePaymentCard: z.boolean().optional(),
+  
   children: z.array(childSchema).optional(),
   serviceIds: z.array(z.string()).optional(),
   userServices: z.array(userServiceSchema).optional(), 
   packages: z.array(packageSchema).optional(),
 });
+
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
