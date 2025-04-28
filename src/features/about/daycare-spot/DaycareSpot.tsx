@@ -30,7 +30,7 @@ const DayCareSpot: React.FC = () => {
 
           <SectionDescriptionText center>
             Finding reliable and convenient daycare can be challenging. Full
-            Steam Ahead simplifies this process by creating a comprehensive list
+            St3am Ahead simplifies this process by creating a comprehensive list
             of families seeking daycare in your area and providing a platform
             for daycares to advertise their available spots.
           </SectionDescriptionText>

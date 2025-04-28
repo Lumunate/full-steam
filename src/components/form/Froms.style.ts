@@ -35,7 +35,7 @@ export const StyledLabel = styled(FormControlLabel)<{ isselected?: boolean }>(
     cursor: 'pointer',
     padding: '9px 0',
     borderRadius: '8px',
-    width: ' 105px',
+    width: '105px',
     background: isselected ? 'white' : '',
     boxShadow: isselected ? '0px 4px 14px 0px #0000002B' : '',
   }),

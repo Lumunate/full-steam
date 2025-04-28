@@ -28,7 +28,7 @@ const ActionToday: React.FC = () => {
               <SectionMainHeading text='Take Action Today!' color='white' />
               <SectionDescriptionText color='white' fontSize='18px'>
                 Join thousands of families who have discovered the perfect
-                support system with Full Steam Ahead.
+                support system with Full St3am Ahead.
               </SectionDescriptionText>
             </ContentWrapper>
             <Box

@@ -9,7 +9,7 @@ export const metadata = {
   title: 'FullSt3amAhead - About',
 };
 
-export default function Home() {
+export default function About() {
   return (
     <>
       <AboutHero />

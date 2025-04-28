@@ -53,7 +53,7 @@ const HowItWorks: React.FC = () => {
               <SectionMainHeading text='How It Works' />
 
               <SectionDescriptionText>
-                Getting started with Full Steam Ahead is simple. Here&apos;s how
+                Getting started with Full St3am Ahead is simple. Here&apos;s how
                 you can find the perfect Mom Helper for your family.
               </SectionDescriptionText>
             </Box>

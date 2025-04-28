@@ -55,6 +55,34 @@ const cards = [
     imgSrc: '/home/service-card/pet-minding.png',
     background: '#B5BAFEB2',
   },
+  {
+    heading: 'Bringing in your Amazon packages',
+    description:
+      'Compassionate assistance and regular check-ins for elderly family members, providing peace of mind.',
+    imgSrc: '/home/service-card/elderly.png',
+    background: '#DEA2C6B2',
+  },
+  {
+    heading: 'Water my plants',
+    description:
+      'Compassionate assistance and regular check-ins for elderly family members, providing peace of mind.',
+    imgSrc: '/home/service-card/pet-minding.png',
+    background: '#DEA2C6B2',
+  },
+  {
+    heading: 'Taking out the rubbish/trash',
+    description:
+      'Find the perfect daycare spot for your child through our specialized matching service.',
+    imgSrc: '/home/service-card/daycare-matching.png',
+    background: '#B5BAFEB2',
+  },
+  {
+    heading: 'Snow shoveling',
+    description:
+      'Caring attention for your furry family members, including feeding, walking, and playtime.',
+    imgSrc: '/home/service-card/pet-minding.png',
+    background: '#B5BAFEB2',
+  },
 ];
 
 const Services: React.FC = () => {

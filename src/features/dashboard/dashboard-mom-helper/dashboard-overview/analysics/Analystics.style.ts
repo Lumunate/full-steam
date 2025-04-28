@@ -16,7 +16,8 @@ export const AnalysticCard = styled(Box)({
   borderRadius: '28px',
   boxShadow: '0px 16px 24px 0px #0000000F',
   padding: '40px 24px',
-  flex: 1
+  flex: 1,
+  maxWidth: '25%'
 
 });
 

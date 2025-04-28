@@ -45,7 +45,7 @@ const WhyChooseFSA: React.FC = () => {
             <SectionMainHeading
               center
               text='Why Choose '
-              span='Full Steam Ahead?'
+              span='Full St3am Ahead?'
             />
             <ServiceCardGrid>
               {cards.map((card, index) => (
