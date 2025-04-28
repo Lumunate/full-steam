@@ -1,5 +1,7 @@
 'use client';
 
+import { off } from 'process';
+
 import { Box } from '@mui/material';
 import Image from 'next/image';
 
@@ -139,17 +141,21 @@ const MomHelperCard: React.FC<MomHelperCardProps> = ({
             <PriceHr>
               <PricesTypography>${lowerRate}-{upperRate}</PricesTypography>/hr
             </PriceHr>
-            <OfferedTypography>
-              {offeredServices} Services Offered
-            </OfferedTypography>
+            {offeredServices &&
+              <OfferedTypography>
+                {offeredServices} Services Offered
+              </OfferedTypography> }
+            
           </Box>
           <Box>
 
             <StartingTypography>Sessions Completed</StartingTypography>
             <PricesTypography sx={{textAlign: 'right'}}>{completedSessions}</PricesTypography>
+            {packagesOffered && 
             <OfferedTypography>
               {packagesOffered} Packages Offered
             </OfferedTypography>
+            }
           </Box>
         </Box>
 
