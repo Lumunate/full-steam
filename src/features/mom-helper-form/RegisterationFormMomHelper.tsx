@@ -396,7 +396,7 @@ export default function RegsiterationFormMomHelper() {
                   <CustomSelect
                     label="Time Unit"
                     value={selectValues[box] || 'hrs'}
-                    onChange={(e) => handleSelectChange(box, e.target.value)}
+                    onChange={(e) => handleSelectChange(box, e.target.value as string)}
                   >
                     <MenuItem value="hrs">hrs</MenuItem>
                     <MenuItem value="mins">mins</MenuItem>
