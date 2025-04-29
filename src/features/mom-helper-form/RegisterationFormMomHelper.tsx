@@ -2,9 +2,9 @@
 
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Snackbar, Input, Alert, Checkbox, MenuItem } from '@mui/material';
+import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import { Paper, Snackbar, Input, Alert, Checkbox, MenuItem, Box, Select , Table,TableContainer, TableHead, TableCell, TableRow, TableBody} from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
 import { ChangeEvent } from 'react';
@@ -25,7 +25,6 @@ import {
   StyledInputLabel,
   GridBox,
   InputHolder,
-  ControlBox,
   StyledCheckBoxLabel,
   CardCaption,
   CheckFlex,
@@ -36,6 +35,13 @@ import {
   CertificateStyledInputLabel,
   OptionalGridBox,
   StyledSelect,
+  BorderBox,
+  CheckBorderBox,
+  CheckBoxContainer,
+  StyledInputFieldCheckBox,
+  BorderBoxInternal,
+  CustomSelect,
+  CustomTableCell
 } from '../../components/form/Froms.style';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -47,6 +53,15 @@ const checkBoxLabels = [
   'Tutoring',
   'Pet Minding',
   'Elderly Check-in',
+  'Grocery Runs',
+  'Tutoring (up to Grade 2)',
+  'Laundry / Sundries',
+  'Feed My Pet (Separate Visit)',
+  'Bringing in your Amazon packages',
+  'Water my plants',
+  'Taking out the rubbish/trash',
+  'Snow shoveling'
+
 ];
 
 interface CheckedState {
@@ -54,20 +69,9 @@ interface CheckedState {
 }
 
 export default function RegsiterationFormMomHelper() {
-  const [checkedState, setCheckedState] = useState<CheckedState>(
-    checkBoxLabels.reduce<CheckedState>((acc, label) => {
-      acc[label] = false; 
- 
-      return acc;
-    }, {})
-  );
- 
-  const handleCheckboxChange = (label: string) => {
-    setCheckedState(prevState => ({
-      ...prevState,
-      [label]: !prevState[label],
-    }));
-  };
+  const [checkedState, setCheckedState] = useState<Record<string, boolean>>({});
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
+  const [selectValues, setSelectValues] = useState<Record<string, string>>({});
 
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
@@ -83,7 +87,20 @@ export default function RegsiterationFormMomHelper() {
     city: '',
     postcode: '',
     country: '',
+    state: ''
   });
+
+  const handleCheckboxChange = (key: string) => {
+    setCheckedState(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+  
+  const handleInputChange = (key: string, value: string) => {
+    setInputValues(prev => ({ ...prev, [key]: value }));
+  };
+  
+  const handleSelectChange = (key: string, value: string) => {
+    setSelectValues(prev => ({ ...prev, [key]: value }));
+  };
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -120,7 +137,8 @@ export default function RegsiterationFormMomHelper() {
         formData.city &&
         formData.postcode &&
         formData.country &&
-        formData.password
+        formData.password &&
+        formData.state
       );
     }
     if (currentStep === 2) {
@@ -307,6 +325,18 @@ export default function RegsiterationFormMomHelper() {
         </InputHolder>
       </GridBox>
       <InputHolder>
+        <StyledInputLabel htmlFor='state'>State/Province</StyledInputLabel>
+        <StyledInputField
+          disableUnderline
+          type='text'
+          id='state'
+          name='state'
+          value={formData.state}
+          onChange={handleChange}
+        />
+      </InputHolder>
+
+      <InputHolder>
         <StyledInputLabel htmlFor='country'>Short Bio</StyledInputLabel>
         <StyledInputField
           disableUnderline
@@ -328,32 +358,87 @@ export default function RegsiterationFormMomHelper() {
       </FormDescription>
 
       <StyledInputLabel>Services You can Provide</StyledInputLabel>
-      <GridBox>
-        {checkBoxLabels.map((box, index) => (
-          <ControlBox
-          
-            checked={checkedState[box] ?? false}
-            key={index}
-            sx={index > 1 ?   { marginTop: '19px' } : undefined}
-            onClick={() => handleCheckboxChange(box)}
-          >
-            <Checkbox
-              {...label}
-              checked={checkedState[box]}
-              onChange={() => handleCheckboxChange(box)}
-              icon={<RadioButtonUncheckedIcon />}
-              checkedIcon={<CheckCircleIcon sx={{ color: '#005782' }} />}
-            />
-            <StyledCheckBoxLabel>{box}</StyledCheckBoxLabel>
-          </ControlBox>
-        ))}
-      </GridBox>
+      <BorderBox>
+        <BorderBoxInternal>
 
-      <StyledInputLabel>Hourly Rate</StyledInputLabel>
-      <CardCaption>
-        Set your hourly rate. Youll receive 80% of the total bill*
-      </CardCaption>
-      <StyledInputField type='number' disableUnderline />
+          <Box sx={{display: 'flex', justifyContent: 'space-between', padding: '20px 0' ,borderBottom: '1px solid #DFEAF2'}}>
+
+            <StyledCheckBoxLabel sx={{marginLeft: '18px',}}>Services</StyledCheckBoxLabel>
+            <Box sx={{display: 'flex', marginRight: '19px', gap: '20px'}}>
+
+              <StyledCheckBoxLabel style={{width: '120px' , textAlign: 'center'}}>Rate</StyledCheckBoxLabel>
+              <StyledCheckBoxLabel style={{width: '120px', textAlign: 'center'}}>Duration</StyledCheckBoxLabel>
+            </Box>
+          </Box>
+          <Box sx={{padding: '18px 12px'}}>
+
+            {checkBoxLabels.map((box, index) => (
+              <CheckBorderBox key={box} index={index}>
+                <CheckBoxContainer>
+                  <Checkbox
+                    icon={<CheckBoxOutlineBlankIcon />}
+                    checkedIcon={<CheckBoxIcon sx={{ color: '#005782' }} />}
+                    checked={checkedState[box] || false}
+                    onChange={() => handleCheckboxChange(box)}
+                  />
+                  <StyledCheckBoxLabel>{box}</StyledCheckBoxLabel>
+                </CheckBoxContainer>
+
+                <Box sx={{ display: 'flex', flexDirection: 'row', gap: '11px' }}>
+                  <StyledInputFieldCheckBox
+                    disableUnderline
+                    type="text"
+                    id={box}
+                    name={box}
+                    value={inputValues[box] || ''}
+                    onChange={(e) => handleInputChange(box, e.target.value)}
+                  />
+                  <CustomSelect
+                    label="Time Unit"
+                    value={selectValues[box] || 'hrs'}
+                    onChange={(e) => handleSelectChange(box, e.target.value)}
+                  >
+                    <MenuItem value="hrs">hrs</MenuItem>
+                    <MenuItem value="mins">mins</MenuItem>
+                  </CustomSelect>
+                </Box>
+              </CheckBorderBox>
+            ))}
+
+          </Box>
+
+        </BorderBoxInternal>
+      </BorderBox>
+
+      <StyledInputLabel>Custom Packages</StyledInputLabel>
+      <BorderBox>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <CustomTableCell>Package Name</CustomTableCell>
+                <CustomTableCell>Included Services</CustomTableCell>
+                <CustomTableCell>Prices</CustomTableCell>
+                <CustomTableCell>Sessions (1hr)</CustomTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow >
+                <TableCell>Weekend Boost</TableCell>
+                <TableCell>LighHousekeeping, Childcare, Pet Minding</TableCell>
+                <TableCell><StyledInputField 
+                  disableUnderline
+                /></TableCell>
+                <TableCell><StyledInputField 
+                  disableUnderline
+                /></TableCell>
+              </TableRow>
+
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Button width='100%' style={{marginTop: '16px'}}>Add Package</Button>
+      </BorderBox>
       <CertificateBoxWrapper>
         <CertificateStyledInputLabel>
           Government Issued ID
