@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useSnackbar } from '@/components/snackbar';
 import { IFeedback } from '@/types/feedback';
 
-export const useFeedback = () => {
+export const useFeedback = (skipFetch = true) => {
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
@@ -30,6 +30,7 @@ export const useFeedback = () => {
         throw new Error(errorMessage);
       }
     },
+    enabled: !skipFetch, // Skip fetching by default
   });
 
   const createMutation = useMutation({
