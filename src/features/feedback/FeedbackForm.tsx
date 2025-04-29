@@ -1,5 +1,4 @@
 'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Box,
@@ -26,7 +25,6 @@ import {
   StyledTextField,
   CustomInputLabel,
 } from '../../components/form/text-field.style';
-
 const defaultValues: IFeedback = {
   name: '',
   lastName: '',
@@ -36,7 +34,6 @@ const defaultValues: IFeedback = {
   experience: '4',
   feedback: '',
 };
-
 const relationOptions = [
   { value: 'childcare', label: 'Childcare' },
   { value: 'tutoring', label: 'Tutoring' },
@@ -49,7 +46,6 @@ export default function FeedbackForm() {
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const {
     control,
     register,
@@ -60,10 +56,8 @@ export default function FeedbackForm() {
     resolver: zodResolver(feedbackSchema),
     defaultValues,
   });
-
   const onSubmit: SubmitHandler<IFeedback> = async (data) => {
     setIsSubmitting(true);
-    
     try {
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -79,19 +73,13 @@ export default function FeedbackForm() {
       if (!response.ok) {
         throw new Error('Failed to submit feedback');
       }
-
       showSnackbar({
         type: 'success',
         title: 'Success',
         message: 'Thank you for your feedback! We appreciate your input.',
       });
-      
       reset();
-      
-      // Optional: redirect after successful submission
-      // router.push('/en/thank-you');
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
+    } catch  {
       showSnackbar({
         type: 'error',
         title: 'Error',
@@ -140,7 +128,6 @@ export default function FeedbackForm() {
             />
           </Grid>
         </Grid>
-
         <Box sx={{ marginBottom: '40px' }}>
           <CustomFormControl
             fullWidth
@@ -185,7 +172,6 @@ export default function FeedbackForm() {
             )}
           </CustomFormControl>
         </Box>
-
         <Box sx={{ marginBottom: '40px' }}>
           <StyledTextField
             label='Email'
@@ -199,7 +185,6 @@ export default function FeedbackForm() {
             labelfontsize='16px'
           />
         </Box>
-
         <Box
           sx={{
             width: '100%',
@@ -247,7 +232,6 @@ export default function FeedbackForm() {
             <FormHelperText error>{errors.experience?.message}</FormHelperText>
           )}
         </Box>
-
         <Box sx={{ marginBottom: '40px' }}>
           <StyledTextField
             label='Share Your Experience Here...'
@@ -263,7 +247,6 @@ export default function FeedbackForm() {
             labelfontsize='16px'
           />
         </Box>
-
         <Button
           type='submit'
           special
