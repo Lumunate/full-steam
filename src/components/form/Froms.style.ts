@@ -9,6 +9,7 @@ import {
   Input,
   InputLabel,
   Select,
+  TableCell
 } from '@mui/material';
 import { styled } from '@mui/system';
 import Image from 'next/image';
@@ -203,4 +204,41 @@ export const CheckBoxTypography = styled(Typography)({
   fontSize: '16px',
   fontWeight: 400,
   color: '#232323',
+});
+
+export const CheckBorderBox = styled(BorderBox)<{ index: number }>(
+  ({ index }) => ({
+    marginTop: index === 0 ? 0 : '12px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row'
+  })
+);
+
+export const CheckBoxContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '10px',
+  alignItems: 'center'
+});
+
+export const StyledInputFieldCheckBox = styled(StyledInputField)({
+  maxWidth: '120px',
+  height: '45px'
+});
+
+export const BorderBoxInternal = styled(BorderBox)({
+  padding: '0'
+});
+
+export const CustomSelect = styled(Select)({
+  borderRadius: '15px',
+  height: '45px',
+  width: '120px'
+});
+
+export const CustomTableCell = styled(TableCell)({
+
+  color: '#005782',
+  fontSize: '14px'
 });

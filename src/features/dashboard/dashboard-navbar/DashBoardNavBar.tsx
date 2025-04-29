@@ -14,7 +14,7 @@ const links = {
     { heading: 'Dashboard', imageUrl: '/dashboard/home.svg', link: '/dashboard/mom/overview' },
     { heading: 'Orders', imageUrl: '/dashboard/calendar.svg', link: '/dashboard/mom/order-mgmt' },
     { heading: 'Payments', imageUrl: '/dashboard/earnings.svg', link: '/dashboard/mom/earnings' },
-    { heading: 'Saved Helpers', imageUrl: '/dashboard/message.svg', link: '/dashboard/mom/messages' },
+    { heading: 'Saved Helpers', imageUrl: '/dashboard/message.svg', link: '/dashboard/mom/profile-view' },
     { heading: 'Monitoring', imageUrl: '/dashboard/monitoring.svg', link: '/dashboard/mom/profile' },
     { heading: 'Profile', imageUrl: '/dashboard/profile.svg', link: '/dashboard/mom/profile' },
   ],

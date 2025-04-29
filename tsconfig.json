@@ -37,6 +37,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
-  ],
+, "src/features/legal-pages/service-agreement"  ],
   "exclude": ["node_modules"]
 }

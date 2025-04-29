@@ -172,7 +172,8 @@ const Footer: FC = () => {
       heading: 'Legal',
       links: [
         { text: 'Privacy Policy', href: '/privacy-policy' },
-        { text: 'Terms of Service', href: '/terms-of-service' },
+        { text: 'Terms of Service', href: '/terms-service' },
+        { text: 'Service Agreement', href: '/service-agreement' },
       ],
     },
   ];
