@@ -1,8 +1,10 @@
 'use client';
 
+import Avatar from '@mui/material/Avatar';
 import Image from 'next/image';
 
 import { Button } from '@/components/buttons/Button.style';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 import {
   DashBoardWelcomeBack,
@@ -17,9 +19,35 @@ import {
   DashBoardUserName,
   DashBoardUserRole,
   DashBoardUserDetails,
-  DashBoardUserImage,
 } from './DashBoardWelcome.style';
+
+// Map user roles to more user-friendly display names
+const roleDisplayMapping: Record<string, string> = {
+  'HELPER': 'Caregiver',
+  'USER': 'Parent',
+  'ADMIN': 'Administrator',
+  'SERVICE_MASTER': 'Service Manager'
+};
+
 export default function DashBoardWelcome() {
+  // Get current user data
+  const { user, isLoading } = useCurrentUser();
+
+  // Get user display name - use first and last name if available, otherwise username
+  const userName = user
+    ? `${user.firstName} ${user.lastName || ''}`
+    : 'User';
+    
+  // Get user role display name
+  const userRoleDisplay = user && user.role 
+    ? (roleDisplayMapping[user.role] || user.role)
+    : 'Guest';
+
+  // Get user profile image with fallback
+  const userImageSrc = user && user.image && user.image.trim() !== ''
+    ? user.image
+    : '/dashboard/welcome-section/user-img.png';
+
   return (
     <>
       <DashBoardWelcomeBox>
@@ -53,20 +81,24 @@ export default function DashBoardWelcome() {
             width={50}
           />
           <DashBoardUserProfile>
-            <DashBoardUserImage
-              src='/dashboard/welcome-section/user-img.png'
-              alt='User Name'
-              height={40}
-              width={40}
+            {/* Use MUI Avatar component for all user images */}
+            <Avatar
+              alt={userName}
+              src={userImageSrc}
+              sx={{ 
+                width: 40, 
+                height: 40,
+                border: '1px solid #f0f0f0'
+              }}
             />
             <DashBoardUserDetails>
-              <DashBoardUserName>Sarah Wilson</DashBoardUserName>
-              <DashBoardUserRole>Caregiver</DashBoardUserRole>
+              <DashBoardUserName>{userName}</DashBoardUserName>
+              <DashBoardUserRole>{userRoleDisplay}</DashBoardUserRole>
             </DashBoardUserDetails>
           </DashBoardUserProfile>
         </DashBoardWelcomeControls>
       </DashBoardWelcomeBox>
-      <DashBoardWelcomeBack>Welcome back, Sarah!</DashBoardWelcomeBack>
+      <DashBoardWelcomeBack>Welcome back, {user ? user.firstName : 'User'}!</DashBoardWelcomeBack>
     </>
   );
 }

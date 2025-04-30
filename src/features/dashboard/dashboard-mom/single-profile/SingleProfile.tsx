@@ -10,6 +10,9 @@ import {
   DetailsIntro,
 } from './SingleProfile.style';
 
+// Default profile image path
+const DEFAULT_PROFILE_IMAGE = '/dashboard/dashboard-mom/profile-view-data/profilepic.png';
+
 const popularServices =
 {
   name: 'Bessie Cooper',
@@ -19,7 +22,7 @@ const popularServices =
   lowerRate: 30,
   upperRate: 35,
   completedSessions: 5,
-  profilePic: '/dashboard/dashboard-mom/profile-view-data/profilepic.png',
+  profilePic: DEFAULT_PROFILE_IMAGE, // Use constant for default image
   verifed: true,
   banner: '/dashboard/dashboard-mom/profile-view-data/banner.svg',
   intro: `Hi! I'm Bessie Cooper, a caring and responsible babysitter with [X] years of experience providing safe, fun, and nurturing care for children of all ages. I prioritize creating a warm and engaging environment where kids feel comfortable, happy, and entertained.
