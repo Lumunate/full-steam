@@ -19,7 +19,8 @@ export const useUserApproval = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
-      
+      queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'stats'] });      
       showSnackbar({
         type: 'success',
         title: 'Approval Status Updated',

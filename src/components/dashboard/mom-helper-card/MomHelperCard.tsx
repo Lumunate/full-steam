@@ -1,8 +1,7 @@
 'use client';
 
-import { off } from 'process';
-
 import { Box } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import Image from 'next/image';
 
 import { Button } from '@/components/buttons/Button.style';
@@ -36,6 +35,14 @@ interface MomHelperCardProps {
   banner: string;
 }
 
+// Added helper function to check Cloudinary URLs
+const isCloudinaryUrl = (url: string): boolean => {
+  return typeof url === 'string' && url.includes('res.cloudinary.com');
+};
+
+// Default profile image to use as fallback
+const DEFAULT_PROFILE_PIC = '/dashboard/dashboard-mom/profile-view-data/profilepic.png';
+
 const MomHelperCard: React.FC<MomHelperCardProps> = ({
   name,
   workType,
@@ -50,6 +57,8 @@ const MomHelperCard: React.FC<MomHelperCardProps> = ({
   verifed,
   banner,
 }) => {
+  // Make sure profilePic has a valid value
+  const imageUrl = profilePic && profilePic.trim() !== '' ? profilePic : DEFAULT_PROFILE_PIC;
 
   const filledStars = [];
   const unfilledStars = [];
@@ -78,6 +87,41 @@ const MomHelperCard: React.FC<MomHelperCardProps> = ({
     );
   }
 
+  // Create a custom profile image component that handles Cloudinary URLs
+  const ProfileImage = () => {
+    if (isCloudinaryUrl(imageUrl)) {
+      return (
+        <Avatar
+          alt={name}
+          src={imageUrl}
+          sx={{
+            width: 90,
+            height: 90,
+          // padding: '12px',
+          // borderRadius: '50%',
+          // backgroundColor: 'white',
+          // position: 'relative',
+          // zIndex: 1,
+          // '& img': {
+          //   objectFit: 'cover',
+          //   width: '100%',
+          //   height: '100%',
+          // },
+          }}
+        />
+      );
+    }
+    
+    return (
+      <MomHelperProfileImage
+        src={imageUrl}
+        alt={name}
+        height={100}
+        width={100}
+      />
+    );
+  };
+
   return (
     <>
       <MomHelperCardContainer>
@@ -91,12 +135,8 @@ const MomHelperCard: React.FC<MomHelperCardProps> = ({
           }}
         >
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <MomHelperProfileImage
-              src={profilePic}
-              alt={name}
-              height={100}
-              width={100}
-            />
+            {/* Use the conditional ProfileImage component */}
+            <ProfileImage />
             {verifed && (
               <Image
                 style={{

@@ -1,13 +1,11 @@
 'use client';
-
 import { Box } from '@mui/material';
 import Image from 'next/image';
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 
-import testimonialsData from './testimonialsData.json';
 import {
   TestimonialsAvatarNameWrapper,
   TestimonialsCard,
@@ -20,12 +18,11 @@ import {
   TestimonialAvatar,
   TestimonialsStarsHead,
   QuotationImageHead,
-} from '../../../components/swiper/testimonials-swiper/TestimonialsSwiper.style';
+} from './TestimonialsSwiper.style';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
 interface Testimonial {
   name: string;
   subject: string;
@@ -33,17 +30,77 @@ interface Testimonial {
   date: string;
   stars: number;
 }
-
+interface IFeedback {
+  id: number;
+  name: string;
+  lastName: string;
+  relation: string;
+  email?: string;
+  sessionDate: Date | null;
+  experience: string;
+  feedback: string;
+  createdAt: string;
+}
 const TestimonialsSwiper: FC = () => {
   const swiperRef = useRef<SwiperType | null>(null);
-  // const { data, isLoading } = useTestimonials();
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/testimonials');
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch testimonials');
+        }
+        const data = await response.json() as IFeedback[];
+        const mappedData = data.map(feedback => ({
+          name: `${feedback.name} ${feedback.lastName}`,
+          subject: feedback.relation,
+          feedback: feedback.feedback,
+          date: new Date(feedback.createdAt).toLocaleDateString(),
+          stars: parseInt(feedback.experience) || 5
+        }));
+
+        setTestimonials(mappedData);
+      } catch  {
+        setTestimonials([
+          {
+            name: 'Sarah Johnson',
+            subject: 'Childcare',
+            feedback: 'Our Mom Helper has been a lifesaver for our family. The childcare she provides is exceptional and our kids adore her.',
+            date: '2023-04-15',
+            stars: 5
+          },
+          {
+            name: 'Michael Thompson',
+            subject: 'Meal Preparation',
+            feedback: 'The meal preparation service has transformed our evenings. We now have more time with our kids instead of spending hours in the kitchen.',
+            date: '2023-05-20',
+            stars: 5
+          },
+          {
+            name: 'Emma Wilson',
+            subject: 'Tutoring',
+            feedback: 'The tutoring service has helped my daughter improve her grades significantly. The personalized approach makes all the difference.',
+            date: '2023-06-10',
+            stars: 4
+          }
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
   useEffect(() => {
     if (swiperRef.current) {
       swiperRef.current.update();
     }
-  }, [swiperRef.current]);
-
+  }, [swiperRef.current, testimonials]);
   const renderStars = (starCount: number) => {
     return Array.from({ length: starCount }, (_, index) => (
       <Image
@@ -57,6 +114,10 @@ const TestimonialsSwiper: FC = () => {
       />
     ));
   };
+
+  if (isLoading) {
+    return <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Loading testimonials...</Box>;
+  }
 
   return (
     <TestimonialsSwiperWrapper>
@@ -80,7 +141,6 @@ const TestimonialsSwiper: FC = () => {
           />
         </Box>
       </TestimonialsNavigationWrapper>
-
       <Swiper
         effect='coverflow'
         grabCursor={true}
@@ -104,7 +164,7 @@ const TestimonialsSwiper: FC = () => {
         }}
         modules={[EffectCoverflow, Pagination, Navigation]}
       >
-        {testimonialsData?.map((testimonial: Testimonial, index: number) => (
+        {testimonials.map((testimonial: Testimonial, index: number) => (
           <SwiperSlide key={index}>
             <TestimonialsCard>
               <Box>

@@ -104,3 +104,7 @@ export async function toggleUserApproval(userId: string) {
   return updatedUser
   ;
 }
+
+export async function checkFieldAvailability(field: 'username' | 'email', value: string): Promise<boolean> {
+  return UserRepository.checkAvailability(field, value);
+}

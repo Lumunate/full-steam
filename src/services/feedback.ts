@@ -38,6 +38,9 @@ export async function getAllFeedbacks() {
   return FeedbackRepository.findAllFeedbacks();
 }
 
+export async function getPublishedFeedbacks() {
+  return FeedbackRepository.findPublishedFeedbacks();
+}
 export async function getFeedbackById(id: number) {
   return FeedbackRepository.findFeedbackById(id);
 }
@@ -73,10 +76,10 @@ export async function sendClientRecieveEmail(data: NewFeedbackNotificationProps)
     const html = await render(NewFeedbackNotificationTemplate(data));
 
     const result = await emailService.sendRawEmail({
-      to: 'mumair299792458u@gmail.com', // This remains your email to receive notifications
+      to: 'mumair299792458u@gmail.com', 
       subject: 'New Feedback Form Submission',
       html: html,
-      from: 'onboarding@resend.dev', // Use Resend test domain
+      from: 'onboarding@resend.dev',
       fromName: 'Full Steam Ahead Feedback',
       replyTo: 'no-reply@example.com',
     });

@@ -1,29 +1,25 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
 
 import { useSnackbar } from '@/components/snackbar';
-import { SafeUser } from '@/types/auth/UserTypes';
+import { Service } from '@/types/services';
 
-export const useAllUsers = () => {
-  const { data: session } = useSession();
+export const useServices = () => {
   const { showSnackbar } = useSnackbar();
 
-  const isAdmin = session?.user?.role === 'ADMIN' || session?.user?.role === 'SERVICE_MASTER';
-
-  const query = useQuery<SafeUser[]>({
-    queryKey: ['allUsers'],
+  const query = useQuery<Service[]>({
+    queryKey: ['services'],
     queryFn: async () => {
       try {
-        const response = await axios.get('/api/user');
+        const response = await axios.get('/api/services');
 
         return response.data;
       } catch (error: any) {
         const errorMessage = error.response?.data?.message || 
                             error.response?.data?.error || 
-                            'Failed to fetch users';
-                            
+                            'Failed to fetch services';
+        
         showSnackbar({
           type: 'error',
           title: 'Error',
@@ -32,16 +28,12 @@ export const useAllUsers = () => {
         
         throw new Error(errorMessage);
       }
-    },
-    enabled: !!isAdmin,
-    refetchOnWindowFocus: false,
+    }
   });
 
   return {
-    users: query.data || [],
+    services: query.data || [],
     isLoading: query.isLoading,
     error: query.error,
-    refetch: query.refetch,
-    isAdmin,
   };
 };

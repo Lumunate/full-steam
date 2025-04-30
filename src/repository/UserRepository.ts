@@ -131,3 +131,11 @@ export async function toggleUserApproval(userId: string) {
     data: { isApproved: !user.isApproved }
   });
 }
+export async function checkAvailability(field: 'username' | 'email', value: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: field === 'username' ? { username: value } : { email: value },
+    select: { id: true }, 
+  });
+  
+  return user === null;
+}
