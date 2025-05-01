@@ -1,6 +1,5 @@
 'use client';
-
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Tooltip } from '@mui/material';
 
 import { Button } from '@/components/buttons/Button.style';
 import DashboardNotification from '@/components/dashboard-notification/DashboardNotification';
@@ -12,7 +11,7 @@ interface FirstOverviewProps {
 }
 
 export default function FirstOverview({ onButtonClick }: FirstOverviewProps) {
-  const { user, isLoading, error } = useCurrentUser();
+  const { user, isLoading, error, role } = useCurrentUser();
 
   if (isLoading) {
     return (
@@ -32,26 +31,22 @@ export default function FirstOverview({ onButtonClick }: FirstOverviewProps) {
     );
   }
 
-  // Format the registration date
   const formatDate = (date: string | Date) => {
     if (!date) return 'N/A';
     const d = new Date(date);
-    
+
     return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear().toString().substring(2)}`;
   };
 
-  // Get submission time from user's createdAt date
   const submissionTime = formatDate(user.createdAt || new Date());
-
-  // Determine button action based on approval status
   const buttonAction = user.isApproved ? 'approved' : 'pending';
-
-  // Get user's profile image or use default
+  
+  const isButtonDisabled = role === 'HELPER' && !user.isApproved;
+  
   const clientImageUrl = user.image && user.image.trim() !== '' 
     ? user.image 
     : '/dashboard/dashboard-overview/notification-profice-pics/anderson.png';
-
-  // Prepare client details for the notification component
+    
   const clientDetails = [{
     name: `${user.firstName} ${user.lastName}`,
     clientImageUrl: clientImageUrl,
@@ -75,15 +70,37 @@ export default function FirstOverview({ onButtonClick }: FirstOverviewProps) {
           ))}
         </Box>
       </Box>
-
-      <Button 
-        onClick={onButtonClick} 
-        special={buttonAction === 'approved'} 
-        width='250px' 
-        sx={{ alignSelf: 'flex-end' }}
-      >
-        {buttonAction === 'approved' ? 'Proceed' : 'Pending Approval'}
-      </Button>
+      
+      {isButtonDisabled ? (
+        <Tooltip title="Your profile needs to be approved before you can proceed" arrow>
+          <span style={{ alignSelf: 'flex-end' }}>
+            <Button 
+              disabled={true}
+              width='250px' 
+              sx={{ 
+                alignSelf: 'flex-end',
+                opacity: 0.7,
+                cursor: 'not-allowed',
+                '&:hover': {
+                  backgroundColor: '#fffbfb',
+                  cursor: 'not-allowed'
+                }
+              }}
+            >
+              Waiting For Approval
+            </Button>
+          </span>
+        </Tooltip>
+      ) : (
+        <Button 
+          onClick={onButtonClick} 
+          special={buttonAction === 'approved'} 
+          width='250px' 
+          sx={{ alignSelf: 'flex-end' }}
+        >
+          {buttonAction === 'approved' ? 'Proceed' : 'Pending Approval'}
+        </Button>
+      )}
     </Box>
   );
 }
