@@ -1,6 +1,21 @@
 'use client';
 
-import { DashBoardNotifcationBox , ClientNameBox,ClientInfoBox, ClientName ,ClientDetailsBox ,ClientRelatedTypography ,ClientRole , ClientProfilePic ,ClientRelatedActionButton  } from './DashboardNotification.style';
+import { Avatar } from '@mui/material';
+import Image from 'next/image';
+
+import {
+  DashBoardNotifcationBox,
+  ClientNameBox,
+  ClientInfoBox,
+  ClientName,
+  ClientDetailsBox,
+  ClientRelatedTypography,
+  ClientRole,
+  ClientRelatedActionButton,
+  ClientRoleTypography,
+  ViewDocumentTypography,
+  ButtonGroup
+} from './DashboardNotification.style';
 
 interface DashBoardNotificationProps {
   clientName: string;
@@ -12,6 +27,11 @@ interface DashBoardNotificationProps {
   message?: string;
   messageTime?: string;
   submissionTime?: string;
+  viewDocument?: boolean;
+  role?: string;
+  submissionDate?: string;
+  onButtonClick?: () => void;
+  onViewDocumentClick?: () => void;
 }
 
 const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
@@ -21,43 +41,77 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
   sessionStartTime = '',
   sessionEndTime = '',
   buttonAction = '',
-  message ='',
+  message = '',
   messageTime = '',
-  submissionTime =''
+  submissionTime = '',
+  viewDocument = false,
+  role = '',
+  submissionDate = '',
+  onButtonClick,
+  onViewDocumentClick
 }) => {
+  // Determine if the image URL is from Cloudinary
+  const isCloudinaryUrl = clientProfilePic.includes('res.cloudinary.com');
+
   return (
     <DashBoardNotifcationBox>
       <ClientInfoBox>
-        <ClientProfilePic
-          src={clientProfilePic}
-          alt={clientName}
-          height={40}
-          width={40}
-        />
+        {isCloudinaryUrl ? (
+          <Avatar
+            src={clientProfilePic}
+            alt={clientName}
+            sx={{ width: 40, height: 40 }}
+          />
+        ) : (
+          <Image
+            src={clientProfilePic}
+            alt={clientName}
+            height={40}
+            width={40}
+            style={{ borderRadius: '50%', objectFit: 'cover' }}
+          />
+        )}
         <ClientDetailsBox>
           <ClientNameBox>
             <ClientName>{clientName}</ClientName>
-            <ClientRelatedTypography>
-              {messageTime}
-            </ClientRelatedTypography>
+            {role && <ClientRoleTypography>{role}</ClientRoleTypography>}
+            {messageTime && (
+              <ClientRelatedTypography>{messageTime}</ClientRelatedTypography>
+            )}
+            {submissionDate && (
+              <ClientRelatedTypography sx={{marginTop: '5px'}}>
+                Submitted on {submissionDate}
+              </ClientRelatedTypography>
+            )}
           </ClientNameBox>
-          <ClientRole>
-          </ClientRole>
+          <ClientRole></ClientRole>
           <ClientRelatedTypography>
             {submissionTime && `Submitted on ${submissionTime}`}
             {message}
-            {sessionDay && sessionEndTime && sessionStartTime && `${sessionDay}, ${sessionStartTime.toUpperCase()}-${sessionEndTime.toUpperCase()}`}
+            {sessionDay &&
+              sessionEndTime &&
+              sessionStartTime &&
+              `${sessionDay}, ${sessionStartTime.toUpperCase()}-${sessionEndTime.toUpperCase()}`}
           </ClientRelatedTypography>
         </ClientDetailsBox>
       </ClientInfoBox>
-
-      {buttonAction && (
-        <ClientRelatedActionButton buttonAction={buttonAction} width="125px">
-          {buttonAction.replace('-', ' ')}
-        </ClientRelatedActionButton>
-      )}
+      <ButtonGroup>
+        {viewDocument && (
+          <ViewDocumentTypography onClick={onViewDocumentClick}>
+            View Document
+          </ViewDocumentTypography>
+        )}
+        {buttonAction && (
+          <ClientRelatedActionButton 
+            buttonAction={buttonAction} 
+            width='125px'
+            onClick={onButtonClick}
+          >
+            {buttonAction.replace('-', ' ')}
+          </ClientRelatedActionButton>
+        )}
+      </ButtonGroup>
     </DashBoardNotifcationBox>
-
   );
 };
 

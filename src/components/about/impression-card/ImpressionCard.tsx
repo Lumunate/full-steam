@@ -1,8 +1,8 @@
-import Image from 'next/image';
 
 import {
   ImpressionCardContainer,
   ImpressionCardText,
+  ImpressionImage
 } from './ImpressionCard.style';
 
 interface ImpressionCardProps {
@@ -13,7 +13,7 @@ interface ImpressionCardProps {
 const ImpressionCard: React.FC<ImpressionCardProps> = ({ imageUrl, text }) => {
   return (
     <ImpressionCardContainer>
-      <Image src={imageUrl} width={75} height={75} alt={text} />
+      <ImpressionImage src={imageUrl} width={75} height={75} alt={text} />
       <ImpressionCardText>{text}</ImpressionCardText>
     </ImpressionCardContainer>
   );

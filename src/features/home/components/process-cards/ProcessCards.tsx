@@ -8,6 +8,7 @@ import {
   ProcessCardDescription,
   ProcessCardHeading,
   ProcessCardNumber,
+  ProcessImage
 } from './ProcessCard.style';
 interface ProcessCardProps {
   heading: string;
@@ -28,8 +29,8 @@ const ProcessCard: React.FC<ProcessCardProps> = ({
 
       <Box>
         <ProcessCardHeading>
-          {' '}
-          <Image src={logoSrc} alt={heading} height={47} width={47} /> {heading}
+          
+          <ProcessImage src={logoSrc} alt={heading} height={47} width={47} /> {heading}
         </ProcessCardHeading>
         <ProcessCardDescription>{description}</ProcessCardDescription>
       </Box>

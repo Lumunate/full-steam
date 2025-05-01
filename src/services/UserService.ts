@@ -97,9 +97,14 @@ export async function getCurrentUser(email: string) {
 
   return  safeUser ;
 }
+
 export async function toggleUserApproval(userId: string) {
   const updatedUser = await UserRepository.toggleUserApproval(userId);
 
   return updatedUser
   ;
+}
+
+export async function checkFieldAvailability(field: 'username' | 'email', value: string): Promise<boolean> {
+  return UserRepository.checkAvailability(field, value);
 }

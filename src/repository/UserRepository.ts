@@ -61,12 +61,16 @@ export async function registerUser(data: RegisterUserInput) {
       phoneNumber: data.phoneNumber,
       address: data.address,
       city: data.city,
+      state: data.state,
       postalCode: data.postalCode,
       country: data.country,
       password: data.password,
       gender: data.gender,
       dateOfBirth: dateOfBirth,
       role: data.role,
+      proStatus: data.proStatus || false,
+      rating: data.rating,
+      saveForFuture: data.saveForFuture || false,
       agreeToTerms: data.agreeToTerms,
       image: data.image,
       shortBio: data.shortBio,
@@ -126,4 +130,12 @@ export async function toggleUserApproval(userId: string) {
     where: { id: userId },
     data: { isApproved: !user.isApproved }
   });
+}
+export async function checkAvailability(field: 'username' | 'email', value: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: field === 'username' ? { username: value } : { email: value },
+    select: { id: true }, 
+  });
+  
+  return user === null;
 }

@@ -10,6 +10,7 @@ import {
   PerfectHelperOverlay,
   HelperTypography,
   ContentWrapper,
+  ColumnBox
 } from '@/features/home/perfect-helper/PerfectHelper.style';
 import { Link } from '@/i18n/routing';
 const ActionToday: React.FC = () => {
@@ -28,10 +29,10 @@ const ActionToday: React.FC = () => {
               <SectionMainHeading text='Take Action Today!' color='white' />
               <SectionDescriptionText color='white' fontSize='18px'>
                 Join thousands of families who have discovered the perfect
-                support system with Full Steam Ahead.
+                support system with Full St3am Ahead.
               </SectionDescriptionText>
             </ContentWrapper>
-            <Box
+            <ColumnBox
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -116,7 +117,7 @@ const ActionToday: React.FC = () => {
                   </Button>
                 </Link>
               </Box>
-            </Box>
+            </ColumnBox>
           </AppContentWrapper>
         </PerfectHelperOverlay>
       </PerfectHelperWrapper>

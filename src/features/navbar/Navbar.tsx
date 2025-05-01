@@ -3,7 +3,8 @@
 import { IconButton } from '@mui/material';
 import { Box } from '@mui/material';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import { signOut, useSession } from 'next-auth/react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { Link } from '@/i18n/routing';
 
@@ -29,15 +30,53 @@ const pages = [
   { name: 'Home', link: '/' },
   { name: 'About', link: '/about' },
   { name: 'Contact', link: '/contact' },
+  { name: 'Blog', link: '/blog' },
 ];
 
 const Navbar: React.FC = () => {
   const [signUp, setSignUp] = useState(false);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Handle outside click to close dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setSignUp(false);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleOpenSignUp = () => {
     setSignUp(!signUp);
+  };
+
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: '/en' });
+  };
+
+  // Determine dashboard link based on user role
+  const getDashboardLink = () => {
+    if (!session?.user?.role) return '/en/dashboard';
+    
+    switch (session.user.role) {
+    case 'USER':
+      return '/dashboard/mom/overview';
+    case 'ADMIN':
+    case 'SERVICE_MASTER':
+      return '/dashboard/admin/overview';
+    case 'HELPER':
+    default:
+      return '/dashboard';
+    }
   };
 
   const toggleDrawer =
@@ -71,42 +110,65 @@ const Navbar: React.FC = () => {
           </NavbarLinksContainer>
 
           <NavbarButtonsContainer sx={{ display: { xs: 'none', lg: 'flex' } }}>
-            <>
-              <Link href='/login?role=mom'>
-                <Button
-                  fontSize='16px'
-                  borderRadius='8px'
-                  width='115px'
-                  height='37px'
-                >
-                  Login
-                </Button>
-              </Link>
-
-              <SignUpWrapper>
-                <Button
-                  special
-                  fontSize='16px'
-                  borderRadius='8px'
-                  width='115px'
-                  height='37px'
-                  onClick={handleOpenSignUp}
-                >
-                  Sign Up
-                </Button>
-                <SignUpDropDown val={signUp}>
-                  <Link onClick={handleOpenSignUp} href='/registeration-mom'>
-                    Family
-                  </Link>
-                  <Link
-                    onClick={handleOpenSignUp}
-                    href='/registeration-mom-helper'
+            {isAuthenticated ? (
+              // Show logout button and dashboard link if authenticated
+              <>
+                <Link href={getDashboardLink()}>
+                  <Button
+                    fontSize='16px'
+                    borderRadius='8px'
+                    width='115px'
+                    height='37px'
                   >
-                    Mom Helper
-                  </Link>
-                </SignUpDropDown>
-              </SignUpWrapper>
-            </>
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  fontSize='16px'
+                  borderRadius='8px'
+                  width='115px'
+                  height='37px'
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              // Show login and signup buttons if not authenticated
+              <>
+                <Link href='/login?role=mom'>
+                  <Button
+                    fontSize='16px'
+                    borderRadius='8px'
+                    width='115px'
+                    height='37px'
+                  >
+                    Login
+                  </Button>
+                </Link>
+
+                <SignUpWrapper ref={dropdownRef}>
+                  <Button
+                    special
+                    fontSize='16px'
+                    borderRadius='8px'
+                    width='115px'
+                    height='37px'
+                    onClick={handleOpenSignUp}
+                  >
+                    Sign Up
+                  </Button>
+                  <SignUpDropDown $val={signUp}>
+                    <Link href='/registeration-mom'>
+                      Family
+                    </Link>
+                    <Link href='/registeration-mom-helper'>
+                      Mom Helper
+                    </Link>
+                  </SignUpDropDown>
+                </SignUpWrapper>
+              </>
+            )}
           </NavbarButtonsContainer>
 
           <IconButton
@@ -172,7 +234,30 @@ const Navbar: React.FC = () => {
               </Box>
               <NavbarButtonsContainer
                 sx={{ display: { xs: 'flex', lg: 'none' }, mt: '20px' }}
-              ></NavbarButtonsContainer>
+              >
+                {isAuthenticated ? (
+                  <Button
+                    fontSize='16px'
+                    borderRadius='8px'
+                    width='115px'
+                    height='37px'
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Link href='/login?role=mom'>
+                    <Button
+                      fontSize='16px'
+                      borderRadius='8px'
+                      width='115px'
+                      height='37px'
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                )}
+              </NavbarButtonsContainer>
             </Box>
           </NavbarDrawer>
         </NavbarContentWrapper>

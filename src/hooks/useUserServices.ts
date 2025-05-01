@@ -20,7 +20,12 @@ export const useUserServices = () => {
 
   const createMutation = useMutation({
     mutationFn: async (data: CreateUserServiceInput) => {
-      const response = await axios.post('/api/user/services', data);
+      const formattedData = {
+        ...data,
+        bookingDate: data.bookingDate instanceof Date ? data.bookingDate : 
+          data.bookingDate ? new Date(data.bookingDate) : undefined
+      };
+      const response = await axios.post('/api/user/services', formattedData);
 
       return response.data;
     },
@@ -47,7 +52,12 @@ export const useUserServices = () => {
 
   const updateMutation = useMutation({
     mutationFn: async ({ serviceId, data }: { serviceId: string, data: Partial<Omit<CreateUserServiceInput, 'serviceId'>> }) => {
-      const response = await axios.patch(`/api/user/services/${serviceId}`, data);
+      const formattedData = {
+        ...data,
+        bookingDate: data.bookingDate instanceof Date ? data.bookingDate : 
+          data.bookingDate ? new Date(data.bookingDate) : undefined
+      };
+      const response = await axios.patch(`/api/user/services/${serviceId}`, formattedData);
 
       return response.data;
     },

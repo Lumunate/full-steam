@@ -1,10 +1,12 @@
+import { Box } from '@mui/material';
+
+import FadeIn from '@/components/animations/FadeIn';
 import { AppContentWrapper } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
 import ServiceCard from '@/features/home/components/service-card/ServiceCard';
 
 import { ServiceWrapper, WhatWeOfferCards } from './ServicesWrapper.style';
-
 const cards = [
   {
     heading: 'Childcare',
@@ -55,25 +57,62 @@ const cards = [
     imgSrc: '/home/service-card/pet-minding.png',
     background: '#B5BAFEB2',
   },
+  {
+    heading: 'Bringing in your Amazon packages',
+    description:
+      'Compassionate assistance and regular check-ins for elderly family members, providing peace of mind.',
+    imgSrc: '/home/service-card/elderly.png',
+    background: '#DEA2C6B2',
+  },
+  {
+    heading: 'Water my plants',
+    description:
+      'Compassionate assistance and regular check-ins for elderly family members, providing peace of mind.',
+    imgSrc: '/home/service-card/pet-minding.png',
+    background: '#DEA2C6B2',
+  },
+  {
+    heading: 'Taking out the rubbish/trash',
+    description:
+      'Find the perfect daycare spot for your child through our specialized matching service.',
+    imgSrc: '/home/service-card/daycare-matching.png',
+    background: '#B5BAFEB2',
+  },
+  {
+    heading: 'Snow shoveling',
+    description:
+      'Caring attention for your furry family members, including feeding, walking, and playtime.',
+    imgSrc: '/home/service-card/pet-minding.png',
+    background: '#B5BAFEB2',
+  },
 ];
 
 const Services: React.FC = () => {
   return (
     <>
       <AppContentWrapper>
+
         <ServiceWrapper>
-          <SectionHeading text='Services' align='start' marginBottom='23px' />
-          <SectionMainHeading text='What We Offer' />
+          <FadeIn direction='up' distance={50} duration={1.5} >
+            <Box sx={{display: 'flex' , flexDirection: 'column' , alignItems: 'center'}}>
+
+              <SectionHeading text='Services' align='center' marginBottom='23px' />
+              <SectionMainHeading text='What We Offer' />
+            </Box>
+          </FadeIn>
 
           <WhatWeOfferCards sx={{ marginTop: '110px' }}>
             {cards.map((card, index) => (
-              <ServiceCard
+              <FadeIn 
                 key={index}
-                heading={card.heading}
-                description={card.description}
-                imgSrc={card.imgSrc}
-                background={card.background}
-              />
+                direction='up' distance={50} duration={1.5}>
+                <ServiceCard
+                  heading={card.heading}
+                  description={card.description}
+                  imgSrc={card.imgSrc}
+                  background={card.background}
+                />
+              </FadeIn>
             ))}
           </WhatWeOfferCards>
         </ServiceWrapper>

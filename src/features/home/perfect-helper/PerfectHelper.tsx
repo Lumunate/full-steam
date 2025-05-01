@@ -10,6 +10,8 @@ import {
   PerfectHelperWrapper,
   PerfectHelperOverlay,
   HelperTypography,
+  PerfectHelperButtonsBox,
+  PerfectHelperBoxButton
 } from './PerfectHelper.style';
 import { ContentWrapper } from './PerfectHelper.style';
 import { SectionDescriptionText } from '../Home.style';
@@ -27,20 +29,13 @@ const PerfectHelper: React.FC = () => {
               />
               <SectionDescriptionText color='white'>
                 Join thousands of families who have discovered the perfect
-                support system with Full Steam Ahead.
+                support system with Full St3am Ahead.
               </SectionDescriptionText>
             </ContentWrapper>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '10px',
-                justifyContent: 'center',
-                marginTop: '10px',
-              }}
+            <PerfectHelperButtonsBox
+             
             >
-              <Box
-                sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+              <PerfectHelperBoxButton
               >
                 <HelperTypography>For Families</HelperTypography>
                 <Link href='/registeration-mom'>
@@ -76,9 +71,8 @@ const PerfectHelper: React.FC = () => {
                     Family Login
                   </Button>
                 </Link>
-              </Box>
-              <Box
-                sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+              </PerfectHelperBoxButton>
+              <PerfectHelperBoxButton
               >
                 <HelperTypography>For Mom Helper</HelperTypography>
                 <Link href='/registeration-mom-helper'>
@@ -115,8 +109,8 @@ const PerfectHelper: React.FC = () => {
                     Mom Helper Login
                   </Button>
                 </Link>
-              </Box>
-            </Box>
+              </PerfectHelperBoxButton>
+            </PerfectHelperButtonsBox>
           </AppContentWrapper>
         </PerfectHelperOverlay>
       </PerfectHelperWrapper>

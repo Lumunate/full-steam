@@ -102,3 +102,17 @@ export async function deletePackage(id: string) {
     }
   });
 }
+export async function deleteManyPackages(packageIds: string[]) {
+  return prisma.package.deleteMany({
+    where: {
+      id: {
+        in: packageIds
+      }
+    }
+  });
+}
+export async function deleteAllPackages(userId: string) {
+  return prisma.package.deleteMany({
+    where: { userId }
+  });
+}

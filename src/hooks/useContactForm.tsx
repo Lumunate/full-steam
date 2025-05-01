@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { IFeedback } from '../types/feedback';
+import { IContact } from '../types/contact'; // Import your form input type
 
-export const useSubmitFeedbackForm = () => {
+export const useSubmitContactForm = () => {
   return useMutation({
-    mutationFn: async (formData: IFeedback) => {
-      const response = await fetch('/api/feedback', {
+    mutationFn: async (formData: IContact) => {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

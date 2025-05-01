@@ -61,35 +61,48 @@ export const HeroContent = styled(CommonHeroTypography)(({ theme }) => ({
   },
 }));
 
-export const HeroWrapper = styled(Box)({
+export const HeroWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
-  minHeight: 'calc(100vh + 135px)',
+  margin: '200px auto',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
-});
+  gap: '20px',
 
-export const HeroImage = styled(Image)({
+  [theme.breakpoints.down(1200)]: {
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+}));
+
+export const HeroImage = styled(Image)(({theme}) => ({
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-});
+  [theme.breakpoints.down(1200)]: {
+    width: '100%'
+  }
+}));
 
 export const HeroDesriptionHolder = styled(Box)({
   maxWidth: '560px',
 });
-export const ButtonsContianer = styled(Box)({
+export const ButtonsContianer = styled(Box)(({ theme }) => ({
   display: 'flex',
   gap: '22px',
   marginTop: '30px',
-});
+  [theme.breakpoints.down(1200)]: {
+    flexDirection: 'column'
+  }
+}));
 
-export const ButtonsGrid = styled(Box)({
+export const ButtonsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '22px',
   marginTop: '30px',
-});
+  
+}));
 
 export const HeroImageOverlay = styled(Box)({
   position: 'absolute',

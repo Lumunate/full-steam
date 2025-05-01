@@ -4,15 +4,23 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Snackbar, Input, Alert, Checkbox } from '@mui/material';
+import { Snackbar, Input, Alert, Checkbox, Box, Typography, MenuItem, Select } from '@mui/material';
+import { Gender, UserRole } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import Image from 'next/image';
-import { useState } from 'react';
-import { ChangeEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect, ChangeEvent } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
 import RegisterationSlider from '@/components/registeration-slider/RegisterationSlider';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
+import { useUserRegistration } from '@/hooks/useUserRegistration';
 import { Link } from '@/i18n/routing';
+import { useCloudinaryUpload } from '@/lib/handlers/storage/lib/cloudinary/hooks/useCloudinaryUpload';
+import { Service } from '@/types/services';
 
 import {
   FormHeading,
@@ -37,61 +45,105 @@ import {
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-const checkBoxLabels: string[] = [
-  'Child Care',
-  'Meal Preparation',
-  'Light Housekeeping',
-  'Tutoring',
-  'Pet Minding',
-  'Elderly Check-in',
-];
+interface Child {
+  name: string;
+  age: number;
+  specialNotes?: string;
+}
 
 interface CheckedState {
   [key: string]: boolean; 
 }
 
 export default function RegsiterationFormMom() {
-  const [checkedState, setCheckedState] = useState<CheckedState>(
-    checkBoxLabels.reduce<CheckedState>((acc, label) => {
-      acc[label] = false; 
+  const router = useRouter();
+  const { uploadFile, isUploading } = useCloudinaryUpload();
+  const { register, registrationState } = useUserRegistration();
+  
+  // Fetch services from API
+  const { data: services } = useQuery<Service[]>({
+    queryKey: ['services'],
+    queryFn: async () => {
+      const response = await axios.get('/api/services');
 
-      return acc;
-    }, {})
-  );
+      return response.data;
+    }
+  });
+  
+  // Set services in checked state when they're loaded
+  const [checkedState, setCheckedState] = useState<CheckedState>({});
+  
+  useEffect(() => {
+    if (services && services.length > 0) {
+      const initialState = services.reduce<CheckedState>((acc, service) => {
+        acc[service.id] = false;
 
-  const handleCheckboxChange = (label: string) => {
+        return acc;
+      }, {});
+
+      setCheckedState(initialState);
+    }
+  }, [services]);
+  
+  const handleCheckboxChange = (serviceId: string) => {
     setCheckedState(prevState => ({
       ...prevState,
-      [label]: !prevState[label],
+      [serviceId]: !prevState[serviceId],
     }));
   };
 
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [filePath, setFilePath] = useState('');
+  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+  const [children, setChildren] = useState<Child[]>([
+    { name: '', age: 0, specialNotes: '' }
+  ]);
+  
   const [formData, setFormData] = useState({
-    name: '',
-    user: '',
+    firstName: '',
+    lastName: '',
+    username: '',
     email: '',
     password: '',
     address: '',
-    phone: '',
-    birthday: '',
+    phoneNumber: '',
+    dateOfBirth: '',
     city: '',
-    postcode: '',
+    postalCode: '',
     country: '',
+    state: '', // Added state field
     cfmPassword: '',
+    gender: Gender.OTHER as Gender,
+    agreeToTerms: false,
+    savePaymentCard: false,
+    paymentCardName: '',
+    paymentCardNumber: '',
+    paymentCardExpiry: '',
+    paymentCardCvv: '',
   });
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  // Handle file upload with Cloudinary
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
+      // Show local preview
       const fileUrl = URL.createObjectURL(file);
 
       setFilePath(fileUrl);
+      
+      try {
+        // Upload to Cloudinary
+        const uploadedUrl = await uploadFile(file);
+
+        setUploadedImageUrl(uploadedUrl);
+      } catch {
+        setMessage('Failed to upload image. Please try again.');
+        setOpen(true);
+      }
     }
   };
 
@@ -99,60 +151,199 @@ export default function RegsiterationFormMom() {
     document.getElementById('fileInput')?.click();
   };
 
-  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
+  
+  const handleSelectChange = (e: any) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  
+  // Handle child data changes
+  const updateChild = (index: number, field: keyof Child, value: any) => {
+    const updatedChildren = [...children];
+
+    if (field === 'age' && typeof value === 'string') {
+      value = parseInt(value) || 0;
+    }
+    updatedChildren[index] = { 
+      ...updatedChildren[index], 
+      [field]: value 
+    } as Child;
+    setChildren(updatedChildren);
+  };
+  
+  // Add another child
+  const addAnotherChild = () => {
+    setChildren([...children, { name: '', age: 0, specialNotes: '' }]);
+  };
+  
+  const { isVerified, isVerifying, verifyRecaptcha, error: recaptchaError } = useRecaptcha();
+  
+  const handleCheckboxToggle = (field: 'agreeToTerms' | 'savePaymentCard') => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
 
   const isFormValid = () => {
     if (currentStep === 1) {
+      // Phone number must be exactly 10 digits
+      const phoneRegex = /^\d{10}$/;
+      const isValidPhone = phoneRegex.test(formData.phoneNumber);
+      
       return (
-        formData.name &&
-        formData.user &&
+        formData.firstName &&
+        formData.lastName &&
+        formData.username &&
         formData.email &&
-        formData.phone &&
-        formData.birthday &&
+        isValidPhone &&
+        formData.dateOfBirth &&
         formData.address &&
         formData.city &&
-        formData.postcode &&
+        formData.postalCode &&
         formData.country &&
         formData.password &&
         formData.cfmPassword
       );
     }
     if (currentStep === 2) {
-      return formData.password;
+      const hasValidChildren = children.some(child => child.name && child.age > 0);
+      const hasSelectedServices = Object.values(checkedState).some(checked => checked);
+
+      return hasValidChildren && hasSelectedServices;
     }
     if (currentStep === 3) {
-      return formData.address && formData.phone;
+      return (
+        formData.paymentCardName &&
+        formData.paymentCardNumber &&
+        formData.paymentCardExpiry &&
+        formData.paymentCardCvv &&
+        formData.agreeToTerms &&
+        isVerified
+      );
     }
 
     return false;
   };
+  
+  const handleRecaptchaChange = async (token: string | null) => {
+    if (token) {
+      await verifyRecaptcha(token);
+    }
+  };
 
-  const nextStep = () => {
+  // Check if username or email already exists
+  const checkUsernameAndEmail = async () => {
+    try {
+      const response = await axios.post('/api/user/check-exists', {
+        username: formData.username,
+        email: formData.email
+      });
+      
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        return error.response.data;
+      }
+
+      return { exists: false };
+    }
+  };
+
+  const nextStep = async () => {
     if (!isFormValid()) {
-      setMessage('Please fill out all fields!');
+      if (currentStep === 1 && !/^\d{10}$/.test(formData.phoneNumber)) {
+        setMessage('Phone number must be exactly 10 digits');
+      } else {
+        setMessage('Please fill out all required fields!');
+      }
       setOpen(true);
 
       return;
     }
-    if (formData.password !== formData.cfmPassword) {
-      setMessage('Password Do Not Match');
+    
+    if (currentStep === 1 && formData.password !== formData.cfmPassword) {
+      setMessage('Passwords do not match');
       setOpen(true);
 
       return;
     }
-    if (isFormValid()) {
-      setCurrentStep(currentStep + 1);
+    
+    // Check username and email uniqueness when moving from step 1
+    if (currentStep === 1) {
+      const result = await checkUsernameAndEmail();
+
+      if (result.exists) {
+        setMessage(result.message || 'Username or email already exists. Please choose another.');
+        setOpen(true);
+
+        return;
+      }
     }
+    
+    setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
     setCurrentStep(currentStep - 1);
   };
+  
+  // Handle form submission
+  const handleSubmit = () => {
+    const selectedServiceIds = Object.entries(checkedState)
+      .filter(([_, isChecked]) => isChecked)
+      .map(([serviceId]) => serviceId);
+    
+    const validChildren = children.filter(child => child.name && child.age > 0);
+    
+    const registrationData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      phoneNumber: formData.phoneNumber,
+      address: formData.address,
+      city: formData.city,
+      postalCode: formData.postalCode,
+      country: formData.country,
+      state: formData.state, // Include state in registration data
+      dateOfBirth: formData.dateOfBirth,
+      gender: formData.gender,
+      agreeToTerms: formData.agreeToTerms,
+      role: UserRole.USER, // For family registration
+      children: validChildren,
+      serviceIds: selectedServiceIds,
+      image: uploadedImageUrl,
+      paymentCardName: formData.paymentCardName,
+      paymentCardNumber: formData.paymentCardNumber,
+      paymentCardExpiry: formData.paymentCardExpiry,
+      paymentCardCvv: formData.paymentCardCvv,
+      savePaymentCard: formData.savePaymentCard,
+      saveForFuture: false, // Default value
+      proStatus: false, // Default value
+    };
+    
+    register(registrationData);
+  };
+  
+  // Redirect after successful registration
+  useEffect(() => {
+    if (registrationState.isSuccess) {
+      router.push('/en/login?role=mom');
+    } else if (registrationState.error) {
+      setMessage(registrationState.error);
+      setOpen(true);
+    }
+  }, [registrationState.isSuccess, registrationState.error, router]);
 
   const step1 = (
     <>
@@ -192,27 +383,55 @@ export default function RegsiterationFormMom() {
 
       <GridBox>
         <InputHolder>
-          <StyledInputLabel htmlFor='name'>Your Name</StyledInputLabel>
+          <StyledInputLabel htmlFor='firstName'>First Name</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
-            id='name'
-            name='name'
-            value={formData.name}
+            id='firstName'
+            name='firstName'
+            value={formData.firstName}
             onChange={handleChange}
           />
         </InputHolder>
 
         <InputHolder>
-          <StyledInputLabel htmlFor='user'>User Name</StyledInputLabel>
+          <StyledInputLabel htmlFor='lastName'>Last Name</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
-            id='user'
-            name='user'
-            value={formData.user}
+            id='lastName'
+            name='lastName'
+            value={formData.lastName}
             onChange={handleChange}
           />
+        </InputHolder>
+        
+        <InputHolder>
+          <StyledInputLabel htmlFor='username'>User Name</StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='text'
+            id='username'
+            name='username'
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </InputHolder>
+        
+        <InputHolder>
+          <StyledInputLabel htmlFor='gender'>Gender</StyledInputLabel>
+          <Select
+            value={formData.gender}
+            onChange={handleSelectChange}
+            name="gender"
+            fullWidth
+            variant="standard"
+            disableUnderline
+          >
+            <MenuItem value={Gender.MALE}>Male</MenuItem>
+            <MenuItem value={Gender.FEMALE}>Female</MenuItem>
+            <MenuItem value={Gender.OTHER}>Other</MenuItem>
+          </Select>
         </InputHolder>
       </GridBox>
       <InputHolder>
@@ -229,25 +448,25 @@ export default function RegsiterationFormMom() {
       </InputHolder>
       <GridBox>
         <InputHolder>
-          <StyledInputLabel htmlFor='phone'>Phone Number</StyledInputLabel>
+          <StyledInputLabel htmlFor='phoneNumber'>Phone Number</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
-            id='phone'
-            name='phone'
-            value={formData.phone}
+            id='phoneNumber'
+            name='phoneNumber'
+            value={formData.phoneNumber}
             onChange={handleChange}
           />
         </InputHolder>
 
         <InputHolder>
-          <StyledInputLabel htmlFor='birthday'>Date Of Birth</StyledInputLabel>
+          <StyledInputLabel htmlFor='dateOfBirth'>Date Of Birth</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='date'
-            id='birthday'
-            name='birthday'
-            value={formData.birthday}
+            id='dateOfBirth'
+            name='dateOfBirth'
+            value={formData.dateOfBirth}
             onChange={handleChange}
           />
         </InputHolder>
@@ -277,13 +496,13 @@ export default function RegsiterationFormMom() {
         </InputHolder>
 
         <InputHolder>
-          <StyledInputLabel htmlFor='postcode'>Postal Code</StyledInputLabel>
+          <StyledInputLabel htmlFor='postalCode'>Postal Code</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
-            id='postcode'
-            name='postcode'
-            value={formData.postcode}
+            id='postalCode'
+            name='postalCode'
+            value={formData.postalCode}
             onChange={handleChange}
           />
         </InputHolder>
@@ -299,8 +518,21 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
+
         <InputHolder>
-          <StyledInputLabel htmlFor='email'>Password</StyledInputLabel>
+          <StyledInputLabel htmlFor='state'>State/Province</StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            type='text'
+            id='state'
+            name='state'
+            value={formData.state}
+            onChange={handleChange}
+          />
+        </InputHolder>
+
+        <InputHolder>
+          <StyledInputLabel htmlFor='password'>Password</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='password'
@@ -334,42 +566,48 @@ export default function RegsiterationFormMom() {
         Share information about your children and the services you need.
       </FormDescription>
       <StyledInputLabel>Children</StyledInputLabel>
-      <GridBoxBordered>
-        <InputHolder>
-          <StyledInputLabel htmlFor='childNams'>Name</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='text'
-            id='childName'
-            name='childName'
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </InputHolder>
-        <InputHolder>
-          <StyledInputLabel htmlFor='childAge'>Age</StyledInputLabel>
-          <StyledInputField
-            disableUnderline
-            type='text'
-            id='childAge'
-            name='childAge'
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </InputHolder>
-      </GridBoxBordered>
-      <InputHolder>
-        <StyledInputLabel htmlFor='specialNotes'>
-          Special Notes
-        </StyledInputLabel>
-        <StyledInputField
-          disableUnderline
-          type='text'
-          id='specialNotes'
-          name='specialNotes'
-          multiline
-        />
-      </InputHolder>
+      
+      {children.map((child, index) => (
+        <GridBoxBordered key={index} style={{ marginBottom: '20px' }}>
+          <InputHolder>
+            <StyledInputLabel htmlFor={`childName-${index}`}>Name</StyledInputLabel>
+            <StyledInputField
+              disableUnderline
+              type='text'
+              id={`childName-${index}`}
+              name={`childName-${index}`}
+              value={child.name}
+              onChange={(e) => updateChild(index, 'name', e.target.value)}
+            />
+          </InputHolder>
+          <InputHolder>
+            <StyledInputLabel htmlFor={`childAge-${index}`}>Age</StyledInputLabel>
+            <StyledInputField
+              disableUnderline
+              type='number'
+              id={`childAge-${index}`}
+              name={`childAge-${index}`}
+              value={child.age}
+              onChange={(e) => updateChild(index, 'age', e.target.value)}
+            />
+          </InputHolder>
+          <InputHolder style={{ gridColumn: '1 / span 2' }}>
+            <StyledInputLabel htmlFor={`specialNotes-${index}`}>
+              Special Notes
+            </StyledInputLabel>
+            <StyledInputField
+              disableUnderline
+              type='text'
+              id={`specialNotes-${index}`}
+              name={`specialNotes-${index}`}
+              value={child.specialNotes || ''}
+              onChange={(e) => updateChild(index, 'specialNotes', e.target.value)}
+              multiline
+            />
+          </InputHolder>
+        </GridBoxBordered>
+      ))}
+      
       <Button
         width='100%'
         height='54px'
@@ -377,12 +615,13 @@ export default function RegsiterationFormMom() {
           color: '#005782',
           fontSize: '18px',
           fontWeight: 700,
-          marginTop: '16px',
+          marginBottom: '30px',
         }}
+        onClick={addAnotherChild}
       >
         <Image
           src='/registeration-mom/add.svg'
-          alt='add '
+          alt='add'
           height={24}
           width={24}
         />
@@ -391,22 +630,21 @@ export default function RegsiterationFormMom() {
 
       <StyledInputLabel>Services Needed</StyledInputLabel>
       <GridBox>
-        {checkBoxLabels.map((box, index) => (
+        {services && services.map((service, index) => (
           <ControlBox
-            checked={checkedState[box] ?? false}
+            checked={checkedState[service.id] ?? false}
             key={index}
-            
-            sx={index > 1 ?   { marginTop: '19px' } : undefined}
-            onClick={() => handleCheckboxChange(box)}
+            sx={index > 1 ? { marginTop: '19px' } : undefined}
+            onClick={() => handleCheckboxChange(service.id)}
           >
             <Checkbox
               {...label}
-              checked={checkedState[box]}
-              onChange={() => handleCheckboxChange(box)}
+              checked={checkedState[service.id] ?? false}
+              onChange={() => handleCheckboxChange(service.id)}
               icon={<RadioButtonUncheckedIcon />}
               checkedIcon={<CheckCircleIcon sx={{ color: '#005782' }} />}
             />
-            <StyledCheckBoxLabel>{box}</StyledCheckBoxLabel>
+            <StyledCheckBoxLabel>{service.name}</StyledCheckBoxLabel>
           </ControlBox>
         ))}
       </GridBox>
@@ -434,50 +672,51 @@ export default function RegsiterationFormMom() {
       <StyledInputLabel>Payment Method</StyledInputLabel>
       <BorderBox>
         <InputHolder>
-          <StyledInputLabel htmlFor='expiryDate'>Name on Card</StyledInputLabel>
+          <StyledInputLabel htmlFor='paymentCardName'>Name on Card</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
-            id='cardName'
-            name='cardName'
-            value={formData.address}
+            id='paymentCardName'
+            name='paymentCardName'
+            value={formData.paymentCardName}
             onChange={handleChange}
           />
         </InputHolder>
         <InputHolder>
-          <StyledInputLabel htmlFor='expiryDate'>Card Number</StyledInputLabel>
+          <StyledInputLabel htmlFor='paymentCardNumber'>Card Number</StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
-            id='cardNumber'
-            name='cardNumber'
-            value={formData.address}
+            id='paymentCardNumber'
+            name='paymentCardNumber'
+            value={formData.paymentCardNumber}
             onChange={handleChange}
           />
         </InputHolder>
 
         <GridBox>
           <InputHolder>
-            <StyledInputLabel htmlFor='expiryDate'>
+            <StyledInputLabel htmlFor='paymentCardExpiry'>
               Expiry Date
             </StyledInputLabel>
             <StyledInputField
               disableUnderline
               type='text'
-              id='expiryDate'
-              name='expiryDate'
-              value={formData.address}
+              id='paymentCardExpiry'
+              name='paymentCardExpiry'
+              placeholder='MM/YY'
+              value={formData.paymentCardExpiry}
               onChange={handleChange}
             />
           </InputHolder>
           <InputHolder>
-            <StyledInputLabel htmlFor='cvv'>CVV</StyledInputLabel>
+            <StyledInputLabel htmlFor='paymentCardCvv'>CVV</StyledInputLabel>
             <StyledInputField
               disableUnderline
               type='number'
-              id='cvv'
-              name='cvv'
-              value={formData.phone}
+              id='paymentCardCvv'
+              name='paymentCardCvv'
+              value={formData.paymentCardCvv}
               onChange={handleChange}
             />
           </InputHolder>
@@ -492,6 +731,8 @@ export default function RegsiterationFormMom() {
         <Checkbox
           icon={<CheckBoxOutlineBlankIcon />}
           checkedIcon={<CheckBoxIcon />}
+          checked={formData.savePaymentCard}
+          onChange={() => handleCheckboxToggle('savePaymentCard')}
         />
         <CheckBoxTypography>
           Save this card for future bookings
@@ -501,6 +742,8 @@ export default function RegsiterationFormMom() {
         <Checkbox
           icon={<CheckBoxOutlineBlankIcon />}
           checkedIcon={<CheckBoxIcon />}
+          checked={formData.agreeToTerms}
+          onChange={() => handleCheckboxToggle('agreeToTerms')}
         />
         <CheckBoxTypography>
           I agree to the
@@ -508,6 +751,22 @@ export default function RegsiterationFormMom() {
           <Link href='/privacy-policy'>&nbsp;Privacy Policy</Link>
         </CheckBoxTypography>
       </CheckFlex>
+      <Box sx={{ marginTop: '20px', marginBottom: '20px', width: '100%' }}>
+        <ReCAPTCHA
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          onChange={handleRecaptchaChange}
+        />
+        {recaptchaError && (
+          <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+            {recaptchaError}
+          </Typography>
+        )}
+        {!isVerified && (
+          <Typography color="primary" variant="body2" sx={{ mt: 1 }}>
+            Please complete the CAPTCHA verification to enable the submit button
+          </Typography>
+        )}
+      </Box>
     </>
   );
 
@@ -570,15 +829,15 @@ export default function RegsiterationFormMom() {
           )}
           {currentStep === 3 && (
             <Button
-              onClick={() => alert('Form Submitted!')}
-              disabled={!isFormValid()}
+              onClick={handleSubmit}
+              disabled={!isFormValid() || !isVerified || registrationState.isLoading || isUploading}
               padding='18px 90px'
               fontSize='18px'
               height='64px'
               borderRadius='15px'
               special
             >
-              Submit
+              {registrationState.isLoading || isUploading ? 'Submitting...' : 'Submit'}
             </Button>
           )}
         </ButtonContainer>

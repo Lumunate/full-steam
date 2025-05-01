@@ -16,6 +16,8 @@ export const userServiceSchema = z.object({
   price: z.number(),
   notes: z.string().optional(),
   sessionId: z.string().optional(),
+  rating: z.number().optional(),
+  bookingDate: z.date().optional().nullable(),
   service: serviceSchema,
   session: sessionSchema.optional(),
   createdAt: z.string(),
@@ -27,6 +29,8 @@ export const createUserServiceInputSchema = z.object({
   price: z.union([z.string(), z.number()]).optional(),
   notes: z.string().optional(),
   sessionId: z.string().optional(),
+  rating: z.number().optional(),
+  bookingDate: z.date().optional(),
 });
 export const createServiceSchema = z.object({
   name: z.string().min(1, 'Service name is required'),

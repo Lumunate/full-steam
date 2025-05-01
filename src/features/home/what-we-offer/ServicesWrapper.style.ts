@@ -4,14 +4,16 @@ import { Box, styled } from '@mui/material';
 
 export const ServiceWrapper = styled(Box)({
   width: '100%',
-  minHeight: 'calc(100vh + 135px)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  marginTop: '100px',
+  marginBottom: '200px',
 });
 export const WhatWeOfferCards = styled(Box)({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
+  display: 'flex',
   gap: '20px',
-  justifyItems: 'center',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexWrap: 'wrap'
 });

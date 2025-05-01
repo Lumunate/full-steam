@@ -3,7 +3,7 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 
-import { SpecialButtonContainer } from './SpecialButton.style';
+import { SpecialButtonContainer , ShieldImage } from './SpecialButton.style';
 import { SpecialBtnAfter } from './SpecialButton.style';
 interface SectionHeadingProps {
   text: string;
@@ -19,7 +19,7 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
   buttonBox,
 }) => {
   return (
-    <SpecialBtnAfter index={index} position={position ? 'absolute' : 'static'}>
+    <SpecialBtnAfter index={index} position={position as any}>
       {buttonBox && index && index % 2 === 1 ? (
         <Image
           alt='Button Icon'
@@ -31,7 +31,7 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
 
       <SpecialButtonContainer>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Image
+          <ShieldImage
             src='/specialButton/logo-wrapper.svg'
             alt='hero-image'
             width={40}
