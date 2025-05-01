@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useSnackbar } from '@/components/snackbar';
@@ -11,7 +12,6 @@ import { contactSchema, IContact } from '@/types/contact';
 import { Button } from '../../components/buttons/Button.style';
 import { StyledTextField } from '../../components/form/text-field.style';
 import { ContactFormContainer } from '../../features/contact/ContactForm.style';
-import { useSubmitContactForm } from '../../hooks/useContactForm';
 
 const defaultValues: IContact = {
   name: '',
@@ -23,6 +23,7 @@ const defaultValues: IContact = {
 
 export default function ContactForm() {
   const { showSnackbar } = useSnackbar();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -34,19 +35,38 @@ export default function ContactForm() {
     defaultValues,
   });
 
-  const { mutate: submitForm, isPending } = useSubmitContactForm();
-  const onSubmit: SubmitHandler<IContact> = async data => {
-    submitForm(data, {
-      onSuccess: () => {
-        showSnackbar({ message: 'Form submitted successfully!' });
-        reset();
-      },
-      onError: () => {
-        showSnackbar({
-          message: 'Failed to submit Contact Form. Please try again later!',
-        });
-      },
-    });
+  const onSubmit: SubmitHandler<IContact> = async (data) => {
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit contact form');
+      }
+
+      showSnackbar({
+        type: 'success',
+        title: 'Message Sent',
+        message: 'Your message has been sent successfully!',
+      });
+      
+      reset();
+    } catch  {
+      showSnackbar({
+        type: 'error',
+        title: 'Submission Failed',
+        message: 'Failed to send your message. Please try again later.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -128,8 +148,9 @@ export default function ContactForm() {
               borderRadius='4px'
               width='170px'
               height='41px'
+              disabled={isSubmitting}
             >
-              {isPending ? <CircularProgress size={24} /> : 'Send Message'}
+              {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Send Message'}
             </Button>
           </Box>
         </form>

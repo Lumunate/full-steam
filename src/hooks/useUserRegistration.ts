@@ -9,16 +9,13 @@ import {
   RegistrationState, 
   UseUserRegistrationReturn 
 } from '@/types/hooks';
-
 interface FileData {
   governmentIdDocument?: string | null;
   policeCheckDocument?: string | null;
   profileImage?: string | null;
 }
-
 export const useUserRegistration = (): UseUserRegistrationReturn => {
   const { showSnackbar } = useSnackbar();
-
   const registerMutation = useMutation({
     mutationFn: async (userData: RegistrationInput) => {
       const { 
@@ -27,36 +24,43 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
         profileImage, 
         ...restUserData 
       } = userData;
-
       const registrationData: RegisterUserInput = {
         ...restUserData,
         ...(governmentIdDocument && { governmentIdDocumentUrl: governmentIdDocument }),
         ...(policeCheckDocument && { policeCheckDocumentUrl: policeCheckDocument }),
         ...(profileImage && { image: profileImage }),
       };
-
       const response = await axios.post('/api/user/register', registrationData);
+
+      if (response.data.emailError) {
+        showSnackbar({
+          type: 'success',
+          title: 'Registration Successful',
+          message: 'Your account has been created. Welcome email could not be sent, but you can still log in.',
+        });
+      }
 
       return response.data;
     },
-    onSuccess: () => {
-      showSnackbar({
-        type: 'success',
-        title: 'Registration Successful',
-        message: 'Your account has been created successfully.',
-      });
+    onSuccess: (data) => {
+      if (!data.emailError) {
+        showSnackbar({
+          type: 'success',
+          title: 'Registration Successful',
+          message: 'Your account has been created successfully. Please check your email for confirmation.',
+        });
+      }
     },
     onError: (error: Error | AxiosError) => {
       let errorMessage = 'An error occurred during registration.';
-      
+
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<any>;
-        
+
         if (axiosError.response?.data) {
           const { message, error: errorTitle } = axiosError.response.data;
 
           errorMessage = message || errorTitle || 'Registration failed.';
-          
           if (axiosError.response.data.details) {
             const details = axiosError.response.data.details;
             const firstError = Object.entries(details)[0];
@@ -69,7 +73,6 @@ export const useUserRegistration = (): UseUserRegistrationReturn => {
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       showSnackbar({
         type: 'error',
         title: 'Registration Failed',

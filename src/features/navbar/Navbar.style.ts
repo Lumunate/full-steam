@@ -159,10 +159,11 @@ export const AvatarDropdownMenuWrapper = styled(Box)({
   cursor: 'pointer',
 });
 
-export const SignUpDropDown = styled(Box)<{ val: boolean }>(({ val }) => ({
+// Using $val instead of val to make it a transient prop
+export const SignUpDropDown = styled(Box)<{ $val: boolean }>(({ $val }) => ({
   background: '#FCFDFF',
   color: 'black',
-  display: val ? 'flex' : 'none',
+  display: $val ? 'flex' : 'none',
   flexDirection: 'column',
   gap: '10px',
   borderRadius: '15px',
@@ -172,8 +173,8 @@ export const SignUpDropDown = styled(Box)<{ val: boolean }>(({ val }) => ({
   transition: 'all .3s ease-in',
   position: 'absolute',
   top: '42px',
-  opacity: val ? 1 : 0,
-  pointerEvents: val ? 'auto' : 'none',
+  opacity: $val ? 1 : 0,
+  pointerEvents: $val ? 'auto' : 'none',
 }));
 
 export const SignUpWrapper = styled(Box)({

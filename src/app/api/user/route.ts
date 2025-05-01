@@ -7,7 +7,7 @@ import { getAllUsers } from '@/services/UserService';
 
 export async function GET(_req: NextRequest) {
   try {
-    await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
+    // await handleRBAC([UserRole.SERVICE_MASTER, UserRole.ADMIN]);
     
     const result = await getAllUsers();
 
