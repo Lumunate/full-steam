@@ -1,9 +1,6 @@
 
 'use client';
 import FadeIn from '@/components/animations/FadeIn';
-
-
-
 import { Link } from '@/i18n/routing';
 
 import { Button } from '../../../components/buttons/Button.style';
