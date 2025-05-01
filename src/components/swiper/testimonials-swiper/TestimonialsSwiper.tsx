@@ -68,26 +68,40 @@ const TestimonialsSwiper: FC = () => {
       } catch  {
         setTestimonials([
           {
-            name: 'Sarah Johnson',
+            name: 'Rose R., Oakville',
             subject: 'Childcare',
-            feedback: 'Our Mom Helper has been a lifesaver for our family. The childcare she provides is exceptional and our kids adore her.',
+            feedback: `I honestly wish Full St3am Ahead had been around during the pandemic - it would have been such a lifesaver back then! As a busy Oakville mom juggling schedules, I find it incredibly helpful now. Knowing I can rely on it to help manage shuttling my kids organized and makes the constant shuttling between activities so much easier to handle. It&apos;s become a go-to resource for our family`,
             date: '2023-04-15',
             stars: 5
           },
           {
-            name: 'Michael Thompson',
+            name: 'Margie B., Toronto',
             subject: 'Meal Preparation',
-            feedback: 'The meal preparation service has transformed our evenings. We now have more time with our kids instead of spending hours in the kitchen.',
+            feedback: `Knowing that my husband, John, is being checked on regularly throughout the workday brings me a sense of calm that I didn't think was possible while still needing to work. His aggressive Alzheimer's can make things unpredictable, and the thought of him being agitated or unsafe while I'm not there used to weigh heavily on me. Now, with these in-home check-ins through Full St3am , I can focus on my work knowing someone is looking out for him. It's not just about his safety; it's about my peace of mind too, which is invaluable`,
             date: '2023-05-20',
             stars: 5
           },
           {
             name: 'Emma Wilson',
             subject: 'Tutoring',
-            feedback: 'The tutoring service has helped my daughter improve her grades significantly. The personalized approach makes all the difference.',
+            feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
             date: '2023-06-10',
             stars: 4
-          }
+          },
+          {
+            name: 'Rosa Park',
+            subject: 'Tutoring',
+            feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
+            date: '2023-06-10',
+            stars: 4
+          },
+          {
+            name: 'Nikita Chang',
+            subject: 'Childcare',
+            feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
+            date: '2023-06-10',
+            stars: 4
+          },
         ]);
       } finally {
         setIsLoading(false);

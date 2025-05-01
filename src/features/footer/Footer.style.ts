@@ -190,6 +190,8 @@ export const FooterWrapper = styled(Box)(({ theme }) => ({
 export const FooterLinksContainer = styled(List)(({ theme }) => ({
   display: 'flex',
   alignItems: 'flex-start',
+  width: '50%',
+  justifyContent: 'space-between',
   [theme.breakpoints.down('sm')]: {
     width: '50%',
     flexDirection: 'column',
