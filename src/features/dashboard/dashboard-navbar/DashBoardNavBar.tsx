@@ -52,7 +52,7 @@ export default function DashBoardNavBar() {
 
   return (
     <DashBoardNav>
-      <Link href={`/dashboard/${role ===  'momHelper' ? '' : `${role}/overview` }`}>
+      <Link href='/'>
         <Image src='/logo.svg' alt='FSA Logo' height={58} width={110} />
       </Link>
 

@@ -44,7 +44,10 @@ export const DashBoardUserImage = styled(Image)({
   borderRadius: '50%',
   overflow: 'hidden',
 });
-export const DashBoardUserDetails = styled(Box)({});
+export const DashBoardUserDetails = styled(Box)({
+  position: 'relative',
+  cursor: 'pointer'
+});
 export const DashBoardUserName = styled(Typography)({
   fontSize: '14px',
   fontWeight: 600,
@@ -64,3 +67,16 @@ export const DashBoardSearchInputBox = styled(Box)({
   gap: '15px',
   padding: ' 15px 25px ',
 });
+
+export const DashBoardLogoutDropDown = styled(Box)<{ logout?: boolean }>(({ logout }) => ({
+  background: '#FCFDFF',
+  borderRadius: '15px',
+  boxShadow: '0px 4px 37.4px 0px #00000038',
+  padding: '12px 18px',
+  width: '100px',
+  textAlign: 'center',
+  position: 'absolute',
+  right: 0,
+  top: '50px',
+  display: logout ? 'block' : 'none',
+}));

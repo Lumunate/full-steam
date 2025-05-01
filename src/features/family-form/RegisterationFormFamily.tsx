@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, ChangeEvent } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-
+import { PopUpModal, PopupOverlay, StyledSelect } from '../../components/form/Froms.style';
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
 import RegisterationSlider from '@/components/registeration-slider/RegisterationSlider';
@@ -40,8 +40,10 @@ import {
   CardCaption,
   CheckFlex,
   CheckBoxTypography,
-  ButtonContainer,
+  ButtonContainer
 } from '../../components/form/Froms.style';
+import TermsAndServices from '../legal-pages/terms-service/TermService';
+import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -56,9 +58,19 @@ interface CheckedState {
 }
 
 export default function RegsiterationFormMom() {
+  const [terms, setTerms] = useState(false);
+  const [privacy, setPrivacy] = useState(false);
   const router = useRouter();
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { register, registrationState } = useUserRegistration();
+
+
+  const handleTerms = () =>{
+    setTerms(!terms);
+  }
+  const handlePrivacy = () =>{
+    setPrivacy(!privacy);
+  }
   
   // Fetch services from API
   const { data: services } = useQuery<Service[]>({
@@ -420,7 +432,7 @@ export default function RegsiterationFormMom() {
         
         <InputHolder>
           <StyledInputLabel htmlFor='gender'>Gender</StyledInputLabel>
-          <Select
+          <StyledSelect
             value={formData.gender}
             onChange={handleSelectChange}
             name="gender"
@@ -431,7 +443,7 @@ export default function RegsiterationFormMom() {
             <MenuItem value={Gender.MALE}>Male</MenuItem>
             <MenuItem value={Gender.FEMALE}>Female</MenuItem>
             <MenuItem value={Gender.OTHER}>Other</MenuItem>
-          </Select>
+          </StyledSelect>
         </InputHolder>
       </GridBox>
       <InputHolder>
@@ -569,7 +581,9 @@ export default function RegsiterationFormMom() {
       
       {children.map((child, index) => (
         <GridBoxBordered key={index} style={{ marginBottom: '20px' }}>
-          <InputHolder>
+          <InputHolder sx={{'@media (max-width: 600px)':{
+          gridColumn: 'span 2',
+          }}} >
             <StyledInputLabel htmlFor={`childName-${index}`}>Name</StyledInputLabel>
             <StyledInputField
               disableUnderline
@@ -580,7 +594,9 @@ export default function RegsiterationFormMom() {
               onChange={(e) => updateChild(index, 'name', e.target.value)}
             />
           </InputHolder>
-          <InputHolder>
+          <InputHolder sx={{'@media (max-width: 600px)':{
+          gridColumn: 'span 2',
+          }}}>
             <StyledInputLabel htmlFor={`childAge-${index}`}>Age</StyledInputLabel>
             <StyledInputField
               disableUnderline
@@ -745,10 +761,10 @@ export default function RegsiterationFormMom() {
           checked={formData.agreeToTerms}
           onChange={() => handleCheckboxToggle('agreeToTerms')}
         />
-        <CheckBoxTypography>
+        <CheckBoxTypography sx={{display: 'flex'}}>
           I agree to the
-          <Link href='/terms-of-service'>&nbsp;Terms of Service</Link>&nbsp; and
-          <Link href='/privacy-policy'>&nbsp;Privacy Policy</Link>
+          <Typography onClick={handleTerms} sx={{cursor: 'pointer'}}>&nbsp;Terms of Service</Typography>&nbsp; and
+          <Typography onClick={handlePrivacy} sx={{cursor: 'pointer'}}>&nbsp;Privacy Policy</Typography>
         </CheckBoxTypography>
       </CheckFlex>
       <Box sx={{ marginTop: '20px', marginBottom: '20px', width: '100%' }}>
@@ -766,6 +782,22 @@ export default function RegsiterationFormMom() {
             Please complete the CAPTCHA verification to enable the submit button
           </Typography>
         )}
+        {terms && 
+        <PopupOverlay onClick={handleTerms}>
+<PopUpModal >
+<TermsAndServices/>
+</PopUpModal>
+ </PopupOverlay>
+}
+{privacy &&
+
+        <PopupOverlay onClick={handlePrivacy}>
+<PopUpModal >
+<PrivacyandPolicy/>
+</PopUpModal>
+ </PopupOverlay>
+
+}
       </Box>
     </>
   );

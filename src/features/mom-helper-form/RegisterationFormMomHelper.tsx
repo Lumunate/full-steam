@@ -31,7 +31,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
 import RegisterationSlider from '@/components/registeration-slider/RegisterationSlider';
@@ -70,8 +69,12 @@ import {
   StyledInputFieldCheckBox,
   BorderBoxInternal,
   CustomSelect,
-  CustomTableCell
+  CustomTableCell,
+  PopUpModal,
+  PopupOverlay
 } from '../../components/form/Froms.style';
+import TermsAndServices from '../legal-pages/terms-service/TermService';
+import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
 
 // Types for custom package and service pricing
 interface ServicePricing {
@@ -88,6 +91,8 @@ interface PackageData {
 }
 
 export default function RegsiterationFormMomHelper() {
+   const [terms, setTerms] = useState(false);
+    const [privacy, setPrivacy] = useState(false);
   const router = useRouter();
   const { services, isLoading: servicesLoading } = useServices();
   const { uploadFile, isUploading } = useCloudinaryUpload();
@@ -152,6 +157,14 @@ export default function RegsiterationFormMomHelper() {
     bankInstitutionNumber: '',
     bankAccountNumber: '',
   });
+
+  
+  const handleTerms = () =>{
+    setTerms(!terms);
+  }
+  const handlePrivacy = () =>{
+    setPrivacy(!privacy);
+  }
 
   // Check username availability
   const checkUsernameAvailability = async (username: string) => {
@@ -1111,10 +1124,10 @@ export default function RegsiterationFormMomHelper() {
             checked={formData.agreeToTerms}
             onChange={(e) => setFormData({...formData, agreeToTerms: e.target.checked})}
           />
-          <CheckBoxTypography>
+          <CheckBoxTypography sx={{display: 'flex'}}>
             I agree to the
-            <Link href='/terms-of-service'>&nbsp;Terms of Service</Link>&nbsp; and
-            <Link href='/privacy-policy'>&nbsp;Privacy Policy</Link>
+            <Typography onClick={handleTerms}>&nbsp;Terms of Service</Typography>&nbsp; and
+            <Typography onClick={handlePrivacy}>&nbsp;Privacy Policy</Typography>
           </CheckBoxTypography>
         </CheckFlex>
         
@@ -1124,6 +1137,22 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleCaptchaChange}
           />
         </Box>
+       {terms && 
+               <PopupOverlay onClick={handleTerms}>
+       <PopUpModal >
+       <TermsAndServices/>
+       </PopUpModal>
+        </PopupOverlay>
+       }
+       {privacy &&
+       
+               <PopupOverlay onClick={handlePrivacy}>
+       <PopUpModal >
+       <PrivacyandPolicy/>
+       </PopUpModal>
+        </PopupOverlay>
+       
+       }
       </Box>
     </>
   );

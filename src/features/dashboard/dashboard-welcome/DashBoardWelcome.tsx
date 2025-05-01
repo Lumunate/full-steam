@@ -19,7 +19,10 @@ import {
   DashBoardUserName,
   DashBoardUserRole,
   DashBoardUserDetails,
+  DashBoardLogoutDropDown
 } from './DashBoardWelcome.style';
+import { SignUpDropDown, SignUpWrapper } from '@/features/navbar/Navbar.style';
+import { useState } from 'react';
 
 // Map user roles to more user-friendly display names
 const roleDisplayMapping: Record<string, string> = {
@@ -31,7 +34,12 @@ const roleDisplayMapping: Record<string, string> = {
 
 export default function DashBoardWelcome() {
   // Get current user data
+  const [logout, setLogout] = useState(false);
   const { user, isLoading } = useCurrentUser();
+
+  const handleLogout = () =>{
+    setLogout(!logout);
+  }
 
   // Get user display name - use first and last name if available, otherwise username
   const userName = user
@@ -91,9 +99,13 @@ export default function DashBoardWelcome() {
                 border: '1px solid #f0f0f0'
               }}
             />
-            <DashBoardUserDetails>
+            <DashBoardUserDetails onClick={handleLogout}>
               <DashBoardUserName>{userName}</DashBoardUserName>
               <DashBoardUserRole>{userRoleDisplay}</DashBoardUserRole>
+              <DashBoardLogoutDropDown logout={logout} >
+                Logout
+              </DashBoardLogoutDropDown>
+              
             </DashBoardUserDetails>
           </DashBoardUserProfile>
         </DashBoardWelcomeControls>
