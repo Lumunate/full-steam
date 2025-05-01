@@ -8,6 +8,9 @@ import {
   CardHeading,
   CardImageContainer,
   CardContent,
+  ArrowImage,
+  CardImage
+
 } from './ServiceCard.style';
 interface ServiceCardProps {
   heading: string;
@@ -33,7 +36,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         <CardDescription >{description}</CardDescription>
       </CardContent>
 
-      <Image
+      <ArrowImage
         src='/home/service-card/arrow.svg'
         alt='arrows'
         width={64}
@@ -41,7 +44,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       />
 
       <CardImageContainer>
-        <Image src={imgSrc} alt={heading} width={220} height={220} />
+        <CardImage src={imgSrc} alt={heading} width={220} height={220} />
       </CardImageContainer>
     </CardContainer>
   );

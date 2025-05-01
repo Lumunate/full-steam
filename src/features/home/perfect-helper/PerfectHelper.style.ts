@@ -1,15 +1,18 @@
 'use client';
 
 import { Box, styled, Typography } from '@mui/material';
-
-export const PerfectHelperWrapper = styled(Box)({
+export const PerfectHelperWrapper = styled(Box)(({theme}) =>({
   background: `url('/home/perfect-helper/perfect-helper.png')`,
+  backgroundPosition: 'center',
   width: '100%',
-  minHeight: 'calc(60vh )',
+  minHeight: 'calc(80vh)',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   position: 'relative',
-});
+  [theme.breakpoints.down(1200)]:{
+    minHeight: 'calc(100vh)'
+  }
+}));
 export const PerfectHelperOverlay = styled(Box)({
   position: 'absolute',
   top: 0,
@@ -28,8 +31,35 @@ export const ContentWrapper = styled(Box)({
   paddingTop: '117px',
 });
 
-export const HelperTypography = styled(Typography)({
+export const HelperTypography = styled(Typography)(({theme}) =>({
   fontSize: '18px',
   color: '#fff',
   textAlign: 'center',
-});
+  [theme.breakpoints.down(1200)]:{
+    fontSize: '12px',
+  }
+}));
+
+export const PerfectHelperButtonsBox = styled(Box)(({theme})=>({
+
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '10px',
+  justifyContent: 'center',
+  marginTop: '10px',
+  [theme.breakpoints.down(1200)]:{
+    flexDirection: 'column'
+  }
+}));
+
+export const PerfectHelperBoxButton = styled(Box)(({theme}) => ({
+  display: 'flex', flexDirection: 'column', gap: '10px' ,
+  alignItems: 'center'
+}));
+
+export const ColumnBox = styled(Box)(({theme}) => ({
+  display: 'flex',
+  [theme.breakpoints.down(1200)]:{
+    flexDirection: 'column'
+  }
+}));

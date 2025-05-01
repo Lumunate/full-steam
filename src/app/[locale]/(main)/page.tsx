@@ -1,3 +1,4 @@
+import { AppContentWrapper } from '@/components/common/Global.style';
 import Hero from '@/features/home/hero/Hero';
 import HowItWorks from '@/features/home/how-it-works/HowItWorks';
 import NewService from '@/features/home/new-service/NewService';

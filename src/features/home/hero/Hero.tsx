@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 
+import FadeIn from '@/components/animations/FadeIn';
 import { Button } from '@/components/buttons/Button.style';
 import { AppContentWrapper } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
@@ -9,6 +10,7 @@ import StatHolder from '@/components/statholder/StatHolder';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
 import { Link } from '@/i18n/routing';
 
+import { HeroImage } from './Hero.style';
 import {
   HeroWrapper,
   HeroDesriptionHolder,
@@ -25,7 +27,8 @@ const specialButtons = [
 
 const Hero: React.FC = () => {
   return (
-    <>
+    <>  
+    
       <AppContentWrapper>
         <HeroWrapper
           sx={{
@@ -34,71 +37,81 @@ const Hero: React.FC = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Box>
-            <SectionHeading
-              text='On-demand Family Support'
-              align='start'
-              marginBottom='23px'
-            />
-            <SectionMainHeading text="Your Family's " span='Perfect Helper' />
-            <HeroDesriptionHolder>
-              <SectionDescriptionText>
+          <FadeIn direction='left' distance={200} duration={1.5}>
+            
+            <Box >
+              <SectionHeading
+                text='On-demand Family Support'
+                align='start'
+                marginBottom='23px'
+              />
+              <SectionMainHeading text="Your Family's " span='Perfect Helper' />
+              <HeroDesriptionHolder>
+                <SectionDescriptionText>
                 Connecting busy families with certified Mom Helpers for
                 childcare, meal prep, housekeeping, and more
-              </SectionDescriptionText>
-              <ButtonsContianer>
-                <Link href='/registeration-mom'>
-                  <Button
-                    special
-                    fontSize='16px'
-                    borderRadius='8px'
-                    width='253px'
-                    height='44px'
-                  >
+                </SectionDescriptionText>
+                <ButtonsContianer>
+                  <Link href='/registeration-mom'>
+                    <Button
+                      special
+                      fontSize='16px'
+                      borderRadius='8px'
+                      width='253px'
+                      height='44px'
+                    >
                     Find a Mom Helper
-                  </Button>
-                </Link>
+                    </Button>
+                  </Link>
 
-                <Link href='/registeration-mom-helper'>
-                  <Button
-                    fontSize='16px'
-                    borderRadius='8px'
-                    width='253px'
-                    height='44px'
-                  >
+                  <Link href='/registeration-mom-helper'>
+                    <Button
+                      fontSize='16px'
+                      borderRadius='8px'
+                      width='253px'
+                      height='44px'
+                    >
                     Become a Mom Helper
-                  </Button>
-                </Link>
-              </ButtonsContianer>
-              <ButtonsGrid>
-                {specialButtons.map((button, index) => (
-                  <SpecialButton key={index} text={button} />
-                ))}
-              </ButtonsGrid>
-            </HeroDesriptionHolder>
-          </Box>
-          <Box sx={{ position: 'relative' }}>
-            <StatHolder
-              text1='Background Verified'
-              text2='Trusted And Certified'
-              imgSrc='/home/tick-circle.svg'
-              top='25%'
-              left='-35%'
-            />
-            <Image
-              src='/home/family.png'
-              alt='hero-image'
-              width={570}
-              height={527}
-            />
-            <StatHolder
-              text1='500+ Families'
-              text2='Trusted Us'
-              imgSrc='/home/user-square.svg'
-              top='75%'
-              left='75%'
-            />
-          </Box>
+                    </Button>
+                  </Link>
+                </ButtonsContianer>
+                <ButtonsGrid>
+                  {specialButtons.map((button, index) => (
+                    <SpecialButton key={index} text={button} />
+                  ))}
+                </ButtonsGrid>
+              </HeroDesriptionHolder>
+            </Box>
+          </FadeIn>
+         
+          <FadeIn direction='right' distance={200} duration={1.5} width={50} >
+            <Box sx={{ position: 'relative' ,
+              '@media (max-width: 600px)':{
+                width: '100%'
+              }
+            }}>
+              <StatHolder
+                text1='Background Verified'
+                text2='Trusted And Certified'
+                imgSrc='/home/tick-circle.svg'
+                top={35}
+                left={-20}
+              />
+              <HeroImage
+                src='/home/family.png'
+                alt='hero-image'
+                width={570}
+                height={527}
+              />
+              <StatHolder
+                text1='500+ Families'
+                text2='Trusted Us'
+                imgSrc='/home/user-square.svg'
+                top={75}
+                right={-5}
+              />
+            </Box>
+          </FadeIn>
         </HeroWrapper>
       </AppContentWrapper>
     </>

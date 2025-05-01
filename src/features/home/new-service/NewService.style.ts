@@ -8,13 +8,16 @@ const CommonHeroTypography = styled(Typography)({
   fontStyle: 'normal',
 });
 
-export const ServiceCheckList = styled(ListItem)({
+export const ServiceCheckList = styled(ListItem)(({theme})=>({
   padding: 0,
   marginBottom: '14px',
   display: 'flex',
   gap: '10px',
   color: '#005782',
-});
+  [theme.breakpoints.down(1200)]:{
+    fontSize: '14px'
+  }
+}));
 
 export const HeroHeading = styled(CommonHeroTypography)(({ theme }) => ({
   fontWeight: 600,
@@ -68,13 +71,16 @@ export const HeroContent = styled(CommonHeroTypography)(({ theme }) => ({
   },
 }));
 
-export const NewServiceWrapper = styled(Box)({
+export const NewServiceWrapper = styled(Box)(({theme})=>({
   width: '100%',
-  minHeight: 'calc(100vh)',
+  margin: '200px auto',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
-});
+  [theme.breakpoints.down(1200)]:{
+    flexDirection: ' column !important'
+  }
+}));
 
 export const HeroImage = styled(Image)({
   width: '100%',
@@ -123,4 +129,13 @@ export const HeroContentContainer = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down(400)]: {
     padding: '150px 0 280px',
   },
+}));
+
+export const ServiceImage =styled(Image)(({theme}) => ({
+  
+  [theme.breakpoints.down(1200)]:{
+    width: '21px',
+    height: '21px'
+  }
+
 }));

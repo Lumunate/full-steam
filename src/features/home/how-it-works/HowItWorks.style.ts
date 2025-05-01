@@ -8,9 +8,25 @@ export const ProcessMain = styled(Box)({
   background: '#CEEDFF',
 });
 
-export const ProcessWrapper = styled(Box)({
+export const ProcessWrapper = styled(Box)(({theme})=>({
   padding: '118px 0  224px',
   display: 'flex',
   alignItems: 'center',
   gap: '65px',
-});
+  [theme.breakpoints.down(1200)]:{
+    flexDirection: ' column !important'
+  }
+}));
+
+export const ProcessWrapperBoxUpper =styled(Box)(({theme}) => ({
+  width: '50%' , overflow: 'hidden'
+}) );
+export const ProcessWrapperBoxLower =styled(Box)(({theme}) => ({
+  display: 'flex',
+  gap: '20px',
+  width: '50%',
+  overflow: 'hidden',
+  [theme.breakpoints.down(1200)]: {
+    width: '100%'
+  }
+}));
