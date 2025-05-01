@@ -124,6 +124,7 @@ export default function RegsiterationFormMom() {
   });
 
   const [currentStep, setCurrentStep] = useState(1);
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LcNbygrAAAAAD48zAGw3fsjHZtZSizUeQsJDcwi';
 
   // Handle file upload with Cloudinary
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -753,7 +754,7 @@ export default function RegsiterationFormMom() {
       </CheckFlex>
       <Box sx={{ marginTop: '20px', marginBottom: '20px', width: '100%' }}>
         <ReCAPTCHA
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          sitekey={recaptchaSiteKey}
           onChange={handleRecaptchaChange}
         />
         {recaptchaError && (
