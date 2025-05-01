@@ -68,6 +68,7 @@ export const HeroWrapper = styled(Box)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  margin: 'auto'
 });
 
 export const HeroImage = styled(Image)({

@@ -11,8 +11,9 @@ export const ServiceWrapper = styled(Box)({
   marginBottom: '200px',
 });
 export const WhatWeOfferCards = styled(Box)({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
+  display: 'flex',
   gap: '20px',
-  justifyItems: 'center',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexWrap: 'wrap'
 });

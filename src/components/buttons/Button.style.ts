@@ -60,13 +60,8 @@ export const Button = styled(ButtonBase, {
     },
     [theme.breakpoints.down('sm')]: {
       fontSize: '14px !important',
-      width: '142px !important',
+      width: 'auto !important',
       height: '41px !important',
-    },
-    [theme.breakpoints.down(400)]: {
-      fontSize: '12px !important',
-      width: '100px !important',
-      height: '34px !important',
     },
   }),
 );

@@ -1,11 +1,13 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 
+import FadeIn from '@/components/animations/FadeIn';
 import { Button } from '@/components/buttons/Button.style';
 import { AppContentWrapper } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
 
+import { ServiceImage } from './NewService.style';
 import { NewServiceWrapper, HeroDesriptionHolder } from './NewService.style';
 import { ServiceCheckList } from './NewService.style';
 import { SectionDescriptionText } from '../Home.style';
@@ -28,7 +30,8 @@ const NewService: React.FC = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Box>
+          <FadeIn direction='left' distance={200} duration={1.5}>
+
             <SectionHeading
               text='New Service'
               align='start'
@@ -44,9 +47,10 @@ const NewService: React.FC = () => {
                 to be notified when spots become available in your area.
               </SectionDescriptionText>
               <Box sx={{ margin: '40px 0' }}>
+                
                 {checkList.map((item, index) => (
                   <ServiceCheckList key={index}>
-                    <Image
+                    <ServiceImage
                       src='/home/new-service/tick-circle.svg'
                       alt='checkmark'
                       width={30}
@@ -66,15 +70,21 @@ const NewService: React.FC = () => {
                 Learn More About Daycare Matching
               </Button>
             </HeroDesriptionHolder>
-          </Box>
-          <Box>
+          </FadeIn>
+
+          <FadeIn direction='right' distance={200} duration={1.5}>
+
             <Image
               src='/home/new-service/daycare-spot.png'
               alt='hero-image'
               width={615}
               height={327}
+              style={{
+                width: '100%',
+                objectFit: 'cover'
+              }}
             />
-          </Box>
+          </FadeIn>
         </NewServiceWrapper>
       </AppContentWrapper>
     </>
