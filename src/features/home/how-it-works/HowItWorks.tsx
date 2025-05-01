@@ -1,15 +1,25 @@
-import { Box } from '@mui/material';
+'use client';
 
+import { Box } from '@mui/material';
+import { FC, useEffect, useRef } from 'react';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper as SwiperType } from 'swiper/types';
+
+import FadeIn from '@/components/animations/FadeIn';
 import { AppContentWrapper } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
 import ProcessCard from '@/features/home/components/process-cards/ProcessCards';
 
+import { ProcessWrapperBoxLower, ProcessWrapperBoxUpper } from './HowItWorks.style';
 import { ProcessMain, ProcessWrapper } from './HowItWorks.style';
 import { SectionDescriptionText } from '../Home.style';
 
 import 'swiper/css';
+import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const processSteps = [
   {
@@ -39,44 +49,81 @@ const processSteps = [
 ];
 
 const HowItWorks: React.FC = () => {
+
+  const swiperRef = useRef<SwiperType | null>(null);
+  // const { data, isLoading } = useTestimonials();
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.update();
+    }
+  }, [swiperRef.current]);
+
   return (
     <>
       <ProcessMain>
         <AppContentWrapper>
-          <ProcessWrapper>
-            <Box sx={{ width: '50%' }}>
-              <SectionHeading
-                text='Process'
-                align='start'
-                marginBottom='23px'
-              />
-              <SectionMainHeading text='How It Works' />
+          <FadeIn>
 
-              <SectionDescriptionText>
+            <ProcessWrapper>
+              <ProcessWrapperBoxUpper >
+                <SectionHeading
+                  text='Process'
+                  align='start'
+                  marginBottom='23px'
+                />
+                <SectionMainHeading text='How It Works' />
+
+                <SectionDescriptionText>
                 Getting started with Full St3am Ahead is simple. Here&apos;s how
                 you can find the perfect Mom Helper for your family.
-              </SectionDescriptionText>
-            </Box>
+                </SectionDescriptionText>
+              </ProcessWrapperBoxUpper>
 
-            <Box
-              sx={{
-                display: 'flex',
-                gap: '20px',
-                width: '50%',
-                overflow: 'hidden',
-              }}
-            >
-              {processSteps.map((step, index) => (
-                <ProcessCard
-                  key={index}
-                  index={`0${index + 1}`}
-                  heading={step.heading}
-                  description={step.description}
-                  logoSrc={step.logoSrc}
-                />
-              ))}
-            </Box>
-          </ProcessWrapper>
+              <ProcessWrapperBoxLower
+                
+              >
+                <Swiper
+                  effect='ceter-autoed'
+                  grabCursor={true}
+                  centeredSlides={true}
+                  slidesPerView={'auto'}
+                  coverflowEffect={{
+                    rotate: 0,
+                    stretch: 50,
+                    depth: 100,
+                    modifier: 2,
+                    slideShadows: true,
+                  }}
+                  loop={true}
+                  pagination={{ clickable: true }}
+                  navigation={{
+                    prevEl: '.swiper-button-prev',
+                    nextEl: '.swiper-button-next',
+                  }}
+                  onSwiper={swiper => {
+                    swiperRef.current = swiper;
+                  }}
+                  modules={[EffectCoverflow, Pagination, Navigation]}
+                >
+                  {processSteps.map((step, index) => (
+                    <SwiperSlide key={index} style={{    alignItems: 'center',
+                      justifyContent: 'center',
+                      display: 'flex'
+                    }} >
+
+                      <ProcessCard
+                        index={`0${index + 1}`}
+                        heading={step.heading}
+                        description={step.description}
+                        logoSrc={step.logoSrc}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </ProcessWrapperBoxLower>
+            </ProcessWrapper>
+          </FadeIn>
         </AppContentWrapper>
       </ProcessMain>
     </>

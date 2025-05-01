@@ -20,6 +20,7 @@ const CommonHeadingContainer = styled(Box)<{
   width: textSize,
   fontSize: textSize,
   marginBottom: marginBottom,
+  zIndex: 20
 }));
 
 const CommonHeadingTypography = styled(Typography)(({ theme }) => ({
@@ -29,13 +30,9 @@ const CommonHeadingTypography = styled(Typography)(({ theme }) => ({
   fontStyle: 'normal',
   whiteSpace: 'nowrap',
   textAlign: 'inherit',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '1.6rem',
-    maxWidth: '140px',
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '12px',
-  },
+  [theme.breakpoints.down(1200)]: {
+    fontSize: '14px',
+  }
 }));
 
 const SectionHeading: React.FC<SectionHeadingProps> = ({

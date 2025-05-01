@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 
+import FadeIn from '@/components/animations/FadeIn';
 import { AppContentWrapper } from '@/components/common/Global.style';
 import SectionMainHeading from '@/components/section-main-heading/SectionMainHeading';
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
@@ -32,35 +33,41 @@ const WhyChooseFSA: React.FC = () => {
   return (
     <>
       <AppContentWrapper>
-        <HeroWrapper>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              position: 'relative',
-            }}
-          >
-            <SectionHeading text='Benefits' align='start' marginBottom='23px' />
-            <SectionMainHeading
-              center
-              text='Why Choose '
-              span='Full St3am Ahead?'
-            />
-            <ServiceCardGrid>
-              {cards.map((card, index) => (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            position: 'relative',
+            marginTop: '100px'
+          }}
+        >
+          <SectionHeading text='Benefits' align='start' marginBottom='23px' />
+          <SectionMainHeading
+            center
+            text='Why Choose '
+            span='Full St3am Ahead?'
+          />
+          <ServiceCardGrid>
+            {cards.map((card, index) => (
+              <FadeIn
+                key={index}
+                direction='up'
+                duration={1.5}
+                distance={200}
+              >
+
                 <ServiceCard
-                  key={index}
                   heading={card.heading}
                   description={card.description}
                   imgSrc={card.imgSrc}
                   background={card.background}
                   fontsize='20px'
                 />
-              ))}
-            </ServiceCardGrid>
-          </Box>
-        </HeroWrapper>
+              </FadeIn>
+            ))}
+          </ServiceCardGrid>
+        </Box>
       </AppContentWrapper>
     </>
   );
