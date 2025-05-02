@@ -105,7 +105,7 @@ const Page = () => {
 
       <Box sx={{ display: 'flex', justifyContent: 'end', mt: 3 }}>
         <Button special width='200px' onClick={handleApproval}>
-          Approve
+          {user?.isApproved ? 'Unapprove' : 'Approve'}
         </Button>
       </Box>
     </>
