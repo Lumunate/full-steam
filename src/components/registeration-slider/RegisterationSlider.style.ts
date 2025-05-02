@@ -19,37 +19,51 @@ export const Slider = styled(Box)({
   zIndex: 1,
 });
 
-export const SliderTypography = styled(Typography)({
+export const SliderTypography = styled(Typography)(({theme}) =>({
   fontSize: '16px',
   fontWeight: '700',
   color: '#005782',
-});
+  [theme.breakpoints.down(1200)] :{
+    fontSize : '10px'
+  }
+}));
 
-export const SliderCircle = styled(Box)<{ select?: boolean }>(({ select }) => ({
+export const SliderCircle = styled(Box)<{ select?: boolean }>(({ select , theme}) => ({
   borderRadius: '50px',
   padding: '16px 32px',
   background: select ? '#37B5FF' : '#FFFFFF',
-  boxShadow: select ? 'none' : '0px 1px 5.7px 0px #00000047',
+  boxShadow:  '0px 1px 5.7px 0px #00000047',
+  [theme.breakpoints.down(1200)]: {
+    padding: '12px',
+    borderRadius: '25px'
+  }
 }));
 
 export const SelectedTypography = styled(Typography)<{ select?: boolean }>(
-  ({ select }) => ({
+  ({ select , theme }) => ({
     fontSize: '32px',
     color: select ? '#FFFFFF' : '#005782',
     width: '19px',
     display: 'flex',
     justifyContent: 'center',
     fontWeight: '700',
-  }),
+    [theme.breakpoints.down(1200)] : {
+      fontSize: '13px'
+    }
+  })
 );
 
-export const SliderLine = styled(Box)({
+export const SliderLine = styled(Box)(({theme}) => ({
   height: '1px',
   background: '#DFEAF2',
-  width: '90%',
+  width: '82%',
   position: 'absolute',
   zIndex: 0,
-  top: '40%',
+  top: '30%',
   left: '50%',
   transform: 'translateX(-50%)',
-});
+  [theme.breakpoints.down(500)]:{
+    width: '70%',
+
+  }
+}));

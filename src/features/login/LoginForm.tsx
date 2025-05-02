@@ -108,7 +108,7 @@ export default function LoginForm() {
         </Alert>
       </Snackbar>
       <form
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' , width: '100%' }}
         onSubmit={handleSubmit(onSubmit)}
       >
         <RadioContainer value={value} onChange={e => setValue(e.target.value)}>
