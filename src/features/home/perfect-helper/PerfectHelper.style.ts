@@ -5,12 +5,12 @@ export const PerfectHelperWrapper = styled(Box)(({theme}) =>({
   background: `url('/home/perfect-helper/perfect-helper.png')`,
   backgroundPosition: 'center',
   width: '100%',
-  minHeight: 'calc(80vh)',
+  minHeight: '493px',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   position: 'relative',
   [theme.breakpoints.down(1200)]:{
-    minHeight: 'calc(100vh)'
+    minHeight: '550px '
   }
 }));
 export const PerfectHelperOverlay = styled(Box)({
@@ -28,7 +28,7 @@ export const ContentWrapper = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  paddingTop: '117px',
+  paddingTop: '76px',
 });
 
 export const HelperTypography = styled(Typography)(({theme}) =>({

@@ -46,10 +46,10 @@ export const SpecialBtnAfter = styled(Box)<{
   position && index === 2 || position &&  index === 3 ? `calc(-50px - ${(index - 2) * 40}px)` : '',
   [theme.breakpoints.down(1200)]:{
     
-    top: position && index === 0 || position && index === 1 ? `calc(-50px - ${index * 25}px)` : '',
+    top: position && index === 0 || position && index === 1 ? `calc(-75px - ${index * 25}px)` : '',
     left: position && index === 0 || position && index === 2 ? `calc(25px + ${index * 10}px)` : '',
     right: position && index === 1 || position && index === 3 ? `calc(25px + ${index * 10}px)` : '',
     bottom:
-    position && index === 2 || position &&  index === 3 ? `calc(-50px - ${(index - 2) * 40}px)` : '',
+    position && index === 2 || position &&  index === 3 ? `calc(-75px - ${(index - 2) * 40}px)` : '',
   }
 }));

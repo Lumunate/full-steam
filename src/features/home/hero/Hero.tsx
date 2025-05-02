@@ -27,8 +27,7 @@ const specialButtons = [
 
 const Hero: React.FC = () => {
   return (
-    <>  
-    
+    <>
       <AppContentWrapper>
         <HeroWrapper
           sx={{
@@ -38,8 +37,7 @@ const Hero: React.FC = () => {
           }}
         >
           <FadeIn direction='left' distance={200} duration={1.5}>
-            
-            <Box >
+            <Box>
               <SectionHeading
                 text='On-demand Family Support'
                 align='start'
@@ -48,8 +46,8 @@ const Hero: React.FC = () => {
               <SectionMainHeading text="Your Family's " span='Perfect Helper' />
               <HeroDesriptionHolder>
                 <SectionDescriptionText>
-                Connecting busy families with certified Mom Helpers for
-                childcare, meal prep, housekeeping, and more
+                  Connecting busy families with certified Mom Helpers for
+                  childcare, meal prep, housekeeping, and more
                 </SectionDescriptionText>
                 <ButtonsContianer>
                   <Link href='/registeration-mom'>
@@ -60,7 +58,7 @@ const Hero: React.FC = () => {
                       width='253px'
                       height='44px'
                     >
-                    Find a Mom Helper
+                      Find a Mom Helper
                     </Button>
                   </Link>
 
@@ -71,7 +69,7 @@ const Hero: React.FC = () => {
                       width='253px'
                       height='44px'
                     >
-                    Become a Mom Helper
+                      Become a Mom Helper
                     </Button>
                   </Link>
                 </ButtonsContianer>
@@ -83,19 +81,23 @@ const Hero: React.FC = () => {
               </HeroDesriptionHolder>
             </Box>
           </FadeIn>
-         
-          <FadeIn direction='right' distance={200} duration={1.5} width={50} >
-            <Box sx={{ position: 'relative' ,
-              '@media (max-width: 600px)':{
-                width: '100%'
-              }
-            }}>
+
+          <FadeIn direction='right' distance={200} duration={1.5} width={50}>
+            <Box
+              sx={{
+                position: 'relative',
+                '@media (max-width: 600px)': {
+                  width: '100%',
+                },
+              }}
+            >
               <StatHolder
                 text1='Background Verified'
                 text2='Trusted And Certified'
                 imgSrc='/home/tick-circle.svg'
                 top={35}
                 left={-20}
+                yes={true}
               />
               <HeroImage
                 src='/home/family.png'

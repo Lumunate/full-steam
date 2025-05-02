@@ -70,8 +70,8 @@ export const FormContainer = styled(Box)<{
 
 export const StyledInputField = styled(Input)({
   border: '1px solid #DFEAF2',
-  borderRadius: '15px',
-  padding: '22px',
+  borderRadius: '10px',
+  padding: '10px 14px',
   fontSize: '15px',
   fontWeight: 400,
   color: '#005782',
@@ -80,8 +80,8 @@ export const StyledInputField = styled(Input)({
 
 export const StyledSelect = styled(Select)({
   border: '1px solid #DFEAF2',
-  borderRadius: '15px',
-  padding: '22px',
+  borderRadius: '10px',
+  padding: '10px 14px',
   fontSize: '15px',
   fontWeight: 400,
   color: '#005782',
@@ -259,7 +259,6 @@ export const CustomTableCell = styled(TableCell)({
   fontSize: '14px'
 });
 
-
 export const PopupOverlay = styled(Box)({
   width: 'calc(100vw + 40px)',
   height: '100vh',
@@ -268,7 +267,6 @@ export const PopupOverlay = styled(Box)({
   top: 0,
   zIndex: 9999,
   left: '-20px',
-  
   
 });
 
@@ -284,6 +282,5 @@ export const PopUpModal = styled(Box)({
   overflow: 'scroll',
   margin:'auto' ,  marginTop: '150px',
   boxShadow: '0px 3px 22.9px 0px #0000001A',
-
 
 });

@@ -36,7 +36,7 @@ const DayCareSpot: React.FC = () => {
               span='Interest & Availability'
             />
 
-            <SectionDescriptionText center>
+            <SectionDescriptionText center margin={128} >
             Finding reliable and convenient daycare can be challenging. Full
             St3am Ahead simplifies this process by creating a comprehensive list
             of families seeking daycare in your area and providing a platform

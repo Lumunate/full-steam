@@ -3,13 +3,12 @@
 import { Box, styled } from '@mui/material';
 export const ProcessMain = styled(Box)({
   width: '100%',
-  minHeight: 'calc(100vh )',
 
   background: '#CEEDFF',
 });
 
 export const ProcessWrapper = styled(Box)(({theme})=>({
-  padding: '118px 0  224px',
+  padding: '118px 0',
   display: 'flex',
   alignItems: 'center',
   gap: '65px',

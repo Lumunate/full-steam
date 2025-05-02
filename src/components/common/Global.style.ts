@@ -33,7 +33,7 @@ export const FlexBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '200px 0',
+  padding: '160px 0',
   justifyContent: 'center',
   width: '100%',
 });

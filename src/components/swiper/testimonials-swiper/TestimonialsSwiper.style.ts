@@ -59,7 +59,7 @@ export const TestimonialsCard = styled(Box)<{ isSpace?: boolean }>(
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
     height: '100%',
     textAlign: 'left',
-    minHeight: '450px',
+    minHeight: '550px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
