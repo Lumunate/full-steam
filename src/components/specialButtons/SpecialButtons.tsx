@@ -20,7 +20,7 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
 }) => {
   return (
     <SpecialBtnAfter index={index} position={position as any}>
-      {buttonBox && index && index % 2 === 1 ? (
+      {buttonBox &&  index % 2 === 1 ? (
         <Image
           alt='Button Icon'
           src='/icons/button-circle.svg'
@@ -30,7 +30,18 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
       ) : null}
 
       <SpecialButtonContainer>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: {
+              xs: '9px',   
+              sm: '16px',  
+            },
+          }}
+        >
+
           <ShieldImage
             src='/specialButton/logo-wrapper.svg'
             alt='hero-image'
@@ -46,7 +57,7 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
           height={18}
         />
       </SpecialButtonContainer>
-      {buttonBox && index && index % 2 === 0 ? (
+      {buttonBox &&  index % 2 === 0 ? (
         <Image
           alt='Button Icon'
           src='/icons/button-circle.svg'

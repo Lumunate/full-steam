@@ -81,7 +81,8 @@ const NewService: React.FC = () => {
               height={327}
               style={{
                 width: '100%',
-                objectFit: 'cover'
+                objectFit: 'cover',
+                height: 'auto'
               }}
             />
           </FadeIn>

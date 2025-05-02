@@ -84,10 +84,12 @@ const HowItWorks: React.FC = () => {
                 
               >
                 <Swiper
-                  effect='ceter-autoed'
+                  effect='center-auto'
                   grabCursor={true}
                   centeredSlides={true}
-                  slidesPerView={'auto'}
+                  spaceBetween={30}
+
+                  slidesPerView={1}
                   coverflowEffect={{
                     rotate: 0,
                     stretch: 50,
@@ -95,7 +97,6 @@ const HowItWorks: React.FC = () => {
                     modifier: 2,
                     slideShadows: true,
                   }}
-                  loop={true}
                   pagination={{ clickable: true }}
                   navigation={{
                     prevEl: '.swiper-button-prev',
@@ -104,7 +105,7 @@ const HowItWorks: React.FC = () => {
                   onSwiper={swiper => {
                     swiperRef.current = swiper;
                   }}
-                  modules={[EffectCoverflow, Pagination, Navigation]}
+                  modules={[Pagination]}
                 >
                   {processSteps.map((step, index) => (
                     <SwiperSlide key={index} style={{    alignItems: 'center',

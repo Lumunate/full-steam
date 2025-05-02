@@ -58,6 +58,8 @@ export const ArrowImage = styled(Image)(({theme}) => ({
 
 }));
 export const CardImage = styled(Image)(({theme}) => ({
+  objectFit: 'cover',
+  width: '100%',
 
   [theme.breakpoints.down(900)]:{
     width: '186px !important',

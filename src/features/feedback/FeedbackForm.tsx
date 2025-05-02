@@ -238,7 +238,7 @@ export default function FeedbackForm() {
             variant='standard'
             fullWidth
             multiline
-            rows={5}
+            rows={1}
             margin='none'
             error={!!errors.feedback}
             helperText={errors.feedback?.message}

@@ -50,7 +50,7 @@ const TestimonialsSwiper: FC = () => {
     const fetchTestimonials = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/testimonials');
+        const response = await fetch('/api/testimonialsa');
 
         if (!response.ok) {
           throw new Error('Failed to fetch testimonials');
@@ -89,19 +89,20 @@ const TestimonialsSwiper: FC = () => {
             stars: 4
           },
           {
-            name: 'Rosa Park',
+            name: 'Emma Wilson',
             subject: 'Tutoring',
             feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
             date: '2023-06-10',
             stars: 4
           },
           {
-            name: 'Nikita Chang',
-            subject: 'Childcare',
+            name: 'Emma Wilson',
+            subject: 'Tutoring',
             feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
             date: '2023-06-10',
             stars: 4
           },
+          
         ]);
       } finally {
         setIsLoading(false);

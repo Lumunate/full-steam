@@ -15,7 +15,7 @@ export default function LoginPage() {
   return (
     <FlexBox>
       <SectionHeading text='Login' />
-      <SectionMainHeading text='Welcome Back' />
+      <SectionMainHeading color='#005782' text='Welcome Back' />
       <SectionDescriptionText>
         Log in to your Full Steam Ahead account
       </SectionDescriptionText>

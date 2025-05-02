@@ -4,6 +4,7 @@ import { Box, styled, Typography } from '@mui/material';
 import Image from 'next/image';
 export const HowItWorksBox = styled(Box)(({theme}) =>({
   position: 'relative',
+
   [theme.breakpoints.down(1200)]:{
     display: 'flex',
     flexDirection: 'column-reverse'
@@ -25,7 +26,6 @@ export const AboutSubHeading = styled(Typography)(({theme}) =>({
 
 export const AboutWrapper = styled(Box)({
   width: '100%',
-  minHeight: 'calc(100vh + 335px)',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
@@ -43,7 +43,9 @@ export const ImpressionGrid = styled(Box)(({theme}) => ({
 }));
 
 export const ParentsImage = styled(Image)(({theme}) =>({
-  position: 'absolute', zIndex: 0, top: '0', right: '0' ,
+  position: 'absolute', zIndex: 0, top: '0', right: '-150px' ,
+  width: '40%',
+  objectFit: 'cover',
   [theme.breakpoints.down(1200)]:{
     width: '100%',
     objectFit: 'contain',

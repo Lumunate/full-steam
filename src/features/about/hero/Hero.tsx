@@ -54,7 +54,7 @@ const AboutHero: React.FC = () => {
                 text2='For on-demand assistance.'
               />
 
-              <SectionDescriptionText center>
+              <SectionDescriptionText center margin={120}>
               Full St3am Ahead (FSA) is a platform connecting busy parents and
               guardians with qualified and certified Mom Helpers. Our service
               provides on-demand and scheduled assistance, including childcare,

@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, ChangeEvent } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { PopUpModal, PopupOverlay, StyledSelect } from '../../components/form/Froms.style';
+
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
 import RegisterationSlider from '@/components/registeration-slider/RegisterationSlider';
@@ -22,6 +22,7 @@ import { Link } from '@/i18n/routing';
 import { useCloudinaryUpload } from '@/lib/handlers/storage/lib/cloudinary/hooks/useCloudinaryUpload';
 import { Service } from '@/types/services';
 
+import { PopUpModal, PopupOverlay, StyledSelect } from '../../components/form/Froms.style';
 import {
   FormHeading,
   FormDescription,
@@ -42,8 +43,8 @@ import {
   CheckBoxTypography,
   ButtonContainer
 } from '../../components/form/Froms.style';
-import TermsAndServices from '../legal-pages/terms-service/TermService';
 import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
+import TermsAndServices from '../legal-pages/terms-service/TermService';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -64,13 +65,12 @@ export default function RegsiterationFormMom() {
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { register, registrationState } = useUserRegistration();
 
-
   const handleTerms = () =>{
     setTerms(!terms);
-  }
+  };
   const handlePrivacy = () =>{
     setPrivacy(!privacy);
-  }
+  };
   
   // Fetch services from API
   const { data: services } = useQuery<Service[]>({
@@ -582,7 +582,7 @@ export default function RegsiterationFormMom() {
       {children.map((child, index) => (
         <GridBoxBordered key={index} style={{ marginBottom: '20px' }}>
           <InputHolder sx={{'@media (max-width: 600px)':{
-          gridColumn: 'span 2',
+            gridColumn: 'span 2',
           }}} >
             <StyledInputLabel htmlFor={`childName-${index}`}>Name</StyledInputLabel>
             <StyledInputField
@@ -595,7 +595,7 @@ export default function RegsiterationFormMom() {
             />
           </InputHolder>
           <InputHolder sx={{'@media (max-width: 600px)':{
-          gridColumn: 'span 2',
+            gridColumn: 'span 2',
           }}}>
             <StyledInputLabel htmlFor={`childAge-${index}`}>Age</StyledInputLabel>
             <StyledInputField
@@ -784,20 +784,20 @@ export default function RegsiterationFormMom() {
         )}
         {terms && 
         <PopupOverlay onClick={handleTerms}>
-<PopUpModal >
-<TermsAndServices/>
-</PopUpModal>
- </PopupOverlay>
-}
-{privacy &&
+          <PopUpModal >
+            <TermsAndServices />
+          </PopUpModal>
+        </PopupOverlay>
+        }
+        {privacy &&
 
         <PopupOverlay onClick={handlePrivacy}>
-<PopUpModal >
-<PrivacyandPolicy/>
-</PopUpModal>
- </PopupOverlay>
+          <PopUpModal >
+            <PrivacyandPolicy />
+          </PopUpModal>
+        </PopupOverlay>
 
-}
+        }
       </Box>
     </>
   );

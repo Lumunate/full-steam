@@ -40,6 +40,9 @@ const ActionToday: React.FC = () => {
                 justifyContent: 'center',
                 marginTop: '10px',
                 maxWidth: '281px',
+                paddingBottom: {
+                  lg: '200px'
+                }
               }}
             >
               <Box

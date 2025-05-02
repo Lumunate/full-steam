@@ -14,7 +14,7 @@ export const ImpressionCardContainer = styled(Box)(({theme}) => ({
   background: '#FFFFFF',
   zIndex: 10,
   [theme.breakpoints.down(1200)]:{
-    padding: '32px'
+    padding: '0 32px '
   }
 }));
 
