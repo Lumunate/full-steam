@@ -17,7 +17,7 @@ export const packageSchema = z.object({
 
 export const userServiceSchema = z.object({
   serviceId: z.string().min(1, 'Service ID is required'),
-  price: z.number().min(0, 'Price must be a positive number or zero'),
+  price: z.number().min(0, 'Price must be a positive number or zero.'),
   notes: z.string().optional(),
   sessionId: z.string().optional(),
 });
