@@ -4,7 +4,16 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { Snackbar, Input, Alert, Checkbox, Box, Typography, MenuItem, Select } from '@mui/material';
+import {
+  Snackbar,
+  Input,
+  Alert,
+  Checkbox,
+  Box,
+  Typography,
+  MenuItem,
+  Select,
+} from '@mui/material';
 import { Gender, UserRole } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -22,7 +31,11 @@ import { Link } from '@/i18n/routing';
 import { useCloudinaryUpload } from '@/lib/handlers/storage/lib/cloudinary/hooks/useCloudinaryUpload';
 import { Service } from '@/types/services';
 
-import { PopUpModal, PopupOverlay, StyledSelect } from '../../components/form/Froms.style';
+import {
+  PopUpModal,
+  PopupOverlay,
+  StyledSelect,
+} from '../../components/form/Froms.style';
 import {
   FormHeading,
   FormDescription,
@@ -41,7 +54,7 @@ import {
   CardCaption,
   CheckFlex,
   CheckBoxTypography,
-  ButtonContainer
+  ButtonContainer,
 } from '../../components/form/Froms.style';
 import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
 import TermsAndServices from '../legal-pages/terms-service/TermService';
@@ -55,7 +68,7 @@ interface Child {
 }
 
 interface CheckedState {
-  [key: string]: boolean; 
+  [key: string]: boolean;
 }
 
 export default function RegsiterationFormMom() {
@@ -65,13 +78,13 @@ export default function RegsiterationFormMom() {
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { register, registrationState } = useUserRegistration();
 
-  const handleTerms = () =>{
+  const handleTerms = () => {
     setTerms(!terms);
   };
-  const handlePrivacy = () =>{
+  const handlePrivacy = () => {
     setPrivacy(!privacy);
   };
-  
+
   // Fetch services from API
   const { data: services } = useQuery<Service[]>({
     queryKey: ['services'],
@@ -79,12 +92,12 @@ export default function RegsiterationFormMom() {
       const response = await axios.get('/api/services');
 
       return response.data;
-    }
+    },
   });
-  
+
   // Set services in checked state when they're loaded
   const [checkedState, setCheckedState] = useState<CheckedState>({});
-  
+
   useEffect(() => {
     if (services && services.length > 0) {
       const initialState = services.reduce<CheckedState>((acc, service) => {
@@ -96,7 +109,7 @@ export default function RegsiterationFormMom() {
       setCheckedState(initialState);
     }
   }, [services]);
-  
+
   const handleCheckboxChange = (serviceId: string) => {
     setCheckedState(prevState => ({
       ...prevState,
@@ -109,9 +122,9 @@ export default function RegsiterationFormMom() {
   const [filePath, setFilePath] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const [children, setChildren] = useState<Child[]>([
-    { name: '', age: 0, specialNotes: '' }
+    { name: '', age: 0, specialNotes: '' },
   ]);
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -146,7 +159,7 @@ export default function RegsiterationFormMom() {
       const fileUrl = URL.createObjectURL(file);
 
       setFilePath(fileUrl);
-      
+
       try {
         // Upload to Cloudinary
         const uploadedUrl = await uploadFile(file);
@@ -169,14 +182,14 @@ export default function RegsiterationFormMom() {
       [e.target.name]: e.target.value,
     });
   };
-  
+
   const handleSelectChange = (e: any) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-  
+
   // Handle child data changes
   const updateChild = (index: number, field: keyof Child, value: any) => {
     const updatedChildren = [...children];
@@ -184,24 +197,29 @@ export default function RegsiterationFormMom() {
     if (field === 'age' && typeof value === 'string') {
       value = parseInt(value) || 0;
     }
-    updatedChildren[index] = { 
-      ...updatedChildren[index], 
-      [field]: value 
+    updatedChildren[index] = {
+      ...updatedChildren[index],
+      [field]: value,
     } as Child;
     setChildren(updatedChildren);
   };
-  
+
   // Add another child
   const addAnotherChild = () => {
     setChildren([...children, { name: '', age: 0, specialNotes: '' }]);
   };
-  
-  const { isVerified, isVerifying, verifyRecaptcha, error: recaptchaError } = useRecaptcha();
-  
+
+  const {
+    isVerified,
+    isVerifying,
+    verifyRecaptcha,
+    error: recaptchaError,
+  } = useRecaptcha();
+
   const handleCheckboxToggle = (field: 'agreeToTerms' | 'savePaymentCard') => {
     setFormData(prev => ({
       ...prev,
-      [field]: !prev[field]
+      [field]: !prev[field],
     }));
   };
 
@@ -210,7 +228,7 @@ export default function RegsiterationFormMom() {
       // Phone number must be exactly 10 digits
       const phoneRegex = /^\d{10}$/;
       const isValidPhone = phoneRegex.test(formData.phoneNumber);
-      
+
       return (
         formData.firstName &&
         formData.lastName &&
@@ -227,8 +245,12 @@ export default function RegsiterationFormMom() {
       );
     }
     if (currentStep === 2) {
-      const hasValidChildren = children.some(child => child.name && child.age > 0);
-      const hasSelectedServices = Object.values(checkedState).some(checked => checked);
+      const hasValidChildren = children.some(
+        child => child.name && child.age > 0,
+      );
+      const hasSelectedServices = Object.values(checkedState).some(
+        checked => checked,
+      );
 
       return hasValidChildren && hasSelectedServices;
     }
@@ -245,7 +267,7 @@ export default function RegsiterationFormMom() {
 
     return false;
   };
-  
+
   const handleRecaptchaChange = async (token: string | null) => {
     if (token) {
       await verifyRecaptcha(token);
@@ -257,9 +279,9 @@ export default function RegsiterationFormMom() {
     try {
       const response = await axios.post('/api/user/check-exists', {
         username: formData.username,
-        email: formData.email
+        email: formData.email,
       });
-      
+
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 409) {
@@ -281,41 +303,44 @@ export default function RegsiterationFormMom() {
 
       return;
     }
-    
+
     if (currentStep === 1 && formData.password !== formData.cfmPassword) {
       setMessage('Passwords do not match');
       setOpen(true);
 
       return;
     }
-    
+
     // Check username and email uniqueness when moving from step 1
     if (currentStep === 1) {
       const result = await checkUsernameAndEmail();
 
       if (result.exists) {
-        setMessage(result.message || 'Username or email already exists. Please choose another.');
+        setMessage(
+          result.message ||
+            'Username or email already exists. Please choose another.',
+        );
         setOpen(true);
 
         return;
       }
     }
-    
+
     setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
     setCurrentStep(currentStep - 1);
   };
-  
+
   // Handle form submission
   const handleSubmit = () => {
     const selectedServiceIds = Object.entries(checkedState)
       .filter(([_, isChecked]) => isChecked)
       .map(([serviceId]) => serviceId);
-    
+
     const validChildren = children.filter(child => child.name && child.age > 0);
-    
+
     const registrationData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -343,10 +368,10 @@ export default function RegsiterationFormMom() {
       saveForFuture: false, // Default value
       proStatus: false, // Default value
     };
-    
+
     register(registrationData);
   };
-  
+
   // Redirect after successful registration
   useEffect(() => {
     if (registrationState.isSuccess) {
@@ -417,7 +442,7 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='username'>User Name</StyledInputLabel>
           <StyledInputField
@@ -429,15 +454,15 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='gender'>Gender</StyledInputLabel>
           <StyledSelect
             value={formData.gender}
             onChange={handleSelectChange}
-            name="gender"
+            name='gender'
             fullWidth
-            variant="standard"
+            variant='standard'
             disableUnderline
           >
             <MenuItem value={Gender.MALE}>Male</MenuItem>
@@ -460,7 +485,9 @@ export default function RegsiterationFormMom() {
       </InputHolder>
       <GridBox>
         <InputHolder>
-          <StyledInputLabel htmlFor='phoneNumber'>Phone Number</StyledInputLabel>
+          <StyledInputLabel htmlFor='phoneNumber'>
+            Phone Number
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
@@ -472,7 +499,9 @@ export default function RegsiterationFormMom() {
         </InputHolder>
 
         <InputHolder>
-          <StyledInputLabel htmlFor='dateOfBirth'>Date Of Birth</StyledInputLabel>
+          <StyledInputLabel htmlFor='dateOfBirth'>
+            Date Of Birth
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='date'
@@ -578,33 +607,45 @@ export default function RegsiterationFormMom() {
         Share information about your children and the services you need.
       </FormDescription>
       <StyledInputLabel>Children</StyledInputLabel>
-      
+
       {children.map((child, index) => (
         <GridBoxBordered key={index} style={{ marginBottom: '20px' }}>
-          <InputHolder sx={{'@media (max-width: 600px)':{
-            gridColumn: 'span 2',
-          }}} >
-            <StyledInputLabel htmlFor={`childName-${index}`}>Name</StyledInputLabel>
+          <InputHolder
+            sx={{
+              '@media (max-width: 600px)': {
+                gridColumn: 'span 2',
+              },
+            }}
+          >
+            <StyledInputLabel htmlFor={`childName-${index}`}>
+              Name
+            </StyledInputLabel>
             <StyledInputField
               disableUnderline
               type='text'
               id={`childName-${index}`}
               name={`childName-${index}`}
               value={child.name}
-              onChange={(e) => updateChild(index, 'name', e.target.value)}
+              onChange={e => updateChild(index, 'name', e.target.value)}
             />
           </InputHolder>
-          <InputHolder sx={{'@media (max-width: 600px)':{
-            gridColumn: 'span 2',
-          }}}>
-            <StyledInputLabel htmlFor={`childAge-${index}`}>Age</StyledInputLabel>
+          <InputHolder
+            sx={{
+              '@media (max-width: 600px)': {
+                gridColumn: 'span 2',
+              },
+            }}
+          >
+            <StyledInputLabel htmlFor={`childAge-${index}`}>
+              Age
+            </StyledInputLabel>
             <StyledInputField
               disableUnderline
               type='number'
               id={`childAge-${index}`}
               name={`childAge-${index}`}
               value={child.age}
-              onChange={(e) => updateChild(index, 'age', e.target.value)}
+              onChange={e => updateChild(index, 'age', e.target.value)}
             />
           </InputHolder>
           <InputHolder style={{ gridColumn: '1 / span 2' }}>
@@ -617,13 +658,13 @@ export default function RegsiterationFormMom() {
               id={`specialNotes-${index}`}
               name={`specialNotes-${index}`}
               value={child.specialNotes || ''}
-              onChange={(e) => updateChild(index, 'specialNotes', e.target.value)}
+              onChange={e => updateChild(index, 'specialNotes', e.target.value)}
               multiline
             />
           </InputHolder>
         </GridBoxBordered>
       ))}
-      
+
       <Button
         width='100%'
         height='54px'
@@ -646,23 +687,24 @@ export default function RegsiterationFormMom() {
 
       <StyledInputLabel>Services Needed</StyledInputLabel>
       <GridBox>
-        {services && services.map((service, index) => (
-          <ControlBox
-            checked={checkedState[service.id] ?? false}
-            key={index}
-            sx={index > 1 ? { marginTop: '19px' } : undefined}
-            onClick={() => handleCheckboxChange(service.id)}
-          >
-            <Checkbox
-              {...label}
+        {services &&
+          services.map((service, index) => (
+            <ControlBox
               checked={checkedState[service.id] ?? false}
-              onChange={() => handleCheckboxChange(service.id)}
-              icon={<RadioButtonUncheckedIcon />}
-              checkedIcon={<CheckCircleIcon sx={{ color: '#005782' }} />}
-            />
-            <StyledCheckBoxLabel>{service.name}</StyledCheckBoxLabel>
-          </ControlBox>
-        ))}
+              key={index}
+              sx={index > 1 ? { marginTop: '19px' } : undefined}
+              onClick={() => handleCheckboxChange(service.id)}
+            >
+              <Checkbox
+                {...label}
+                checked={checkedState[service.id] ?? false}
+                onChange={() => handleCheckboxChange(service.id)}
+                icon={<RadioButtonUncheckedIcon />}
+                checkedIcon={<CheckCircleIcon sx={{ color: '#005782' }} />}
+              />
+              <StyledCheckBoxLabel>{service.name}</StyledCheckBoxLabel>
+            </ControlBox>
+          ))}
       </GridBox>
       <InputHolder>
         <StyledInputLabel htmlFor='specialNotes2'>
@@ -688,7 +730,9 @@ export default function RegsiterationFormMom() {
       <StyledInputLabel>Payment Method</StyledInputLabel>
       <BorderBox>
         <InputHolder>
-          <StyledInputLabel htmlFor='paymentCardName'>Name on Card</StyledInputLabel>
+          <StyledInputLabel htmlFor='paymentCardName'>
+            Name on Card
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
@@ -699,7 +743,9 @@ export default function RegsiterationFormMom() {
           />
         </InputHolder>
         <InputHolder>
-          <StyledInputLabel htmlFor='paymentCardNumber'>Card Number</StyledInputLabel>
+          <StyledInputLabel htmlFor='paymentCardNumber'>
+            Card Number
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
@@ -761,43 +807,46 @@ export default function RegsiterationFormMom() {
           checked={formData.agreeToTerms}
           onChange={() => handleCheckboxToggle('agreeToTerms')}
         />
-        <CheckBoxTypography sx={{display: 'flex'}}>
+        <CheckBoxTypography sx={{ display: 'flex' }}>
           I agree to the
-          <Typography onClick={handleTerms} sx={{cursor: 'pointer'}}>&nbsp;Terms of Service</Typography>&nbsp; and
-          <Typography onClick={handlePrivacy} sx={{cursor: 'pointer'}}>&nbsp;Privacy Policy</Typography>
+          <Typography onClick={handleTerms} sx={{ cursor: 'pointer' }}>
+            &nbsp;Terms of Service
+          </Typography>
+          &nbsp; and
+          <Typography onClick={handlePrivacy} sx={{ cursor: 'pointer' }}>
+            &nbsp;Privacy Policy
+          </Typography>
         </CheckBoxTypography>
       </CheckFlex>
       <Box sx={{ marginTop: '20px', marginBottom: '20px', width: '100%' }}>
         <ReCAPTCHA
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          sitekey='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
           onChange={handleRecaptchaChange}
         />
         {recaptchaError && (
-          <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+          <Typography color='error' variant='body2' sx={{ mt: 1 }}>
             {recaptchaError}
           </Typography>
         )}
         {!isVerified && (
-          <Typography color="primary" variant="body2" sx={{ mt: 1 }}>
+          <Typography color='primary' variant='body2' sx={{ mt: 1 }}>
             Please complete the CAPTCHA verification to enable the submit button
           </Typography>
         )}
-        {terms && 
-        <PopupOverlay onClick={handleTerms}>
-          <PopUpModal >
-            <TermsAndServices />
-          </PopUpModal>
-        </PopupOverlay>
-        }
-        {privacy &&
-
-        <PopupOverlay onClick={handlePrivacy}>
-          <PopUpModal >
-            <PrivacyandPolicy />
-          </PopUpModal>
-        </PopupOverlay>
-
-        }
+        {terms && (
+          <PopupOverlay onClick={handleTerms}>
+            <PopUpModal>
+              <TermsAndServices />
+            </PopUpModal>
+          </PopupOverlay>
+        )}
+        {privacy && (
+          <PopupOverlay onClick={handlePrivacy}>
+            <PopUpModal>
+              <PrivacyandPolicy />
+            </PopUpModal>
+          </PopupOverlay>
+        )}
       </Box>
     </>
   );
@@ -862,14 +911,21 @@ export default function RegsiterationFormMom() {
           {currentStep === 3 && (
             <Button
               onClick={handleSubmit}
-              disabled={!isFormValid() || !isVerified || registrationState.isLoading || isUploading}
+              disabled={
+                !isFormValid() ||
+                !isVerified ||
+                registrationState.isLoading ||
+                isUploading
+              }
               padding='18px 90px'
               fontSize='18px'
               height='64px'
               borderRadius='15px'
               special
             >
-              {registrationState.isLoading || isUploading ? 'Submitting...' : 'Submit'}
+              {registrationState.isLoading || isUploading
+                ? 'Submitting...'
+                : 'Submit'}
             </Button>
           )}
         </ButtonContainer>
