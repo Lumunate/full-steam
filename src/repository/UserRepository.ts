@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client';
+import { Package, PackageService, Service, Session, UserRole, UserService } from '@prisma/client';
 
 import { prisma } from '@/lib/prisma';
 import { RegisterUserInput } from '@/types/auth/register-user';
@@ -27,6 +27,11 @@ const templateUserInclude = {
     }
   }
 };
+
+export type UserWithAllData = User & {
+  userServices: (UserService & {service: Service, session?: Session})[],
+  packages: (Package & {packageServices: (PackageService & {service: Service})[], session?: Session})[]
+}
 
 export async function findUserById(id: string) {
   return prisma.user.findUnique({

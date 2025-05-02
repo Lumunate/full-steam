@@ -47,7 +47,6 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
   viewDocument = false,
   role = '',
   submissionDate = '',
-  onButtonClick,
   onViewDocumentClick
 }) => {
   // Determine if the image URL is from Cloudinary
@@ -98,14 +97,13 @@ const DashboardNotification: React.FC<DashBoardNotificationProps> = ({
       <ButtonGroup>
         {viewDocument && (
           <ViewDocumentTypography onClick={onViewDocumentClick}>
-            View Document
+            View Detail
           </ViewDocumentTypography>
         )}
         {buttonAction && (
           <ClientRelatedActionButton 
             buttonAction={buttonAction} 
             width='125px'
-            onClick={onButtonClick}
           >
             {buttonAction.replace('-', ' ')}
           </ClientRelatedActionButton>
