@@ -2,8 +2,10 @@
 
 import Avatar from '@mui/material/Avatar';
 import Image from 'next/image';
+import { useState } from 'react';
 
 import { Button } from '@/components/buttons/Button.style';
+import { SignUpDropDown, SignUpWrapper } from '@/features/navbar/Navbar.style';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 import {
@@ -21,8 +23,6 @@ import {
   DashBoardUserDetails,
   DashBoardLogoutDropDown
 } from './DashBoardWelcome.style';
-import { SignUpDropDown, SignUpWrapper } from '@/features/navbar/Navbar.style';
-import { useState } from 'react';
 
 // Map user roles to more user-friendly display names
 const roleDisplayMapping: Record<string, string> = {
@@ -39,7 +39,7 @@ export default function DashBoardWelcome() {
 
   const handleLogout = () =>{
     setLogout(!logout);
-  }
+  };
 
   // Get user display name - use first and last name if available, otherwise username
   const userName = user
