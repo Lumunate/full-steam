@@ -18,6 +18,7 @@ interface StatHolderProps {
   left?: number;
   bottom?: number;
   right?: number;
+  yes?: boolean;
 }
 
 const StatHolder: React.FC<StatHolderProps> = ({
@@ -28,11 +29,15 @@ const StatHolder: React.FC<StatHolderProps> = ({
   bottom = 0,
   right = 0,
   left = 0,
+  yes = false
 }) => {
   return (
-    <StatHolderContainer
+    <Box
       sx={{
+        display: 'flex',
+        alignItems: 'center',
         position: 'absolute',
+        gap: '16px',
         top: top ?  `${top}%` : '',
         bottom: bottom ? `${bottom}%` : '',
         right: right ?  `${right}%` : '',
@@ -43,12 +48,33 @@ const StatHolder: React.FC<StatHolderProps> = ({
         }
       }}
     >
-      <StatImage src={imgSrc} alt='hero-image' width={40} height={40} />
-      <Box sx={{ marginLeft: '8px' }}>
-        <StatHolderHeading>{text1}</StatHolderHeading>
-        <StatHolderPara>{text2}</StatHolderPara>
-      </Box>
-    </StatHolderContainer>
+      {yes && 
+      
+      <Image
+        alt='Button Icon'
+        src='/icons/button-circle.svg'
+        height={20}
+        width={20}
+      />
+      }      <StatHolderContainer
+        
+      >
+        <StatImage src={imgSrc} alt='hero-image' width={40} height={40} />
+        <Box sx={{ marginLeft: '8px' }}>
+          <StatHolderHeading>{text1}</StatHolderHeading>
+          <StatHolderPara>{text2}</StatHolderPara>
+        </Box>
+      </StatHolderContainer>
+      {!yes &&
+      
+      <Image
+        alt='Button Icon'
+        src='/icons/button-circle.svg'
+        height={20}
+        width={20}
+      />
+      }
+    </Box>
   );
 };
 

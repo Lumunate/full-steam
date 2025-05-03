@@ -19,6 +19,7 @@ export const ProcessCardNumber = styled(Typography)(({theme}) => ({
   background: 'linear-gradient(180deg, #37B5FF 0%, #62C5FF 44%, #FFFFFF 100%)',
   WebkitBackgroundClip: 'text',
   color: 'transparent',
+  fontWeight: 'bold',
   [theme.breakpoints.down(900)]: {
     fontSize: '70px'
   }

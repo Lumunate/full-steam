@@ -62,6 +62,7 @@ export const Button = styled(ButtonBase, {
       fontSize: '14px !important',
       width: 'auto !important',
       height: '41px !important',
+      padding: '9px'
     },
   }),
 );

@@ -24,7 +24,7 @@ export const MainHeadingSpan = styled(Typography)(({ theme }) => ({
   fontSize: '56px',
   fontWeight: 700,
   lineHeight: '100%',
-  color: '#1A3375',
+  color: '#005782',
   fontFamily: 'Urbanist, sans-serif',
   fontStyle: 'normal',
   [theme.breakpoints.down(1200)]: {

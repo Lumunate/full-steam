@@ -5,26 +5,26 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { 
-  Paper, 
-  Snackbar, 
-  Alert, 
-  Checkbox, 
-  MenuItem, 
-  Box, 
-  Select, 
+import {
+  Paper,
+  Snackbar,
+  Alert,
+  Checkbox,
+  MenuItem,
+  Box,
+  Select,
   Table,
-  TableContainer, 
-  TableHead, 
-  TableCell, 
-  TableRow, 
+  TableContainer,
+  TableHead,
+  TableCell,
+  TableRow,
   TableBody,
   CircularProgress,
   Typography,
   Chip,
   Autocomplete,
   TextField,
-  InputAdornment
+  InputAdornment,
 } from '@mui/material';
 import axios from 'axios';
 import Image from 'next/image';
@@ -70,8 +70,12 @@ import {
   StyledInputFieldCheckBox,
   BorderBoxInternal,
   CustomSelect,
-  CustomTableCell
+  CustomTableCell,
+  PopUpModal,
+  PopupOverlay,
 } from '../../components/form/Froms.style';
+import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
+import TermsAndServices from '../legal-pages/terms-service/TermService';
 
 // Types for custom package and service pricing
 interface ServicePricing {
@@ -102,33 +106,39 @@ export default function RegsiterationFormMomHelper() {
   const [open, setOpen] = useState(false);
   const [profilePreview, setProfilePreview] = useState('');
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-  
+
   // Username and email availability state
-  const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
-  const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(null);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<
+    boolean | null
+  >(null);
+  const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
+    null,
+  );
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
-  
+
   // Selected services with pricing
-  const [selectedServices, setSelectedServices] = useState<Record<string, ServicePricing>>({});
-  
+  const [selectedServices, setSelectedServices] = useState<
+    Record<string, ServicePricing>
+  >({});
+
   // Packages state
   const [packages, setPackages] = useState<PackageData[]>([]);
   const [newPackage, setNewPackage] = useState<PackageData>({
     name: '',
     price: 0,
     serviceIds: [],
-    notes: ''
+    notes: '',
   });
-  
+
   // Document URLs
   const [documents, setDocuments] = useState({
     governmentIdDocumentUrl: '',
     policeCheckDocumentUrl: '',
     firstAidCertificate: '',
-    image: ''
+    image: '',
   });
-  
+
   // User form data
   const [formData, setFormData] = useState({
     firstName: '',
@@ -156,6 +166,13 @@ export default function RegsiterationFormMomHelper() {
     bankAccountNumber: '',
   });
 
+  const handleTerms = () => {
+    setTerms(!terms);
+  };
+  const handlePrivacy = () => {
+    setPrivacy(!privacy);
+  };
+
   // Check username availability
   const checkUsernameAvailability = async (username: string) => {
     if (!username || username.length < 3) {
@@ -163,13 +180,15 @@ export default function RegsiterationFormMomHelper() {
 
       return;
     }
-    
+
     setIsCheckingUsername(true);
     try {
-      const response = await axios.get(`/api/user/check-availability?field=username&value=${encodeURIComponent(username)}`);
+      const response = await axios.get(
+        `/api/user/check-availability?field=username&value=${encodeURIComponent(username)}`,
+      );
 
       setIsUsernameAvailable(response.data.available);
-    } catch  {
+    } catch {
       setIsUsernameAvailable(null);
     } finally {
       setIsCheckingUsername(false);
@@ -183,13 +202,15 @@ export default function RegsiterationFormMomHelper() {
 
       return;
     }
-    
+
     setIsCheckingEmail(true);
     try {
-      const response = await axios.get(`/api/user/check-availability?field=email&value=${encodeURIComponent(email)}`);
+      const response = await axios.get(
+        `/api/user/check-availability?field=email&value=${encodeURIComponent(email)}`,
+      );
 
       setIsEmailAvailable(response.data.available);
-    } catch  {
+    } catch {
       setIsEmailAvailable(null);
     } finally {
       setIsCheckingEmail(false);
@@ -202,7 +223,7 @@ export default function RegsiterationFormMomHelper() {
 
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -213,7 +234,7 @@ export default function RegsiterationFormMomHelper() {
         checkUsernameAvailability(formData.username);
       }
     }, 500); // Debounce for 500ms
-    
+
     return () => clearTimeout(timer);
   }, [formData.username]);
 
@@ -223,7 +244,7 @@ export default function RegsiterationFormMomHelper() {
         checkEmailAvailability(formData.email);
       }
     }, 500); // Debounce for 500ms
-    
+
     return () => clearTimeout(timer);
   }, [formData.email]);
 
@@ -235,8 +256,8 @@ export default function RegsiterationFormMomHelper() {
         [serviceId]: {
           serviceId,
           price: 0,
-          duration: '1 hr'
-        }
+          duration: '1 hr',
+        },
       }));
     } else {
       const { [serviceId]: _, ...rest } = selectedServices;
@@ -253,8 +274,8 @@ export default function RegsiterationFormMomHelper() {
       [serviceId]: {
         serviceId: prev[serviceId]?.serviceId || serviceId,
         price,
-        duration: prev[serviceId]?.duration || '1 hr'
-      }
+        duration: prev[serviceId]?.duration || '1 hr',
+      },
     }));
   };
 
@@ -264,8 +285,8 @@ export default function RegsiterationFormMomHelper() {
       [serviceId]: {
         serviceId: prev[serviceId]?.serviceId || serviceId,
         price: prev[serviceId]?.price || 0,
-        duration
-      }
+        duration,
+      },
     }));
   };
 
@@ -288,7 +309,7 @@ export default function RegsiterationFormMomHelper() {
     if (service && !newPackage.serviceIds.includes(service.id)) {
       setNewPackage(prev => ({
         ...prev,
-        serviceIds: [...prev.serviceIds, service.id]
+        serviceIds: [...prev.serviceIds, service.id],
       }));
     }
   };
@@ -296,12 +317,16 @@ export default function RegsiterationFormMomHelper() {
   const handleRemoveService = (serviceId: string) => {
     setNewPackage(prev => ({
       ...prev,
-      serviceIds: prev.serviceIds.filter(id => id !== serviceId)
+      serviceIds: prev.serviceIds.filter(id => id !== serviceId),
     }));
   };
 
   const handleAddPackage = () => {
-    if (!newPackage.name || newPackage.serviceIds.length === 0 || newPackage.price <= 0) {
+    if (
+      !newPackage.name ||
+      newPackage.serviceIds.length === 0 ||
+      newPackage.price <= 0
+    ) {
       setMessage('Please fill all package details');
       setOpen(true);
 
@@ -320,7 +345,10 @@ export default function RegsiterationFormMomHelper() {
   };
 
   // File upload handlers
-  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>, documentType: string) => {
+  const handleFileChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+    documentType: string,
+  ) => {
     try {
       const file = e.target.files?.[0];
 
@@ -335,26 +363,35 @@ export default function RegsiterationFormMomHelper() {
 
       // Upload to Cloudinary
       const cloudinaryUrl = await uploadFile(file);
-      
+
       // Update document URLs
       switch (documentType) {
       case 'image':
         setDocuments(prev => ({ ...prev, image: cloudinaryUrl }));
         break;
       case 'governmentId':
-        setDocuments(prev => ({ ...prev, governmentIdDocumentUrl: cloudinaryUrl }));
+        setDocuments(prev => ({
+          ...prev,
+          governmentIdDocumentUrl: cloudinaryUrl,
+        }));
         break;
       case 'policeCheck':
-        setDocuments(prev => ({ ...prev, policeCheckDocumentUrl: cloudinaryUrl }));
+        setDocuments(prev => ({
+          ...prev,
+          policeCheckDocumentUrl: cloudinaryUrl,
+        }));
         break;
       case 'firstAid':
-        setDocuments(prev => ({ ...prev, firstAidCertificate: cloudinaryUrl }));
+        setDocuments(prev => ({
+          ...prev,
+          firstAidCertificate: cloudinaryUrl,
+        }));
         break;
       }
-      
+
       setMessage('Document uploaded successfully');
       setOpen(true);
-    } catch  {
+    } catch {
       setMessage('Failed to upload file');
       setOpen(true);
     }
@@ -363,7 +400,7 @@ export default function RegsiterationFormMomHelper() {
   // reCAPTCHA handler
   const handleCaptchaChange = async (token: string | null) => {
     if (!token) return;
-    
+
     const isSuccessful = await verifyRecaptcha(token);
 
     setIsCaptchaVerified(isSuccessful);
@@ -390,29 +427,32 @@ export default function RegsiterationFormMomHelper() {
       const userServices = Object.values(selectedServices).map(service => ({
         serviceId: service.serviceId,
         price: service.price,
-        notes: service.duration
+        notes: service.duration,
       }));
 
       const registrationData: RegisterUserInput = {
-        saveForFuture: false, 
+        saveForFuture: false,
         ...formData,
-        proStatus: false, 
+        proStatus: false,
         phoneNumber: formData.phoneNumber.trim(),
         dateOfBirth: formData.dateOfBirth,
-        hourlyRate: Math.max(...Object.values(selectedServices).map(s => s.price), 0),
+        hourlyRate: Math.max(
+          ...Object.values(selectedServices).map(s => s.price),
+          0,
+        ),
         userServices: userServices,
         packages: packages.map(pkg => ({
           name: pkg.name,
           price: pkg.price,
           serviceIds: pkg.serviceIds,
-          notes: pkg.notes || ''
+          notes: pkg.notes || '',
         })),
         ...documents,
       };
 
       // Register user
       register(registrationData);
-    } catch  {
+    } catch {
       setMessage('Registration failed. Please try again.');
       setOpen(true);
     }
@@ -423,13 +463,15 @@ export default function RegsiterationFormMomHelper() {
     if (registrationState.isSuccess) {
       setMessage('Registration successful! Redirecting to login...');
       setOpen(true);
-      
+
       // Redirect after delay
       setTimeout(() => {
         router.push('/en/login');
       }, 2000);
     } else if (registrationState.error) {
-      setMessage(registrationState.error || 'Registration failed. Please try again.');
+      setMessage(
+        registrationState.error || 'Registration failed. Please try again.',
+      );
       setOpen(true);
     }
   }, [registrationState, router]);
@@ -438,14 +480,14 @@ export default function RegsiterationFormMomHelper() {
   const isFormValid = () => {
     if (currentStep === 1) {
       return (
-        formData.firstName && 
-        formData.lastName && 
-        formData.username && 
+        formData.firstName &&
+        formData.lastName &&
+        formData.username &&
         formData.username.length >= 3 &&
-        (isUsernameAvailable === true) && // Username must be available
+        isUsernameAvailable === true && // Username must be available
         formData.email &&
         formData.email.includes('@') &&
-        (isEmailAvailable === true) && // Email must be available
+        isEmailAvailable === true && // Email must be available
         formData.password &&
         formData.password.length >= 6 &&
         formData.phoneNumber.length === 10 && // Validate phone has 10 characters
@@ -456,12 +498,12 @@ export default function RegsiterationFormMomHelper() {
         formData.dateOfBirth
       );
     }
-    
+
     if (currentStep === 2) {
       // At least one service must be selected
       return Object.keys(selectedServices).length > 0;
     }
-    
+
     return true;
   };
 
@@ -519,9 +561,11 @@ export default function RegsiterationFormMomHelper() {
           <input
             type='file'
             id='fileInput'
-            onChange={(e) => handleFileChange(e, 'image')}
+            onChange={e => handleFileChange(e, 'image')}
             style={{ display: 'none' }}
-            accept="image/*"
+            accept='image/*'
+            title='Upload your profile image'
+            placeholder='Choose a file'
           />
         </ProfileWrapper>
       </ProfileBox>
@@ -550,7 +594,7 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleInputChange}
           />
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='username'>Username</StyledInputLabel>
           <StyledInputField
@@ -560,33 +604,35 @@ export default function RegsiterationFormMomHelper() {
             name='username'
             value={formData.username}
             onChange={handleInputChange}
-            error={formData.username.length >= 3 && isUsernameAvailable === false}
+            error={
+              formData.username.length >= 3 && isUsernameAvailable === false
+            }
             endAdornment={
               formData.username.length >= 3 && (
-                <InputAdornment position="end">
+                <InputAdornment position='end'>
                   {isCheckingUsername ? (
                     <CircularProgress size={20} />
                   ) : isUsernameAvailable === true ? (
-                    <CheckCircleIcon color="success" />
+                    <CheckCircleIcon color='success' />
                   ) : isUsernameAvailable === false ? (
-                    <ErrorIcon color="error" />
+                    <ErrorIcon color='error' />
                   ) : null}
                 </InputAdornment>
               )
             }
           />
           {formData.username.length >= 3 && isUsernameAvailable === false && (
-            <Typography color="error" variant="caption">
+            <Typography color='error' variant='caption'>
               Username is already taken
             </Typography>
           )}
           {formData.username.length >= 3 && isUsernameAvailable === true && (
-            <Typography color="success" variant="caption">
+            <Typography color='success' variant='caption'>
               Username is available
             </Typography>
           )}
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='email'>Email</StyledInputLabel>
           <StyledInputField
@@ -599,30 +645,30 @@ export default function RegsiterationFormMomHelper() {
             error={formData.email.includes('@') && isEmailAvailable === false}
             endAdornment={
               formData.email.includes('@') && (
-                <InputAdornment position="end">
+                <InputAdornment position='end'>
                   {isCheckingEmail ? (
                     <CircularProgress size={20} />
                   ) : isEmailAvailable === true ? (
-                    <CheckCircleIcon color="success" />
+                    <CheckCircleIcon color='success' />
                   ) : isEmailAvailable === false ? (
-                    <ErrorIcon color="error" />
+                    <ErrorIcon color='error' />
                   ) : null}
                 </InputAdornment>
               )
             }
           />
           {formData.email.includes('@') && isEmailAvailable === false && (
-            <Typography color="error" variant="caption">
+            <Typography color='error' variant='caption'>
               Email is already registered
             </Typography>
           )}
           {formData.email.includes('@') && isEmailAvailable === true && (
-            <Typography color="success" variant="caption">
+            <Typography color='success' variant='caption'>
               Email is available
             </Typography>
           )}
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='password'>Password</StyledInputLabel>
           <StyledInputField
@@ -634,14 +680,16 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleInputChange}
           />
           {formData.password && formData.password.length < 6 && (
-            <Typography color="error" variant="caption">
+            <Typography color='error' variant='caption'>
               Password must be at least 6 characters
             </Typography>
           )}
         </InputHolder>
 
         <InputHolder>
-          <StyledInputLabel htmlFor='phoneNumber'>Phone Number (10 digits)</StyledInputLabel>
+          <StyledInputLabel htmlFor='phoneNumber'>
+            Phone Number (10 digits)
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='text'
@@ -650,17 +698,23 @@ export default function RegsiterationFormMomHelper() {
             value={formData.phoneNumber}
             onChange={handleInputChange}
             inputProps={{ maxLength: 10 }}
-            error={formData.phoneNumber.length > 0 && formData.phoneNumber.length !== 10}
+            error={
+              formData.phoneNumber.length > 0 &&
+              formData.phoneNumber.length !== 10
+            }
           />
-          {formData.phoneNumber.length > 0 && formData.phoneNumber.length !== 10 && (
-            <Typography color="error" variant="caption">
-              Phone number must be 10 digits
+          {formData.phoneNumber.length > 0 &&
+            formData.phoneNumber.length !== 10 && (
+            <Typography color='error' variant='caption'>
+                Phone number must be 10 digits
             </Typography>
           )}
         </InputHolder>
 
         <InputHolder>
-          <StyledInputLabel htmlFor='dateOfBirth'>Date Of Birth</StyledInputLabel>
+          <StyledInputLabel htmlFor='dateOfBirth'>
+            Date Of Birth
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
             type='date'
@@ -719,7 +773,7 @@ export default function RegsiterationFormMomHelper() {
           />
         </InputHolder>
       </GridBox>
-      
+
       <InputHolder>
         <StyledInputLabel htmlFor='state'>State/Province</StyledInputLabel>
         <StyledInputField
@@ -759,21 +813,40 @@ export default function RegsiterationFormMomHelper() {
       <StyledInputLabel>Services You can Provide</StyledInputLabel>
       <BorderBox>
         <BorderBoxInternal>
-          <Box sx={{display: 'flex', justifyContent: 'space-between', padding: '20px 0', borderBottom: '1px solid #DFEAF2'}}>
-            <StyledCheckBoxLabel sx={{marginLeft: '18px'}}>Services</StyledCheckBoxLabel>
-            <Box sx={{display: 'flex', marginRight: '19px', gap: '20px'}}>
-              <StyledCheckBoxLabel style={{width: '120px', textAlign: 'center'}}>Rate ($)</StyledCheckBoxLabel>
-              <StyledCheckBoxLabel style={{width: '120px', textAlign: 'center'}}>Duration</StyledCheckBoxLabel>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '20px 0',
+              borderBottom: '1px solid #DFEAF2',
+            }}
+          >
+            <StyledCheckBoxLabel sx={{ marginLeft: '18px' }}>
+              Services
+            </StyledCheckBoxLabel>
+            <Box sx={{ display: 'flex', marginRight: '19px', gap: '20px' }}>
+              <StyledCheckBoxLabel
+                style={{ width: '120px', textAlign: 'center' }}
+              >
+                Rate ($)
+              </StyledCheckBoxLabel>
+              <StyledCheckBoxLabel
+                style={{ width: '120px', textAlign: 'center' }}
+              >
+                Duration
+              </StyledCheckBoxLabel>
             </Box>
           </Box>
-          
-          <Box sx={{padding: '18px 12px'}}>
+
+          <Box sx={{ padding: '18px 12px' }}>
             {servicesLoading ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
                 <CircularProgress size={30} />
               </Box>
             ) : services.length === 0 ? (
-              <Box sx={{ p: 2, textAlign: 'center' }}>No services available</Box>
+              <Box sx={{ p: 2, textAlign: 'center' }}>
+                No services available
+              </Box>
             ) : (
               services.map((service, index) => (
                 <CheckBorderBox key={service.id} index={index}>
@@ -782,30 +855,40 @@ export default function RegsiterationFormMomHelper() {
                       icon={<CheckBoxOutlineBlankIcon />}
                       checkedIcon={<CheckBoxIcon sx={{ color: '#005782' }} />}
                       checked={Boolean(selectedServices[service.id])}
-                      onChange={(e) => handleServiceSelect(service.id, e.target.checked)}
+                      onChange={e =>
+                        handleServiceSelect(service.id, e.target.checked)
+                      }
                     />
                     <StyledCheckBoxLabel>{service.name}</StyledCheckBoxLabel>
                   </CheckBoxContainer>
 
-                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: '11px' }}>
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'row', gap: '11px' }}
+                  >
                     <StyledInputFieldCheckBox
                       disableUnderline
-                      type="number"
+                      type='number'
                       value={selectedServices[service.id]?.price || ''}
-                      onChange={(e) => handleServicePriceChange(service.id, e.target.value)}
+                      onChange={e =>
+                        handleServicePriceChange(service.id, e.target.value)
+                      }
                       disabled={!selectedServices[service.id]}
-                      placeholder="0.00"
+                      placeholder='0.00'
                       inputProps={{ min: 0 }}
                     />
                     <CustomSelect
                       value={selectedServices[service.id]?.duration || '1 hr'}
-                      onChange={(e) => handleServiceDurationChange(service.id, e.target.value as string)}
+                      onChange={e =>
+                        handleServiceDurationChange(
+                          service.id,
+                          e.target.value as string,
+                        )
+                      }
                       disabled={!selectedServices[service.id]}
                       sx={{ width: '120px' }}
                     >
-                      <MenuItem value="30 min">30 min</MenuItem>
-                      <MenuItem value="2 hrs">2 hrs</MenuItem>
-                     
+                      <MenuItem value='30 min'>30 min</MenuItem>
+                      <MenuItem value='2 hrs'>2 hrs</MenuItem>
                     </CustomSelect>
                   </Box>
                 </CheckBorderBox>
@@ -819,42 +902,48 @@ export default function RegsiterationFormMomHelper() {
       <StyledInputLabel sx={{ mt: 4 }}>Custom Packages</StyledInputLabel>
       <BorderBox>
         <Box>
-          <StyledInputLabel htmlFor="packageName">Package Name</StyledInputLabel>
+          <StyledInputLabel htmlFor='packageName'>
+            Package Name
+          </StyledInputLabel>
           <StyledInputField
             disableUnderline
-            type="text"
-            id="packageName"
+            type='text'
+            id='packageName'
             value={newPackage.name}
-            onChange={(e) => handlePackageNameChange(e.target.value)}
-            placeholder="Weekend Special"
+            onChange={e => handlePackageNameChange(e.target.value)}
+            placeholder='Weekend Special'
           />
-          
+
           <StyledInputLabel>Select Services for Package</StyledInputLabel>
           <Autocomplete
-            options={services.filter(service => !newPackage.serviceIds.includes(service.id))}
-            getOptionLabel={(option) => option.name}
+            options={services.filter(
+              service => !newPackage.serviceIds.includes(service.id),
+            )}
+            getOptionLabel={option => option.name}
             onChange={(_, value) => handleAddService(value)}
-            renderInput={(params) => (
-              <TextField 
-                {...params} 
-                placeholder="Select services" 
-                variant="outlined"
-                sx={{ 
+            renderInput={params => (
+              <TextField
+                {...params}
+                placeholder='Select services'
+                variant='outlined'
+                sx={{
                   mb: 2,
                   '.MuiOutlinedInput-root': {
                     borderRadius: '15px',
                     paddingRight: '9px',
                     border: '1px solid #DFEAF2',
                     background: '#EAF9FF',
-                  }
+                  },
                 }}
               />
             )}
           />
-          
+
           {newPackage.serviceIds.length > 0 && (
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" sx={{ mb: 1 }}>Selected Services:</Typography>
+              <Typography variant='subtitle1' sx={{ mb: 1 }}>
+                Selected Services:
+              </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {newPackage.serviceIds.map(serviceId => (
                   <Chip
@@ -862,49 +951,57 @@ export default function RegsiterationFormMomHelper() {
                     label={getServiceName(serviceId)}
                     onDelete={() => handleRemoveService(serviceId)}
                     deleteIcon={<HighlightOffIcon />}
-                    sx={{ 
+                    sx={{
                       background: '#34BCFF33',
                       borderRadius: '15px',
                       color: '#005782',
-                      fontWeight: 500
+                      fontWeight: 500,
                     }}
                   />
                 ))}
               </Box>
             </Box>
           )}
-          
+
           <GridBox>
             <InputHolder>
-              <StyledInputLabel htmlFor="packagePrice">Package Price ($)</StyledInputLabel>
+              <StyledInputLabel htmlFor='packagePrice'>
+                Package Price ($)
+              </StyledInputLabel>
               <StyledInputField
                 disableUnderline
-                type="number"
-                id="packagePrice"
+                type='number'
+                id='packagePrice'
                 value={newPackage.price || ''}
-                onChange={(e) => handlePackagePriceChange(e.target.value)}
+                onChange={e => handlePackagePriceChange(e.target.value)}
                 inputProps={{ min: 0 }}
               />
             </InputHolder>
-            
+
             <InputHolder>
-              <StyledInputLabel htmlFor="packageNotes">Notes (optional)</StyledInputLabel>
+              <StyledInputLabel htmlFor='packageNotes'>
+                Notes (optional)
+              </StyledInputLabel>
               <StyledInputField
                 disableUnderline
-                type="text"
-                id="packageNotes"
+                type='text'
+                id='packageNotes'
                 value={newPackage.notes || ''}
-                onChange={(e) => handlePackageNotesChange(e.target.value)}
-                placeholder="Additional details about this package"
+                onChange={e => handlePackageNotesChange(e.target.value)}
+                placeholder='Additional details about this package'
               />
             </InputHolder>
           </GridBox>
-          
-          <Button width='100%' style={{marginTop: '16px'}} onClick={handleAddPackage}>
+
+          <Button
+            width='100%'
+            style={{ marginTop: '16px' }}
+            onClick={handleAddPackage}
+          >
             Add Package
           </Button>
         </Box>
-        
+
         {packages.length > 0 && (
           <Box mt={3}>
             <StyledInputLabel>Your Packages</StyledInputLabel>
@@ -923,12 +1020,14 @@ export default function RegsiterationFormMomHelper() {
                     <TableRow key={index}>
                       <TableCell>{pkg.name}</TableCell>
                       <TableCell>
-                        {pkg.serviceIds.map(id => getServiceName(id)).join(', ')}
+                        {pkg.serviceIds
+                          .map(id => getServiceName(id))
+                          .join(', ')}
                       </TableCell>
                       <TableCell>{pkg.price}</TableCell>
                       <TableCell>
-                        <Button 
-                          width="auto" 
+                        <Button
+                          width='auto'
                           onClick={() => removePackage(index)}
                           sx={{ minWidth: 'auto', py: 1 }}
                         >
@@ -943,12 +1042,12 @@ export default function RegsiterationFormMomHelper() {
           </Box>
         )}
       </BorderBox>
-      
+
       <CertificateBoxWrapper>
         <CertificateStyledInputLabel>
           Government Issued ID
         </CertificateStyledInputLabel>
-        <CertificateUploadBox 
+        <CertificateUploadBox
           onClick={() => document.getElementById('govIdInput')?.click()}
           style={{ cursor: 'pointer' }}
         >
@@ -959,18 +1058,21 @@ export default function RegsiterationFormMomHelper() {
             alt='Upload Icon'
           />
           <StyledCheckBoxLabel>
-            {documents.governmentIdDocumentUrl ? 'Document Uploaded ✓' : 'Upload Document'}
+            {documents.governmentIdDocumentUrl
+              ? 'Document Uploaded ✓'
+              : 'Upload Document'}
           </StyledCheckBoxLabel>
           <input
             type='file'
             id='govIdInput'
+            title='govID'
             style={{ display: 'none' }}
-            onChange={(e) => handleFileChange(e, 'governmentId')}
-            accept="image/*,application/pdf"
+            onChange={e => handleFileChange(e, 'governmentId')}
+            accept='image/*,application/pdf'
           />
         </CertificateUploadBox>
       </CertificateBoxWrapper>
-      
+
       <CertificateBoxWrapper>
         <CertificateStyledInputLabel>
           Police Vulnerable Sector Check
@@ -986,18 +1088,21 @@ export default function RegsiterationFormMomHelper() {
             alt='Upload Icon'
           />
           <StyledCheckBoxLabel>
-            {documents.policeCheckDocumentUrl ? 'Document Uploaded ✓' : 'Upload Certificate'}
+            {documents.policeCheckDocumentUrl
+              ? 'Document Uploaded ✓'
+              : 'Upload Certificate'}
           </StyledCheckBoxLabel>
           <input
             type='file'
             id='policeCheckInput'
+            title='policeCheckInput'
             style={{ display: 'none' }}
-            onChange={(e) => handleFileChange(e, 'policeCheck')}
-            accept="image/*,application/pdf"
+            onChange={e => handleFileChange(e, 'policeCheck')}
+            accept='image/*,application/pdf'
           />
         </CertificateUploadBox>
       </CertificateBoxWrapper>
-      
+
       <CertificateBoxWrapper>
         <CertificateStyledInputLabel>
           First Aid Certification
@@ -1013,14 +1118,17 @@ export default function RegsiterationFormMomHelper() {
             alt='Upload Icon'
           />
           <StyledCheckBoxLabel>
-            {documents.firstAidCertificate ? 'Document Uploaded ✓' : 'Upload Certificate'}
+            {documents.firstAidCertificate
+              ? 'Document Uploaded ✓'
+              : 'Upload Certificate'}
           </StyledCheckBoxLabel>
           <input
             type='file'
             id='firstAidInput'
+            title='firstAidInput'
             style={{ display: 'none' }}
-            onChange={(e) => handleFileChange(e, 'firstAid')}
-            accept="image/*,application/pdf"
+            onChange={e => handleFileChange(e, 'firstAid')}
+            accept='image/*,application/pdf'
           />
         </CertificateUploadBox>
       </CertificateBoxWrapper>
@@ -1036,16 +1144,21 @@ export default function RegsiterationFormMomHelper() {
 
       <InputHolder>
         <StyledInputLabel>Payment Method</StyledInputLabel>
-        <StyledSelect 
+        <StyledSelect
           value={formData.paymentMethod}
-          onChange={(e) => setFormData({...formData, paymentMethod: e.target.value as 'E_TRANSFER' | 'DIRECT_DEPOSIT'})}
+          onChange={e =>
+            setFormData({
+              ...formData,
+              paymentMethod: e.target.value as 'E_TRANSFER' | 'DIRECT_DEPOSIT',
+            })
+          }
           fullWidth
         >
-          <MenuItem value="E_TRANSFER">E-Transfer</MenuItem>
-          <MenuItem value="DIRECT_DEPOSIT">Direct Deposit</MenuItem>
+          <MenuItem value='E_TRANSFER'>E-Transfer</MenuItem>
+          <MenuItem value='DIRECT_DEPOSIT'>Direct Deposit</MenuItem>
         </StyledSelect>
       </InputHolder>
-      
+
       <InputHolder>
         <StyledInputLabel htmlFor='eTransferEmail'>
           Email for a e-Transfer
@@ -1076,7 +1189,7 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleInputChange}
           />
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='bankInstitutionNumber'>
             Institution Number
@@ -1090,7 +1203,7 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleInputChange}
           />
         </InputHolder>
-        
+
         <InputHolder>
           <StyledInputLabel htmlFor='bankAccountNumber'>
             Account Number
@@ -1112,21 +1225,42 @@ export default function RegsiterationFormMomHelper() {
             icon={<CheckBoxOutlineBlankIcon />}
             checkedIcon={<CheckBoxIcon />}
             checked={formData.agreeToTerms}
-            onChange={(e) => setFormData({...formData, agreeToTerms: e.target.checked})}
+            onChange={e =>
+              setFormData({ ...formData, agreeToTerms: e.target.checked })
+            }
           />
-          <CheckBoxTypography>
+          <CheckBoxTypography sx={{ display: 'flex' }}>
             I agree to the
-            <Link href='/terms-of-service'>&nbsp;Terms of Service</Link>&nbsp; and
-            <Link href='/privacy-policy'>&nbsp;Privacy Policy</Link>
+            <Typography onClick={handleTerms}>
+              &nbsp;Terms of Service
+            </Typography>
+            &nbsp; and
+            <Typography onClick={handlePrivacy}>
+              &nbsp;Privacy Policy
+            </Typography>
           </CheckBoxTypography>
         </CheckFlex>
-        
+
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
           <ReCAPTCHA
             sitekey={recaptchaSiteKey}
             onChange={handleCaptchaChange}
           />
         </Box>
+        {terms && (
+          <PopupOverlay onClick={handleTerms}>
+            <PopUpModal>
+              <TermsAndServices />
+            </PopUpModal>
+          </PopupOverlay>
+        )}
+        {privacy && (
+          <PopupOverlay onClick={handlePrivacy}>
+            <PopUpModal>
+              <PrivacyandPolicy />
+            </PopUpModal>
+          </PopupOverlay>
+        )}
       </Box>
     </>
   );
@@ -1153,7 +1287,7 @@ export default function RegsiterationFormMomHelper() {
       </Snackbar>
 
       <RegisterationSlider highlight={currentStep} />
-      
+
       <FormContainer paddingBottom='200px'>
         {currentStep === 1 && step1}
         {currentStep === 2 && step2}
@@ -1171,7 +1305,7 @@ export default function RegsiterationFormMomHelper() {
               Back
             </Button>
           )}
-          
+
           {currentStep < 3 ? (
             <Button
               special
@@ -1187,7 +1321,11 @@ export default function RegsiterationFormMomHelper() {
           ) : (
             <Button
               onClick={handleSubmit}
-              disabled={!formData.agreeToTerms || !isCaptchaVerified || registrationState.isLoading}
+              disabled={
+                !formData.agreeToTerms ||
+                !isCaptchaVerified ||
+                registrationState.isLoading
+              }
               padding='18px 90px'
               fontSize='18px'
               height='64px'
@@ -1205,7 +1343,7 @@ export default function RegsiterationFormMomHelper() {
             </Button>
           )}
         </ButtonContainer>
-        
+
         <ApplicationSatus />
       </FormContainer>
     </>

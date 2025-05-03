@@ -11,6 +11,7 @@ export const StatHolderContainer = styled(Box)(({theme}) => ({
   color: '#1570B8',
   alignItems: 'center',
   background: ' #FFFFFF0D',
+  backdropFilter: 'blur(13.800000190734863px)',
   boxShadow: '0px 4px 32.4px 0px #0000001A',
   width: '282px',
   borderRadius: '20px',

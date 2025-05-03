@@ -11,7 +11,7 @@ import {
   Select,
   TableCell
 } from '@mui/material';
-import { styled } from '@mui/system';
+import { fontSize, styled } from '@mui/system';
 import Image from 'next/image';
 export const RadioContainer = styled(RadioGroup)({
   background: '#E7F7FF',
@@ -63,15 +63,15 @@ export const FormContainer = styled(Box)<{
   borderRadius: '25px',
   boxShadow: '0px 3px 22.9px 0px #0000001A',
   marginTop: '32px',
-  width: customwidth,
+  width: '100%',
   maxWidth: customwidth,
   paddingBottom: paddingBottom,
 }));
 
 export const StyledInputField = styled(Input)({
   border: '1px solid #DFEAF2',
-  borderRadius: '15px',
-  padding: '22px',
+  borderRadius: '10px',
+  padding: '10px 14px',
   fontSize: '15px',
   fontWeight: 400,
   color: '#005782',
@@ -80,20 +80,23 @@ export const StyledInputField = styled(Input)({
 
 export const StyledSelect = styled(Select)({
   border: '1px solid #DFEAF2',
-  borderRadius: '15px',
-  padding: '15px',
+  borderRadius: '10px',
+  padding: '10px 14px',
   fontSize: '15px',
   fontWeight: 400,
   color: '#005782',
   width: '100%',
 });
 
-export const StyledInputLabel = styled(InputLabel)({
+export const StyledInputLabel = styled(InputLabel)(({theme}) => ({
   marginBottom: '14px',
   fontSize: '16px',
   marginTop: '37px',
   color: '#232323',
-});
+  [theme.breakpoints.down(1200)]: {
+    fontSize :'13px',
+  }
+}));
 
 export const RegisterTypography = styled(Typography)({
   fontSize: '16px',
@@ -108,28 +111,37 @@ export const CheckFlex = styled(Typography)({
   marginTop: '32px',
 });
 
-export const FormHeading = styled(Typography)({
+export const FormHeading = styled(Typography)(({theme}) =>({
   fontSize: '28px',
   fontWeight: 400,
   color: '#02405F',
-});
+  [theme.breakpoints.down(1200)]:{
+    fontSize: '22px'
+  }
+}));
 
 export const StyledCheckBoxLabel = styled(StyledInputLabel)({
   fontSize: '15px',
   color: '#005782',
   margin: 0,
 });
-export const FormDescription = styled(Typography)({
+export const FormDescription = styled(Typography)(({theme}) =>({
   fontSize: '16px',
   fontWeight: 400,
   color: '#02405F',
-});
+  [theme.breakpoints.down(1200)]:{
+    fontSize: '14px'
+  }
+}));
 
-export const GridBox = styled(Box)({
+export const GridBox = styled(Box)(({theme}) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '0 37px',
-});
+  [theme.breakpoints.down(1200)]:{
+    gridTemplateColumns : 'repeat(1, 1fr)'
+  }
+}));
 
 export const OptionalGridBox = styled(GridBox)({
   gridTemplateColumns: 'repeat(3, 1fr)',
@@ -151,11 +163,12 @@ export const CertificateStyledInputLabel = styled(StyledInputLabel)({
   marginTop: '0px',
 });
 
-export const GridBoxBordered = styled(BorderBox)({
+export const GridBoxBordered = styled(BorderBox)(({theme}) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
   gap: '10px',
-});
+  
+}));
 
 export const ProfileBox = styled(Box)({
   display: 'flex',
@@ -168,14 +181,17 @@ export const ProfileWrapper = styled(Box)({
   position: 'relative',
 });
 
-export const InputHolder = styled(Box)({});
+export const InputHolder = styled(Box)({
+//  height: '32px'
+});
 
-export const ButtonContainer = styled(Box)({
+export const ButtonContainer = styled(Box)(({theme}) =>({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
   marginTop: '32px',
-});
+  [theme.breakpoints.down(1200)]: {flexDirection : 'column' , gap: '5px'}
+}));
 
 export const ProfileImage = styled(Image)({
   borderRadius: '50%',
@@ -241,4 +257,30 @@ export const CustomTableCell = styled(TableCell)({
 
   color: '#005782',
   fontSize: '14px'
+});
+
+export const PopupOverlay = styled(Box)({
+  width: 'calc(100vw + 40px)',
+  height: '100vh',
+  background: '#444343f2',
+  position: 'fixed',
+  top: 0,
+  zIndex: 9999,
+  left: '-20px',
+  
+});
+
+export const PopUpModal = styled(Box)({
+
+  borderRadius: '24px',
+  maxWidth: '700px',
+  width: '100%',
+  background: '#FFFFFF',
+  zIndex: 20,
+  padding: '49px 32px',
+  maxHeight: '70vh',
+  overflow: 'scroll',
+  margin:'auto' ,  marginTop: '150px',
+  boxShadow: '0px 3px 22.9px 0px #0000001A',
+
 });
