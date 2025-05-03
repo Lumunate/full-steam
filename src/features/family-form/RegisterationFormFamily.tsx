@@ -1,18 +1,20 @@
 'use client';
-
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import {
-  Snackbar,
-  Input,
-  Alert,
-  Checkbox,
-  Box,
-  Typography,
-  MenuItem,
-  Select,
+import { 
+  Snackbar, 
+  Input, 
+  Alert, 
+  Checkbox, 
+  Box, 
+  Typography, 
+  MenuItem, 
+  Select, 
+  CircularProgress,
+  InputAdornment 
 } from '@mui/material';
 import { Gender, UserRole } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
@@ -56,8 +58,6 @@ import {
   CheckBoxTypography,
   ButtonContainer,
 } from '../../components/form/Froms.style';
-import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
-import TermsAndServices from '../legal-pages/terms-service/TermService';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -66,11 +66,9 @@ interface Child {
   age: number;
   specialNotes?: string;
 }
-
 interface CheckedState {
   [key: string]: boolean;
 }
-
 export default function RegsiterationFormMom() {
   const [terms, setTerms] = useState(false);
   const [privacy, setPrivacy] = useState(false);
@@ -78,14 +76,6 @@ export default function RegsiterationFormMom() {
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { register, registrationState } = useUserRegistration();
 
-  const handleTerms = () => {
-    setTerms(!terms);
-  };
-  const handlePrivacy = () => {
-    setPrivacy(!privacy);
-  };
-
-  // Fetch services from API
   const { data: services } = useQuery<Service[]>({
     queryKey: ['services'],
     queryFn: async () => {
@@ -94,9 +84,11 @@ export default function RegsiterationFormMom() {
       return response.data;
     },
   });
-
-  // Set services in checked state when they're loaded
   const [checkedState, setCheckedState] = useState<CheckedState>({});
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState<boolean | null>(null);
+  const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(null);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   useEffect(() => {
     if (services && services.length > 0) {
@@ -116,7 +108,6 @@ export default function RegsiterationFormMom() {
       [serviceId]: !prevState[serviceId],
     }));
   };
-
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [filePath, setFilePath] = useState('');
@@ -137,7 +128,7 @@ export default function RegsiterationFormMom() {
     city: '',
     postalCode: '',
     country: '',
-    state: '', // Added state field
+    state: '',
     cfmPassword: '',
     gender: Gender.OTHER as Gender,
     agreeToTerms: false,
@@ -147,21 +138,70 @@ export default function RegsiterationFormMom() {
     paymentCardExpiry: '',
     paymentCardCvv: '',
   });
-
   const [currentStep, setCurrentStep] = useState(1);
+  const checkUsernameAvailability = async (username: string) => {
+    if (!username || username.length < 3) {
+      setIsUsernameAvailable(null);
 
-  // Handle file upload with Cloudinary
+      return;
+    }
+    setIsCheckingUsername(true);
+    try {
+      const response = await axios.get(`/api/user/check-availability?field=username&value=${encodeURIComponent(username)}`);
+
+      setIsUsernameAvailable(response.data.available);
+    } catch  {
+      setIsUsernameAvailable(null);
+    } finally {
+      setIsCheckingUsername(false);
+    }
+  };
+  const checkEmailAvailability = async (email: string) => {
+    if (!email || !email.includes('@')) {
+      setIsEmailAvailable(null);
+
+      return;
+    }
+    setIsCheckingEmail(true);
+    try {
+      const response = await axios.get(`/api/user/check-availability?field=email&value=${encodeURIComponent(email)}`);
+
+      setIsEmailAvailable(response.data.available);
+    } catch  {
+      setIsEmailAvailable(null);
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (formData.username && formData.username.length >= 3) {
+        checkUsernameAvailability(formData.username);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [formData.username]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (formData.email && formData.email.includes('@')) {
+        checkEmailAvailability(formData.email);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [formData.email]);
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LcNbygrAAAAAD48zAGw3fsjHZtZSizUeQsJDcwi' ;
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
-      // Show local preview
       const fileUrl = URL.createObjectURL(file);
 
       setFilePath(fileUrl);
 
       try {
-        // Upload to Cloudinary
         const uploadedUrl = await uploadFile(file);
 
         setUploadedImageUrl(uploadedUrl);
@@ -171,11 +211,9 @@ export default function RegsiterationFormMom() {
       }
     }
   };
-
   const handleFileExplorerClick = () => {
     document.getElementById('fileInput')?.click();
   };
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -190,7 +228,6 @@ export default function RegsiterationFormMom() {
     });
   };
 
-  // Handle child data changes
   const updateChild = (index: number, field: keyof Child, value: any) => {
     const updatedChildren = [...children];
 
@@ -203,29 +240,19 @@ export default function RegsiterationFormMom() {
     } as Child;
     setChildren(updatedChildren);
   };
-
-  // Add another child
   const addAnotherChild = () => {
     setChildren([...children, { name: '', age: 0, specialNotes: '' }]);
   };
-
-  const {
-    isVerified,
-    isVerifying,
-    verifyRecaptcha,
-    error: recaptchaError,
-  } = useRecaptcha();
-
+  const { isVerified, isVerifying, verifyRecaptcha, error: recaptchaError } = useRecaptcha();
+  
   const handleCheckboxToggle = (field: 'agreeToTerms' | 'savePaymentCard') => {
     setFormData(prev => ({
       ...prev,
       [field]: !prev[field],
     }));
   };
-
   const isFormValid = () => {
     if (currentStep === 1) {
-      // Phone number must be exactly 10 digits
       const phoneRegex = /^\d{10}$/;
       const isValidPhone = phoneRegex.test(formData.phoneNumber);
 
@@ -233,7 +260,11 @@ export default function RegsiterationFormMom() {
         formData.firstName &&
         formData.lastName &&
         formData.username &&
+        formData.username.length >= 3 &&
+        isUsernameAvailable === true &&
         formData.email &&
+        formData.email.includes('@') &&
+        isEmailAvailable === true &&
         isValidPhone &&
         formData.dateOfBirth &&
         formData.address &&
@@ -241,6 +272,7 @@ export default function RegsiterationFormMom() {
         formData.postalCode &&
         formData.country &&
         formData.password &&
+        formData.password.length >= 6 &&
         formData.cfmPassword
       );
     }
@@ -274,24 +306,6 @@ export default function RegsiterationFormMom() {
     }
   };
 
-  // Check if username or email already exists
-  const checkUsernameAndEmail = async () => {
-    try {
-      const response = await axios.post('/api/user/check-exists', {
-        username: formData.username,
-        email: formData.email,
-      });
-
-      return response.data;
-    } catch (error: any) {
-      if (error.response?.status === 409) {
-        return error.response.data;
-      }
-
-      return { exists: false };
-    }
-  };
-
   const nextStep = async () => {
     if (!isFormValid()) {
       if (currentStep === 1 && !/^\d{10}$/.test(formData.phoneNumber)) {
@@ -311,34 +325,16 @@ export default function RegsiterationFormMom() {
       return;
     }
 
-    // Check username and email uniqueness when moving from step 1
-    if (currentStep === 1) {
-      const result = await checkUsernameAndEmail();
-
-      if (result.exists) {
-        setMessage(
-          result.message ||
-            'Username or email already exists. Please choose another.',
-        );
-        setOpen(true);
-
-        return;
-      }
-    }
-
     setCurrentStep(currentStep + 1);
   };
-
   const prevStep = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  // Handle form submission
   const handleSubmit = () => {
     const selectedServiceIds = Object.entries(checkedState)
       .filter(([_, isChecked]) => isChecked)
       .map(([serviceId]) => serviceId);
-
     const validChildren = children.filter(child => child.name && child.age > 0);
 
     const registrationData = {
@@ -352,11 +348,11 @@ export default function RegsiterationFormMom() {
       city: formData.city,
       postalCode: formData.postalCode,
       country: formData.country,
-      state: formData.state, // Include state in registration data
+      state: formData.state,
       dateOfBirth: formData.dateOfBirth,
       gender: formData.gender,
       agreeToTerms: formData.agreeToTerms,
-      role: UserRole.USER, // For family registration
+      role: UserRole.USER,
       children: validChildren,
       serviceIds: selectedServiceIds,
       image: uploadedImageUrl,
@@ -365,14 +361,14 @@ export default function RegsiterationFormMom() {
       paymentCardExpiry: formData.paymentCardExpiry,
       paymentCardCvv: formData.paymentCardCvv,
       savePaymentCard: formData.savePaymentCard,
-      saveForFuture: false, // Default value
-      proStatus: false, // Default value
+      saveForFuture: false,
+      proStatus: false,
     };
 
     register(registrationData);
   };
 
-  // Redirect after successful registration
+
   useEffect(() => {
     if (registrationState.isSuccess) {
       router.push('/en/login?role=mom');
@@ -381,7 +377,6 @@ export default function RegsiterationFormMom() {
       setOpen(true);
     }
   }, [registrationState.isSuccess, registrationState.error, router]);
-
   const step1 = (
     <>
       <FormHeading>Personal Information</FormHeading>
@@ -417,7 +412,6 @@ export default function RegsiterationFormMom() {
           />
         </ProfileWrapper>
       </ProfileBox>
-
       <GridBox>
         <InputHolder>
           <StyledInputLabel htmlFor='firstName'>First Name</StyledInputLabel>
@@ -430,7 +424,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='lastName'>Last Name</StyledInputLabel>
           <StyledInputField
@@ -452,7 +445,31 @@ export default function RegsiterationFormMom() {
             name='username'
             value={formData.username}
             onChange={handleChange}
+            error={formData.username.length >= 3 && isUsernameAvailable === false}
+            endAdornment={
+              formData.username.length >= 3 && (
+                <InputAdornment position="end">
+                  {isCheckingUsername ? (
+                    <CircularProgress size={20} />
+                  ) : isUsernameAvailable === true ? (
+                    <CheckCircleIcon color="success" />
+                  ) : isUsernameAvailable === false ? (
+                    <ErrorIcon color="error" />
+                  ) : null}
+                </InputAdornment>
+              )
+            }
           />
+          {formData.username.length >= 3 && isUsernameAvailable === false && (
+            <Typography color="error" variant="caption">
+              Username is already taken
+            </Typography>
+          )}
+          {formData.username.length >= 3 && isUsernameAvailable === true && (
+            <Typography color="success" variant="caption">
+              Username is available
+            </Typography>
+          )}
         </InputHolder>
 
         <InputHolder>
@@ -481,7 +498,31 @@ export default function RegsiterationFormMom() {
           value={formData.email}
           onChange={handleChange}
           fullWidth
+          error={formData.email.includes('@') && isEmailAvailable === false}
+          endAdornment={
+            formData.email.includes('@') && (
+              <InputAdornment position="end">
+                {isCheckingEmail ? (
+                  <CircularProgress size={20} />
+                ) : isEmailAvailable === true ? (
+                  <CheckCircleIcon color="success" />
+                ) : isEmailAvailable === false ? (
+                  <ErrorIcon color="error" />
+                ) : null}
+              </InputAdornment>
+            )
+          }
         />
+        {formData.email.includes('@') && isEmailAvailable === false && (
+          <Typography color="error" variant="caption">
+            Email is already registered
+          </Typography>
+        )}
+        {formData.email.includes('@') && isEmailAvailable === true && (
+          <Typography color="success" variant="caption">
+            Email is available
+          </Typography>
+        )}
       </InputHolder>
       <GridBox>
         <InputHolder>
@@ -497,7 +538,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='dateOfBirth'>
             Date Of Birth
@@ -511,7 +551,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='address'>Address</StyledInputLabel>
           <StyledInputField
@@ -523,7 +562,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='city'>City</StyledInputLabel>
           <StyledInputField
@@ -535,7 +573,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='postalCode'>Postal Code</StyledInputLabel>
           <StyledInputField
@@ -547,7 +584,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='country'>Country</StyledInputLabel>
           <StyledInputField
@@ -559,7 +595,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='state'>State/Province</StyledInputLabel>
           <StyledInputField
@@ -571,7 +606,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <InputHolder>
           <StyledInputLabel htmlFor='password'>Password</StyledInputLabel>
           <StyledInputField
@@ -581,7 +615,13 @@ export default function RegsiterationFormMom() {
             name='password'
             value={formData.password}
             onChange={handleChange}
+            error={!!formData.password && formData.password.length < 6}
           />
+          {formData.password && formData.password.length < 6 && (
+            <Typography color="error" variant="caption">
+              Password must be at least 6 characters
+            </Typography>
+          )}
         </InputHolder>
         <InputHolder>
           <StyledInputLabel htmlFor='cfmPassword'>
@@ -599,7 +639,6 @@ export default function RegsiterationFormMom() {
       </GridBox>
     </>
   );
-
   const step2 = (
     <>
       <FormHeading>Children & Service Needs</FormHeading>
@@ -684,7 +723,6 @@ export default function RegsiterationFormMom() {
         />
         Add Another Child
       </Button>
-
       <StyledInputLabel>Services Needed</StyledInputLabel>
       <GridBox>
         {services &&
@@ -720,7 +758,6 @@ export default function RegsiterationFormMom() {
       </InputHolder>
     </>
   );
-
   const step3 = (
     <>
       <FormHeading>Payment Details</FormHeading>
@@ -755,7 +792,6 @@ export default function RegsiterationFormMom() {
             onChange={handleChange}
           />
         </InputHolder>
-
         <GridBox>
           <InputHolder>
             <StyledInputLabel htmlFor='paymentCardExpiry'>
@@ -788,7 +824,6 @@ export default function RegsiterationFormMom() {
           Helper.
         </CardCaption>
       </BorderBox>
-
       <CheckFlex>
         <Checkbox
           icon={<CheckBoxOutlineBlankIcon />}
@@ -820,7 +855,7 @@ export default function RegsiterationFormMom() {
       </CheckFlex>
       <Box sx={{ marginTop: '20px', marginBottom: '20px', width: '100%' }}>
         <ReCAPTCHA
-          sitekey='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+          sitekey={recaptchaSiteKey}
           onChange={handleRecaptchaChange}
         />
         {recaptchaError && (
@@ -877,13 +912,11 @@ export default function RegsiterationFormMom() {
           {message}
         </Alert>
       </Snackbar>
-
       <RegisterationSlider highlight={currentStep} />
       <FormContainer paddingBottom='200px'>
         {currentStep === 1 && step1}
         {currentStep === 2 && step2}
         {currentStep === 3 && step3}
-
         <ButtonContainer>
           {currentStep > 1 && (
             <Button

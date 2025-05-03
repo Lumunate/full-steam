@@ -1,5 +1,6 @@
 'use client';
 import { Box, CircularProgress, Typography, Modal, Paper, Avatar } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import DashboardNotification from '@/components/dashboard-notification/DashboardNotification';
@@ -33,9 +34,11 @@ export default function Submissions() {
       }
     });
   };
+
+  const router = useRouter();
   const handleViewDocument = (documentUrl: string) => {
     if (documentUrl) {
-      setViewingDocument(documentUrl);
+      router.push(documentUrl);
     }
   };
   const handleCloseModal = () => {
@@ -87,7 +90,7 @@ export default function Submissions() {
             viewDocument={Boolean(user.governmentIdDocumentUrl || user.policeCheckDocumentUrl)}
             onButtonClick={() => handleApproval(user.id)}
             onViewDocumentClick={() => handleViewDocument(
-              user.governmentIdDocumentUrl || user.policeCheckDocumentUrl || ''
+              `users/${user.id as string}`
             )}
           />
         ))}

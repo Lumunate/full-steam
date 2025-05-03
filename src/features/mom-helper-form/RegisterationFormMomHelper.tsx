@@ -91,9 +91,10 @@ interface PackageData {
   notes?: string;
 }
 
+const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LcNbygrAAAAAD48zAGw3fsjHZtZSizUeQsJDcwi';
+
 export default function RegsiterationFormMomHelper() {
-  const [terms, setTerms] = useState(false);
-  const [privacy, setPrivacy] = useState(false);
+
   const router = useRouter();
   const { services, isLoading: servicesLoading } = useServices();
   const { uploadFile, isUploading } = useCloudinaryUpload();
@@ -1242,7 +1243,7 @@ export default function RegsiterationFormMomHelper() {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
           <ReCAPTCHA
-            sitekey='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI' // Replace with your actual site key in production
+            sitekey={recaptchaSiteKey}
             onChange={handleCaptchaChange}
           />
         </Box>
