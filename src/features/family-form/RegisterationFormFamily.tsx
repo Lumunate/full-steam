@@ -12,7 +12,6 @@ import {
   Box, 
   Typography, 
   MenuItem, 
-  Select, 
   CircularProgress,
   InputAdornment 
 } from '@mui/material';
@@ -58,6 +57,8 @@ import {
   CheckBoxTypography,
   ButtonContainer,
 } from '../../components/form/Froms.style';
+import PrivacyandPolicy from '../legal-pages/privacy-policy/PrivacyPolicy';
+import TermsAndServices from '../legal-pages/terms-service/TermService';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -108,6 +109,15 @@ export default function RegsiterationFormMom() {
       [serviceId]: !prevState[serviceId],
     }));
   };
+
+  const handleTerms = () => {
+    setTerms(!terms);
+  };
+
+  const handlePrivacy = () => {
+    setPrivacy(!privacy);
+  };
+
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [filePath, setFilePath] = useState('');
@@ -367,7 +377,6 @@ export default function RegsiterationFormMom() {
 
     register(registrationData);
   };
-
 
   useEffect(() => {
     if (registrationState.isSuccess) {

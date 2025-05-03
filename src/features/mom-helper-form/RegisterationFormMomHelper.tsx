@@ -166,6 +166,9 @@ export default function RegsiterationFormMomHelper() {
     bankAccountNumber: '',
   });
 
+  const [terms, setTerms] = useState<boolean>(false);
+  const [privacy, setPrivacy] = useState<boolean>(false);
+
   const handleTerms = () => {
     setTerms(!terms);
   };
