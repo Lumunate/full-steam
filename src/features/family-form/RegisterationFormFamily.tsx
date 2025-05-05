@@ -4,16 +4,14 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { 
-  Snackbar, 
-  Input, 
-  Alert, 
-  Checkbox, 
-  Box, 
-  Typography, 
-  MenuItem, 
+import {
+  Input,
+  Checkbox,
+  Box,
+  Typography,
+  MenuItem,
   CircularProgress,
-  InputAdornment 
+  InputAdornment
 } from '@mui/material';
 import { Gender, UserRole } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
@@ -26,6 +24,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
 import RegisterationSlider from '@/components/registeration-slider/RegisterationSlider';
+import { useSnackbar } from '@/components/snackbar';
 import { useRecaptcha } from '@/hooks/useRecaptcha';
 import { useUserRegistration } from '@/hooks/useUserRegistration';
 import { Link } from '@/i18n/routing';
@@ -71,9 +70,11 @@ interface CheckedState {
   [key: string]: boolean;
 }
 export default function RegsiterationFormMom() {
+  const router = useRouter();
+  const { showSnackbar } = useSnackbar();
+
   const [terms, setTerms] = useState(false);
   const [privacy, setPrivacy] = useState(false);
-  const router = useRouter();
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { register, registrationState } = useUserRegistration();
 
@@ -118,8 +119,6 @@ export default function RegsiterationFormMom() {
     setPrivacy(!privacy);
   };
 
-  const [message, setMessage] = useState('');
-  const [open, setOpen] = useState(false);
   const [filePath, setFilePath] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const [children, setChildren] = useState<Child[]>([
@@ -160,7 +159,7 @@ export default function RegsiterationFormMom() {
       const response = await axios.get(`/api/user/check-availability?field=username&value=${encodeURIComponent(username)}`);
 
       setIsUsernameAvailable(response.data.available);
-    } catch  {
+    } catch {
       setIsUsernameAvailable(null);
     } finally {
       setIsCheckingUsername(false);
@@ -177,7 +176,7 @@ export default function RegsiterationFormMom() {
       const response = await axios.get(`/api/user/check-availability?field=email&value=${encodeURIComponent(email)}`);
 
       setIsEmailAvailable(response.data.available);
-    } catch  {
+    } catch {
       setIsEmailAvailable(null);
     } finally {
       setIsCheckingEmail(false);
@@ -202,7 +201,7 @@ export default function RegsiterationFormMom() {
 
     return () => clearTimeout(timer);
   }, [formData.email]);
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LcNbygrAAAAAD48zAGw3fsjHZtZSizUeQsJDcwi' ;
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LcNbygrAAAAAD48zAGw3fsjHZtZSizUeQsJDcwi';
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -216,8 +215,10 @@ export default function RegsiterationFormMom() {
 
         setUploadedImageUrl(uploadedUrl);
       } catch {
-        setMessage('Failed to upload image. Please try again.');
-        setOpen(true);
+        showSnackbar({
+          type: 'error',
+          message: 'Failed to upload image. Please try again.'
+        });
       }
     }
   };
@@ -254,7 +255,7 @@ export default function RegsiterationFormMom() {
     setChildren([...children, { name: '', age: 0, specialNotes: '' }]);
   };
   const { isVerified, isVerifying, verifyRecaptcha, error: recaptchaError } = useRecaptcha();
-  
+
   const handleCheckboxToggle = (field: 'agreeToTerms' | 'savePaymentCard') => {
     setFormData(prev => ({
       ...prev,
@@ -319,18 +320,25 @@ export default function RegsiterationFormMom() {
   const nextStep = async () => {
     if (!isFormValid()) {
       if (currentStep === 1 && !/^\d{10}$/.test(formData.phoneNumber)) {
-        setMessage('Phone number must be exactly 10 digits');
+        showSnackbar({
+          type: 'error',
+          message: 'Phone number must be exactly 10 digits'
+        });
       } else {
-        setMessage('Please fill out all required fields!');
+        showSnackbar({
+          type: 'error',
+          message: 'Please fill out all required fields!'
+        });
       }
-      setOpen(true);
 
       return;
     }
 
     if (currentStep === 1 && formData.password !== formData.cfmPassword) {
-      setMessage('Passwords do not match');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Passwords do not match'
+      });
 
       return;
     }
@@ -382,8 +390,10 @@ export default function RegsiterationFormMom() {
     if (registrationState.isSuccess) {
       router.push('/en/login?role=mom');
     } else if (registrationState.error) {
-      setMessage(registrationState.error);
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: registrationState.error
+      });
     }
   }, [registrationState.isSuccess, registrationState.error, router]);
   const step1 = (
@@ -897,30 +907,6 @@ export default function RegsiterationFormMom() {
 
   return (
     <>
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={() => setOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        sx={{
-          position: 'fixed',
-          top: '20%',
-          right: '20%',
-        }}
-      >
-        <Alert
-          severity='error'
-          variant='filled'
-          sx={{
-            width: '100%',
-            fontSize: '25px',
-            padding: '15px',
-            marginTop: ' 50%',
-          }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
       <RegisterationSlider highlight={currentStep} />
       <FormContainer paddingBottom='200px'>
         {currentStep === 1 && step1}

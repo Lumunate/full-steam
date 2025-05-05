@@ -7,12 +7,9 @@ import ErrorIcon from '@mui/icons-material/Error';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {
   Paper,
-  Snackbar,
-  Alert,
   Checkbox,
   MenuItem,
   Box,
-  Select,
   Table,
   TableContainer,
   TableHead,
@@ -35,6 +32,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import ApplicationSatus from '@/components/application-status/ApplicationStatus';
 import { Button } from '@/components/buttons/Button.style';
 import RegisterationSlider from '@/components/registeration-slider/RegisterationSlider';
+import { useSnackbar } from '@/components/snackbar';
 import { useRecaptcha } from '@/hooks/useRecaptcha';
 import { useServices } from '@/hooks/useServices';
 import { useUserRegistration } from '@/hooks/useUserRegistration';
@@ -96,14 +94,14 @@ const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LcNbygr
 export default function RegsiterationFormMomHelper() {
 
   const router = useRouter();
+  const { showSnackbar } = useSnackbar();
+
   const { services, isLoading: servicesLoading } = useServices();
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { verifyRecaptcha, isVerified } = useRecaptcha();
   const { register, registrationState } = useUserRegistration();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [message, setMessage] = useState('');
-  const [open, setOpen] = useState(false);
   const [profilePreview, setProfilePreview] = useState('');
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
@@ -330,8 +328,10 @@ export default function RegsiterationFormMomHelper() {
       newPackage.serviceIds.length === 0 ||
       newPackage.price <= 0
     ) {
-      setMessage('Please fill all package details');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Please fill all package details'
+      });
 
       return;
     }
@@ -392,11 +392,15 @@ export default function RegsiterationFormMomHelper() {
         break;
       }
 
-      setMessage('Document uploaded successfully');
-      setOpen(true);
+      showSnackbar({
+        type: 'info',
+        message: 'Document uploaded successfully'
+      });
     } catch {
-      setMessage('Failed to upload file');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Failed to upload file'
+      });
     }
   };
 
@@ -412,15 +416,19 @@ export default function RegsiterationFormMomHelper() {
   // Form submission handler
   const handleSubmit = () => {
     if (!isCaptchaVerified) {
-      setMessage('Please verify you are not a robot');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Please verify you are not a robot'
+      });
 
       return;
     }
 
     if (!formData.agreeToTerms) {
-      setMessage('Please agree to the terms and conditions');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Please agree to the terms and conditions'
+      });
 
       return;
     }
@@ -456,26 +464,30 @@ export default function RegsiterationFormMomHelper() {
       // Register user
       register(registrationData);
     } catch {
-      setMessage('Registration failed. Please try again.');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Registration failed. Please try again.'
+      });
     }
   };
 
   // Redirect to login on successful registration
   useEffect(() => {
     if (registrationState.isSuccess) {
-      setMessage('Registration successful! Redirecting to login...');
-      setOpen(true);
+      showSnackbar({
+        type: 'success',
+        message: 'Registration successful! Redirecting to login...'
+      });
 
       // Redirect after delay
       setTimeout(() => {
         router.push('/en/login');
       }, 2000);
     } else if (registrationState.error) {
-      setMessage(
-        registrationState.error || 'Registration failed. Please try again.',
-      );
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: registrationState.error || 'Registration failed. Please try again.'
+      });
     }
   }, [registrationState, router]);
 
@@ -513,8 +525,10 @@ export default function RegsiterationFormMomHelper() {
   // Step navigation
   const nextStep = () => {
     if (!isFormValid()) {
-      setMessage('Please fill all required fields correctly!');
-      setOpen(true);
+      showSnackbar({
+        type: 'error',
+        message: 'Please fill all required fields correctly!'
+      });
 
       return;
     }
@@ -1270,25 +1284,6 @@ export default function RegsiterationFormMomHelper() {
 
   return (
     <>
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={() => setOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert
-          severity={message.includes('success') ? 'success' : 'error'}
-          variant='filled'
-          sx={{
-            width: '100%',
-            fontSize: '16px',
-            padding: '15px',
-          }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
-
       <RegisterationSlider highlight={currentStep} />
 
       <FormContainer paddingBottom='200px'>
