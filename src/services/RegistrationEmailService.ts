@@ -20,8 +20,8 @@ export async function sendHelperRegistrationEmail(
       to: email,
       subject: 'Welcome to Full Steam Ahead - Your Mom Helper Registration',
       html: html,
-      from: 'onboarding@resend.dev', 
-      fromName: 'Full Steam Ahead',
+      from: process.env.EMAIL_SENDER, 
+      fromName: process.env.EMAIL_SENDER_NAME,
       replyTo: 'no-reply@example.com',
     });
 
@@ -51,8 +51,8 @@ export async function sendUserRegistrationEmail(
       to: email,
       subject: 'Welcome to Full Steam Ahead - Your Family Account is Ready',
       html: html,
-      from: 'onboarding@resend.dev', 
-      fromName: 'Full Steam Ahead',
+      from: process.env.EMAIL_SENDER, 
+      fromName: process.env.EMAIL_SENDER_NAME,
       replyTo: 'no-reply@example.com',
     });
 

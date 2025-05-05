@@ -5,7 +5,7 @@ const emailConfig = {
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
 
   resend: {
-    defaultFrom: 'onboarding@resend.dev', // Special Resend test domain
+    defaultFrom: process.env.EMAIL_SENDER,
     apiKey: process.env.RESEND_API_KEY || '',
     testMode: false 
   },

@@ -53,8 +53,8 @@ export async function sendAcknowledgementEmail(email: string, data: FeedbackAckn
       to: email,
       subject: 'Thank you for your feedback - Full Steam Ahead',
       html: html,
-      from: 'onboarding@resend.dev', 
-      fromName: 'Full Steam Ahead',
+      from: process.env.EMAIL_SENDER, 
+      fromName: process.env.EMAIL_SENDER_NAME,
       replyTo: 'no-reply@example.com',
     });
 
@@ -76,10 +76,10 @@ export async function sendClientRecieveEmail(data: NewFeedbackNotificationProps)
     const html = await render(NewFeedbackNotificationTemplate(data));
 
     const result = await emailService.sendRawEmail({
-      to: 'mumair299792458u@gmail.com', 
+      to: process.env.REPLY_TO_EMAIL!, 
       subject: 'New Feedback Form Submission',
       html: html,
-      from: 'onboarding@resend.dev',
+      from: process.env.EMAIL_SENDER,
       fromName: 'Full Steam Ahead Feedback',
       replyTo: 'no-reply@example.com',
     });

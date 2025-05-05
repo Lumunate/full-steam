@@ -50,9 +50,9 @@ async function sendAcknowledgementEmail(email: string, data: ContactAcknowledgme
       to: email,
       subject: 'Thank you for contacting Full Steam Ahead',
       html: html,
-      from: 'onboarding@resend.dev', 
-      fromName: 'Full Steam Ahead',
-      replyTo: 'mumair299792458u@gmail.com',
+      from: process.env.EMAIL_SENDER, 
+      fromName: process.env.EMAIL_SENDER_NAME,
+      replyTo: process.env.REPLY_TO_EMAIL,
     });
 
     if (!result.success) {
@@ -73,12 +73,12 @@ async function sendClientRecieveEmail(data: NewContactNotificationProps): Promis
     const html = await render(NewContactNotificationTemplate(data));
 
     const result = await emailService.sendRawEmail({
-      to: 'mumair299792458u@gmail.com', 
+      to: process.env.REPLY_TO_EMAIL!, 
       subject: 'New Contact Form Submission',
       html: html,
-      from: 'onboarding@resend.dev', 
+      from: process.env.EMAIL_SENDER, 
       fromName: 'Full Steam Ahead Contact',
-      replyTo: 'mumair299792458u@gmail.com',
+      replyTo: process.env.REPLY_TO_EMAIL,
     });
 
     if (!result.success) {

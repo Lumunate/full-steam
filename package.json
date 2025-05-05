@@ -12,6 +12,7 @@
     "lint:fix": "next lint --fix",
     "check": "next lint && tsc --noEmit",
     "preview": "next build && next start",
+    "email": "email dev",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
