@@ -53,7 +53,7 @@ export default function ContactPage() {
             <ContactLinksHead>
               <Box sx={{ mb: '20px' }}>
                 <ContactStyledLinkOne href={'tel:support@fullst3am.com'}>
-                  +1 234-567-890
+                (647) 792-7762
                 </ContactStyledLinkOne>
                 <ContactStyledLinkOne href={'mailto:support@fullst3am.com'}>
                   <Image
@@ -75,7 +75,7 @@ export default function ContactPage() {
                 }}
                 href={'#'}
               >
-                Cambridge, UK
+                Toronto, ON Canada
               </ContactStyledLinkOne>
             </ContactLinksHead>
           </Grid>
