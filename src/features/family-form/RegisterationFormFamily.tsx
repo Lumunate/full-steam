@@ -70,12 +70,20 @@ interface Child {
 interface CheckedState {
   [key: string]: boolean;
 }
+interface RemoveChildFunction {
+  (indexToRemove: number): void;
+}
 export default function RegsiterationFormMom() {
+
   const [terms, setTerms] = useState(false);
   const [privacy, setPrivacy] = useState(false);
   const router = useRouter();
   const { uploadFile, isUploading } = useCloudinaryUpload();
   const { register, registrationState } = useUserRegistration();
+
+  const removeChild: RemoveChildFunction = (indexToRemove) => {
+    setChildren(prevChildren => prevChildren.filter((_, i) => i !== indexToRemove));
+  };
 
   const { data: services } = useQuery<Service[]>({
     queryKey: ['services'],
@@ -430,6 +438,7 @@ export default function RegsiterationFormMom() {
             id='firstName'
             name='firstName'
             value={formData.firstName}
+            placeholder='Charlene'
             onChange={handleChange}
           />
         </InputHolder>
@@ -437,6 +446,7 @@ export default function RegsiterationFormMom() {
           <StyledInputLabel htmlFor='lastName'>Last Name</StyledInputLabel>
           <StyledInputField
             disableUnderline
+            placeholder='Reed'
             type='text'
             id='lastName'
             name='lastName'
@@ -452,6 +462,7 @@ export default function RegsiterationFormMom() {
             type='text'
             id='username'
             name='username'
+            placeholder='charlenereed'
             value={formData.username}
             onChange={handleChange}
             error={formData.username.length >= 3 && isUsernameAvailable === false}
@@ -504,6 +515,7 @@ export default function RegsiterationFormMom() {
           type='email'
           id='email'
           name='email'
+          placeholder='example@gmail.com'
           value={formData.email}
           onChange={handleChange}
           fullWidth
@@ -542,6 +554,7 @@ export default function RegsiterationFormMom() {
             disableUnderline
             type='text'
             id='phoneNumber'
+            placeholder='charlenereed@gmail.com '
             name='phoneNumber'
             value={formData.phoneNumber}
             onChange={handleChange}
@@ -567,6 +580,7 @@ export default function RegsiterationFormMom() {
             type='text'
             id='address'
             name='address'
+            placeholder='San Jose, California, USA'
             value={formData.address}
             onChange={handleChange}
           />
@@ -578,6 +592,7 @@ export default function RegsiterationFormMom() {
             type='text'
             id='city'
             name='city'
+            placeholder='San Jose'
             value={formData.city}
             onChange={handleChange}
           />
@@ -589,6 +604,7 @@ export default function RegsiterationFormMom() {
             type='text'
             id='postalCode'
             name='postalCode'
+            placeholder='12345'
             value={formData.postalCode}
             onChange={handleChange}
           />
@@ -600,6 +616,7 @@ export default function RegsiterationFormMom() {
             type='text'
             id='country'
             name='country'
+            placeholder='USA'
             value={formData.country}
             onChange={handleChange}
           />
@@ -611,6 +628,7 @@ export default function RegsiterationFormMom() {
             type='text'
             id='state'
             name='state'
+            placeholder='California'
             value={formData.state}
             onChange={handleChange}
           />
@@ -623,6 +641,7 @@ export default function RegsiterationFormMom() {
             id='password'
             name='password'
             value={formData.password}
+            placeholder='**********'
             onChange={handleChange}
             error={!!formData.password && formData.password.length < 6}
           />
@@ -641,6 +660,7 @@ export default function RegsiterationFormMom() {
             type='password'
             id='cfmPassword'
             name='cfmPassword'
+            placeholder='**********'
             value={formData.cfmPassword}
             onChange={handleChange}
           />
@@ -658,51 +678,57 @@ export default function RegsiterationFormMom() {
 
       {children.map((child, index) => (
         <GridBoxBordered key={index} style={{ marginBottom: '20px' }}>
-          <InputHolder
-            sx={{
-              '@media (max-width: 600px)': {
-                gridColumn: 'span 2',
-              },
-            }}
-          >
-            <StyledInputLabel htmlFor={`childName-${index}`}>
+          <Box sx={{display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between'}}>
+
+            <StyledInputLabel sx={{margin: '0'}}>
+            Child {(index+1)}
+            </StyledInputLabel>
+            <Button onClick={() => removeChild(index)} sx={{color: '#005782' , boxShadow: '0px 4px 14px 0px #0000002B' , border: 'none', fontWeight: 500}}>
+            Remove
+            </Button>
+          </Box>
+          <Box sx={{display: 'flex' , gap: '10px'}}>
+
+            <InputHolder
+              sx={{width: '100%'}}
+            >
+              <StyledInputLabel htmlFor={`childName-${index}`}>
               Name
-            </StyledInputLabel>
-            <StyledInputField
-              disableUnderline
-              type='text'
-              id={`childName-${index}`}
-              name={`childName-${index}`}
-              value={child.name}
-              onChange={e => updateChild(index, 'name', e.target.value)}
-            />
-          </InputHolder>
-          <InputHolder
-            sx={{
-              '@media (max-width: 600px)': {
-                gridColumn: 'span 2',
-              },
-            }}
-          >
-            <StyledInputLabel htmlFor={`childAge-${index}`}>
+              </StyledInputLabel>
+              <StyledInputField
+                disableUnderline
+                type='text'
+                id={`childName-${index}`}
+                name={`childName-${index}`}
+                value={child.name}
+                placeholder={`Child Name ${index+1}`}
+                onChange={e => updateChild(index, 'name', e.target.value)}
+              />
+            </InputHolder>
+            <InputHolder
+              sx={{width: '100%'}}
+            >
+              <StyledInputLabel htmlFor={`childAge-${index}`}>
               Age
-            </StyledInputLabel>
-            <StyledInputField
-              disableUnderline
-              type='number'
-              id={`childAge-${index}`}
-              name={`childAge-${index}`}
-              value={child.age}
-              onChange={e => updateChild(index, 'age', e.target.value)}
-            />
-          </InputHolder>
-          <InputHolder style={{ gridColumn: '1 / span 2' }}>
+              </StyledInputLabel>
+              <StyledInputField
+                disableUnderline
+                type='number'
+                id={`childAge-${index}`}
+                name={`childAge-${index}`}
+                value={child.age}
+                onChange={e => updateChild(index, 'age', e.target.value)}
+              />
+            </InputHolder>
+          </Box>
+          <InputHolder >
             <StyledInputLabel htmlFor={`specialNotes-${index}`}>
               Special Notes
             </StyledInputLabel>
             <StyledInputField
               disableUnderline
               type='text'
+              placeholder='Allergies, special needs interests, etc'
               id={`specialNotes-${index}`}
               name={`specialNotes-${index}`}
               value={child.specialNotes || ''}
@@ -762,6 +788,7 @@ export default function RegsiterationFormMom() {
           type='text'
           id='specialNotes2'
           name='specialNotes2'
+          placeholder='Add Notes'
           multiline
         />
       </InputHolder>
@@ -783,6 +810,7 @@ export default function RegsiterationFormMom() {
             disableUnderline
             type='text'
             id='paymentCardName'
+            placeholder='Full Name'
             name='paymentCardName'
             value={formData.paymentCardName}
             onChange={handleChange}
@@ -794,6 +822,7 @@ export default function RegsiterationFormMom() {
           </StyledInputLabel>
           <StyledInputField
             disableUnderline
+            placeholder='1234567890'
             type='text'
             id='paymentCardNumber'
             name='paymentCardNumber'
@@ -808,7 +837,7 @@ export default function RegsiterationFormMom() {
             </StyledInputLabel>
             <StyledInputField
               disableUnderline
-              type='text'
+              type='date'
               id='paymentCardExpiry'
               name='paymentCardExpiry'
               placeholder='MM/YY'
@@ -823,6 +852,7 @@ export default function RegsiterationFormMom() {
               type='number'
               id='paymentCardCvv'
               name='paymentCardCvv'
+              placeholder='123'
               value={formData.paymentCardCvv}
               onChange={handleChange}
             />
@@ -946,6 +976,7 @@ export default function RegsiterationFormMom() {
               fontSize='18px'
               borderRadius='15px'
               height='64px'
+              sx={{marginLeft: 'auto'}}
             >
               Next
             </Button>

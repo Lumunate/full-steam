@@ -15,7 +15,7 @@ export const DashBoardOptions = styled(DashBoardNav)({
   gap: '24px',
   marginTop: '55px',
   borderRight: 'none',
-  paddingTop: 0,
+  padding: 0,
 });
 
 export const DashBoardOption = styled(Box)({

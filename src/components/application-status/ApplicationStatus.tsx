@@ -36,7 +36,8 @@ const ApplicationSatus: React.FC<ApplicationSatusProps> = ({
         href={!isMom ? '/login?role=mom-helper' : '/login?role=mom'}
         style={{ marginTop: '19px' }}
       >
-        <Button padding='9px 59px' width='280px'>
+        <Button padding='9px 59px' width='280px' sx={{color : '#005782', height: '44px' , boxShadow: '0px 4px 14px 0px #0000002B' , border: 'none'
+        }} >
           Login to your Account
         </Button>
       </Link>

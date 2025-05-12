@@ -8,7 +8,7 @@ import SectionMainHeading from '@/components/section-main-heading/SectionMainHea
 import SectionHeading from '@/features/components/section-heading/SectionHeading';
 
 import { ServiceImage } from './NewService.style';
-import { NewServiceWrapper, HeroDesriptionHolder } from './NewService.style';
+import { NewServiceWrapper, HeroDesriptionHolder, PerfectDaycareImage } from './NewService.style';
 import { ServiceCheckList } from './NewService.style';
 import { SectionDescriptionText } from '../Home.style';
 
@@ -72,9 +72,9 @@ const NewService: React.FC = () => {
             </HeroDesriptionHolder>
           </FadeIn>
 
-          <FadeIn direction='right' distance={200} duration={1.5}>
+          <FadeIn width={60} direction='right' distance={200} duration={1.5}>
 
-            <Image
+            <PerfectDaycareImage
               src='/home/new-service/daycare-spot.png'
               alt='hero-image'
               width={615}

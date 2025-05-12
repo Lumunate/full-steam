@@ -10,6 +10,7 @@ interface ButtonProps extends ButtonBaseProps {
   width?: string;
   height?: string;
   padding?: string;
+  color?: string;
 }
 
 export const Button = styled(ButtonBase, {

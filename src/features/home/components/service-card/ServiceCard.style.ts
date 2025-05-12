@@ -50,7 +50,7 @@ export const CardImageContainer = styled(Box)(() => ({
 }));
 
 export const ArrowImage = styled(Image)(({theme}) => ({
-
+  zIndex:5,
   [theme.breakpoints.down(900)]:{
     width: '42px',
     height: '42px'

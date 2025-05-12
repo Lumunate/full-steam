@@ -93,9 +93,10 @@ const ActionToday: React.FC = () => {
               >
                 <Image
                   src='/about/action-today/medical-care.svg'
-                  height={80}
-                  width={79}
+                  height={60}
+                  width={60}
                   alt='Family of 4'
+                  style={{objectFit: 'cover'}}
                 />
 
                 <HelperTypography>

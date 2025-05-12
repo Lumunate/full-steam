@@ -20,9 +20,9 @@ const PerfectHelper: React.FC = () => {
   return (
     <>
       <PerfectHelperWrapper>
-        <PerfectHelperOverlay>
-          <AppContentWrapper>
-            <ContentWrapper>
+        <PerfectHelperOverlay sx={{display: 'flex' , alignItems: 'center'}}>
+          <AppContentWrapper  >
+            <ContentWrapper sx={{paddingTop: 0}}>
               <SectionMainHeading
                 text='Ready to Find Your Perfect Helper?'
                 color='white'

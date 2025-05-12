@@ -1,5 +1,6 @@
 'use client';
 
+import { Link as SocialLink } from '@mui/material';
 import Image from 'next/image';
 import { FC } from 'react';
 
@@ -14,12 +15,12 @@ const Footer: FC = () => {
     {
       heading: 'Services',
       links: [
-        { text: 'Child Care', href: '/child-care' },
-        { text: 'Meal Preparation', href: '/meal-preparation' },
-        { text: 'Housekeeping', href: '/housekeeping' },
-        { text: 'Tutoring', href: '/tutoring' },
-        { text: 'Elderly Check-in', href: '/elderly-check-in' },
-        { text: 'Daycare Matching', href: '/daycare-matching' },
+        { text: 'Child Care', href: '/#services' },
+        { text: 'Meal Preparation', href: '/#services' },
+        { text: 'Housekeeping', href: '/#services' },
+        { text: 'Tutoring', href: '/#services' },
+        { text: 'Elderly Check-in', href: '/#services' },
+        { text: 'Daycare Matching', href: '/#services' },
       ],
     },
     {
@@ -85,29 +86,47 @@ const Footer: FC = () => {
               </FooterCopyRight>
               <FooterMediaIcons>
                 <FooterMediaItem>
-                  <Image
-                    src={'/footer/twitter.svg'}
-                    width={26}
-                    height={26}
-                    alt='twitter'
-                  />
+                  <SocialLink href='https://www.twitter.com'>
+
+                    <Image
+                      src={'/footer/x.svg'}
+                      width={26}
+                      height={26}
+                      alt='twitter'
+                    />
+                  </SocialLink>
                 </FooterMediaItem>
                 <FooterMediaItem>
-                  <Image
-                    src={'/footer/linked-in.svg'}
-                    width={22}
-                    height={22}
-                    alt='linked-in'
-                  />
+                  <SocialLink href='https://www.facebook.com'>
+                    <Image
+                      src={'/footer/facebook.svg'}
+                      width={22}
+                      height={22}
+                      alt='linked-in'
+                    />
+                  </SocialLink>
                 </FooterMediaItem>
                 <FooterMediaItem>
-                  <Image
-                    src={'/footer/github.svg'}
-                    width={22}
-                    height={22}
-                    alt='github'
-                  />
+                  <SocialLink href='https://www.instagram.com'>
+                    <Image
+                      src={'/footer/instagram.svg'}
+                      width={22}
+                      height={22}
+                      alt='linked-in'
+                    />
+                  </SocialLink>
                 </FooterMediaItem>
+                <FooterMediaItem>
+                  <SocialLink href='https://www.linkedin.com'>
+                    <Image
+                      src={'/footer/linked-in.svg'}
+                      width={22}
+                      height={22}
+                      alt='linked-in'
+                    />
+                  </SocialLink>
+                </FooterMediaItem>
+                
               </FooterMediaIcons>
             </FooterLower>
           </FooterWrapper>

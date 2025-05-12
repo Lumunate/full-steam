@@ -139,3 +139,7 @@ export const ServiceImage =styled(Image)(({theme}) => ({
   }
 
 }));
+
+export const PerfectDaycareImage = styled(Image)(({theme})=>({
+  width: '100%'
+}));

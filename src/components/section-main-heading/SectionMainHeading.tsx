@@ -1,9 +1,11 @@
 'use client';
+import { Typography } from '@mui/material';
 
 import {
   MainHeadingSpan,
   MainHeadingTypography,
 } from './SectionMainHeading.style';
+
 interface SectionHeadingProps {
   text: string;
   span?: string;
@@ -30,7 +32,10 @@ const SectionMainHeading: React.FC<SectionHeadingProps> = ({
     >
       {text}
       <MainHeadingSpan variant='caption'>{span}</MainHeadingSpan>
-      {text2}
+      
+      <MainHeadingTypography>
+        {text2}
+      </MainHeadingTypography>
     </MainHeadingTypography>
   );
 };

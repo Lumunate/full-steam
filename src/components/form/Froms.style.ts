@@ -164,9 +164,6 @@ export const CertificateStyledInputLabel = styled(StyledInputLabel)({
 });
 
 export const GridBoxBordered = styled(BorderBox)(({theme}) => ({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: '10px',
   
 }));
 
