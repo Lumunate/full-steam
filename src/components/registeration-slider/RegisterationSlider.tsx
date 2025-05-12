@@ -1,5 +1,7 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import {
   SliderBox,
   Slider,
@@ -8,23 +10,31 @@ import {
   SliderLine,
   SelectedTypography,
 } from './RegisterationSlider.style';
-
 interface RegisterationSliderProps {
   highlight: number;
 }
 
-const sliderDetails = [
+const sliderDetailsMomHelper = [
   'Personal Information',
   'Qualification',
+  'Payment Details',
+];
+const sliderDetailsMom = [
+  'Personal Information',
+  'Services Needed',
   'Payment Details',
 ];
 
 const RegisterationSlider: React.FC<RegisterationSliderProps> = ({
   highlight,
 }) => {
+
+  const pathname = usePathname();
+  const isMomPage = pathname.includes('registeration-mom');
+
   return (
     <SliderBox>
-      {sliderDetails.map((slider, index) => (
+      {(isMomPage ? sliderDetailsMom : sliderDetailsMomHelper).map((slider, index) => (
         <>
           {highlight === index + 1 ? (
             <Slider key={index}>

@@ -15,9 +15,16 @@ export const AnalysticsCardBox = styled(Box)({
 export const AnalysticCard = styled(Box)({
   borderRadius: '28px',
   boxShadow: '0px 16px 24px 0px #0000000F',
+  
   padding: '40px 24px',
   flex: 1,
-  maxWidth: '25%'
+  maxWidth: '25%',
+  border: '1px solid white',
+  transition: 'all .3s ease',
+  '&:hover':{
+    transition: 'all .3s ease',
+    border: '1px solid #E5E5E5'
+  }
 
 });
 

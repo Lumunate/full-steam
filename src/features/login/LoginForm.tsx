@@ -131,6 +131,7 @@ export default function LoginForm() {
             disableUnderline
             type='email'
             id='email'
+            placeholder='charlenereed@gmail.com '
             fullWidth
             error={!!errors.email}
             {...register('email')}
@@ -144,6 +145,7 @@ export default function LoginForm() {
             id='password'
             fullWidth
             disableUnderline
+            placeholder='*********'
             error={!!errors.password}
             {...register('password')}
           />

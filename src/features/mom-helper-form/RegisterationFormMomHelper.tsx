@@ -581,6 +581,8 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='firstName'
             name='firstName'
+            
+            placeholder='Charlene'
             value={formData.firstName}
             onChange={handleInputChange}
           />
@@ -593,6 +595,7 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='lastName'
             name='lastName'
+            placeholder='Reed'
             value={formData.lastName}
             onChange={handleInputChange}
           />
@@ -605,6 +608,7 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='username'
             name='username'
+            placeholder='Charleen Reed'
             value={formData.username}
             onChange={handleInputChange}
             error={
@@ -643,6 +647,7 @@ export default function RegsiterationFormMomHelper() {
             type='email'
             id='email'
             name='email'
+            placeholder='example@gmail.com'
             value={formData.email}
             onChange={handleInputChange}
             error={formData.email.includes('@') && isEmailAvailable === false}
@@ -678,6 +683,7 @@ export default function RegsiterationFormMomHelper() {
             disableUnderline
             type='password'
             id='password'
+            placeholder='********'
             name='password'
             value={formData.password}
             onChange={handleInputChange}
@@ -698,6 +704,7 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='phoneNumber'
             name='phoneNumber'
+            placeholder='(123) 9192836287'
             value={formData.phoneNumber}
             onChange={handleInputChange}
             inputProps={{ maxLength: 10 }}
@@ -733,6 +740,7 @@ export default function RegsiterationFormMomHelper() {
           <StyledInputField
             disableUnderline
             type='text'
+            placeholder='San Jose, California, USA'
             id='address'
             name='address'
             value={formData.address}
@@ -744,6 +752,7 @@ export default function RegsiterationFormMomHelper() {
           <StyledInputLabel htmlFor='city'>City</StyledInputLabel>
           <StyledInputField
             disableUnderline
+            placeholder='San Jose'
             type='text'
             id='city'
             name='city'
@@ -756,6 +765,7 @@ export default function RegsiterationFormMomHelper() {
           <StyledInputLabel htmlFor='postalCode'>Postal Code</StyledInputLabel>
           <StyledInputField
             disableUnderline
+            placeholder='12345'
             type='text'
             id='postalCode'
             name='postalCode'
@@ -768,6 +778,7 @@ export default function RegsiterationFormMomHelper() {
           <StyledInputLabel htmlFor='country'>Country</StyledInputLabel>
           <StyledInputField
             disableUnderline
+            placeholder='USA'
             type='text'
             id='country'
             name='country'
@@ -775,24 +786,25 @@ export default function RegsiterationFormMomHelper() {
             onChange={handleInputChange}
           />
         </InputHolder>
+        <InputHolder>
+          <StyledInputLabel htmlFor='state'>State/Province</StyledInputLabel>
+          <StyledInputField
+            disableUnderline
+            placeholder='California'
+            type='text'
+            id='state'
+            name='state'
+            value={formData.state}
+            onChange={handleInputChange}
+          />
+        </InputHolder>
       </GridBox>
-
-      <InputHolder>
-        <StyledInputLabel htmlFor='state'>State/Province</StyledInputLabel>
-        <StyledInputField
-          disableUnderline
-          type='text'
-          id='state'
-          name='state'
-          value={formData.state}
-          onChange={handleInputChange}
-        />
-      </InputHolder>
 
       <InputHolder>
         <StyledInputLabel htmlFor='shortBio'>Short Bio</StyledInputLabel>
         <StyledInputField
           disableUnderline
+          placeholder='Short Description about yourself...'
           type='text'
           id='shortBio'
           name='shortBio'
@@ -1172,6 +1184,7 @@ export default function RegsiterationFormMomHelper() {
           type='email'
           id='eTransferEmail'
           name='eTransferEmail'
+          placeholder='example@gmail.com'
           value={formData.eTransferEmail}
           onChange={handleInputChange}
         />
@@ -1188,6 +1201,7 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='bankTransitNumber'
             name='bankTransitNumber'
+            placeholder='1234'
             value={formData.bankTransitNumber}
             onChange={handleInputChange}
           />
@@ -1202,6 +1216,7 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='bankInstitutionNumber'
             name='bankInstitutionNumber'
+            placeholder='1234'
             value={formData.bankInstitutionNumber}
             onChange={handleInputChange}
           />
@@ -1216,6 +1231,7 @@ export default function RegsiterationFormMomHelper() {
             type='text'
             id='bankAccountNumber'
             name='bankAccountNumber'
+            placeholder='1234'
             value={formData.bankAccountNumber}
             onChange={handleInputChange}
           />
@@ -1234,17 +1250,17 @@ export default function RegsiterationFormMomHelper() {
           />
           <CheckBoxTypography sx={{ display: 'flex' }}>
             I agree to the
-            <Typography onClick={handleTerms}>
+            <Typography style={{cursor: 'pointer'}} onClick={handleTerms}>
               &nbsp;Terms of Service
             </Typography>
             &nbsp; and
-            <Typography onClick={handlePrivacy}>
+            <Typography style={{cursor: 'pointer'}} onClick={handlePrivacy}>
               &nbsp;Privacy Policy
             </Typography>
           </CheckBoxTypography>
         </CheckFlex>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 1 }}>
           <ReCAPTCHA
             sitekey={recaptchaSiteKey}
             onChange={handleCaptchaChange}
@@ -1318,6 +1334,7 @@ export default function RegsiterationFormMomHelper() {
               borderRadius='15px'
               height='64px'
               disabled={!isFormValid()}
+              sx={{marginLeft: 'auto'}}
             >
               Next
             </Button>

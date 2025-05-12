@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
                 </ButtonsContianer>
                 <ButtonsGrid>
                   {specialButtons.map((button, index) => (
-                    <SpecialButton key={index} text={button} />
+                    <SpecialButton arrow={false} key={index} text={button} />
                   ))}
                 </ButtonsGrid>
               </HeroDesriptionHolder>
@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
               />
               <StatHolder
                 text1='500+ Families'
-                text2='Trusted Us'
+                text2='Trust Us'
                 imgSrc='/home/user-square.svg'
                 top={75}
                 right={-5}

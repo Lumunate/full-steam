@@ -10,6 +10,7 @@ interface SectionHeadingProps {
   position?: boolean;
   index?: number;
   buttonBox?: boolean;
+  arrow?: boolean;
 }
 
 const SpecialButton: React.FC<SectionHeadingProps> = ({
@@ -17,10 +18,11 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
   position = false,
   index = 0,
   buttonBox,
+  arrow = true
 }) => {
   return (
     <SpecialBtnAfter index={index} position={position as any}>
-      {buttonBox &&  index % 2 === 1 ? (
+      { buttonBox &&  index % 2 === 1 ? (
         <Image
           alt='Button Icon'
           src='/icons/button-circle.svg'
@@ -50,12 +52,14 @@ const SpecialButton: React.FC<SectionHeadingProps> = ({
           />
           {text}
         </Box>
+        {arrow &&
         <Image
           src='/specialButton/arrow-up.svg'
           alt='hero-image'
           width={18}
           height={18}
         />
+        }
       </SpecialButtonContainer>
       {buttonBox &&  index % 2 === 0 ? (
         <Image

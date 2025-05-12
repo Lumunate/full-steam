@@ -47,7 +47,7 @@ const cards = [
     heading: 'Daycare Matching',
     description:
       'Find the perfect daycare spot for your child through our specialized matching service.',
-    imgSrc: '/home/service-card/daycare-matching.png',
+    imgSrc: '/home/service-card/chidWithWomen.svg',
     background: '#A4D2FFB2',
   },
   {
@@ -60,29 +60,29 @@ const cards = [
   {
     heading: 'Bringing in your Amazon packages',
     description:
-      'Compassionate assistance and regular check-ins for elderly family members, providing peace of mind.',
-    imgSrc: '/home/service-card/elderly.png',
+      'Out when delivery arrives? Helpers can bring it in!',
+    imgSrc: '/home/service-card/deliveryMan.svg',
     background: '#DEA2C6B2',
   },
   {
     heading: 'Water my plants',
     description:
-      'Compassionate assistance and regular check-ins for elderly family members, providing peace of mind.',
-    imgSrc: '/home/service-card/pet-minding.png',
+      'We keep your plants healthy and hydrated—indoors or out.',
+    imgSrc: '/home/service-card/womenWithWateringPlant.svg',
     background: '#DEA2C6B2',
   },
   {
     heading: 'Taking out the rubbish/trash',
     description:
-      'Find the perfect daycare spot for your child through our specialized matching service.',
-    imgSrc: '/home/service-card/daycare-matching.png',
+      'We handle your pick-up days for you.',
+    imgSrc: '/home/service-card/guyTrash.svg',
     background: '#B5BAFEB2',
   },
   {
-    heading: 'Snow shoveling',
+    heading: 'Yard Help',
     description:
-      'Caring attention for your furry family members, including feeding, walking, and playtime.',
-    imgSrc: '/home/service-card/pet-minding.png',
+      'From weeding to light clean-ups, we keep your yard neat and tidy.',
+    imgSrc: '/home/service-card/womenWithSpade.svg',
     background: '#B5BAFEB2',
   },
 ];
@@ -90,7 +90,7 @@ const cards = [
 const Services: React.FC = () => {
   return (
     <>
-      <AppContentWrapper>
+      <AppContentWrapper id='services'>
 
         <ServiceWrapper>
           <FadeIn direction='up' distance={50} duration={1.5} >

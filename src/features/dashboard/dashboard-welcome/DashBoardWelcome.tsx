@@ -2,6 +2,7 @@
 
 import Avatar from '@mui/material/Avatar';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/components/buttons/Button.style';
@@ -36,6 +37,8 @@ export default function DashBoardWelcome() {
   // Get current user data
   const [logout, setLogout] = useState(false);
   const { user, isLoading } = useCurrentUser();
+  const pathname = usePathname();
+  const isMomHelper = pathname.includes('mom-helper');
 
   const handleLogout = () =>{
     setLogout(!logout);
@@ -61,7 +64,7 @@ export default function DashBoardWelcome() {
       <DashBoardWelcomeBox>
         <DashBoardHeading>Dashboard</DashBoardHeading>
         <DashBoardWelcomeControls>
-          <DashBoardSearchInputBox>
+          {/* <DashBoardSearchInputBox>
             <Image
               src='/dashboard/magnifying-glass.svg'
               alt='search-icon'
@@ -72,16 +75,18 @@ export default function DashBoardWelcome() {
               disableUnderline
               placeholder='Search for something'
             />
-          </DashBoardSearchInputBox>
+          </DashBoardSearchInputBox> */}
+          {isMomHelper && 
           <Button special width='200px'>
-            Upgrade to Majordomo
+            Apply For Pro Status
           </Button>
-          <DashBoardSettings
+          }
+          {/* <DashBoardSettings
             src='/dashboard/welcome-section/settings.svg'
             alt='Notification Icon'
             height={50}
             width={50}
-          />
+          /> */}
           <DashBoardNotifications
             src='/dashboard/welcome-section/notification.svg'
             alt='Settings Icon'

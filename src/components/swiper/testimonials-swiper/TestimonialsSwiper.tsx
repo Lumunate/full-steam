@@ -81,27 +81,28 @@ const TestimonialsSwiper: FC = () => {
             date: '2023-05-20',
             stars: 5
           },
+          
           {
-            name: 'Emma Wilson',
-            subject: 'Tutoring',
-            feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
-            date: '2023-06-10',
+            name: 'Lucas Bennett',
+            subject: 'Childcare',
+            feedback: `Finding Fullste3am was a game-changer for our family. My wife and I both work demanding jobs, and having someone we can trust with our toddler has taken a huge weight off our shoulders. Our helper is not only punctual but genuinely loves spending time with our child — it shows in everything she does. It's like having an extended family member at home.`,
+            date: '2023-08-21',
+            stars: 5
+          },
+          {
+            name: 'Priya Desai',
+            subject: 'Housekeeping',
+            feedback: `As someone juggling a hectic work-from-home schedule, I needed reliable domestic support — and Fullste3am delivered. I now have someone who helps maintain the house, handles the laundry, and even preps meals on the days I’m swamped. It’s helped me reclaim my sanity and be more present with my kids after hours.`,
+            date: '2023-09-04',
             stars: 4
           },
           {
-            name: 'Emma Wilson',
-            subject: 'Tutoring',
-            feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
-            date: '2023-06-10',
-            stars: 4
-          },
-          {
-            name: 'Emma Wilson',
-            subject: 'Tutoring',
-            feedback: `I never expected that one of the most challenging parts of motherhood would be finding reliable, trustworthy help for me and my baby. Before finding Fullste3am, I had struggled to find someone who could help me around the house and with my child while also being on time and showing up regularly. It was a godsend to find this website because now, I have the perfect helper and I can leave my child without having to worry about her safety or whether she will be cared for properly. I also can go to work myself knowing that I will come home and things will be running smoothly at home and I won’t be walking into a disaster. I also can plan things better because I have reliable help so I get the things done that I need to get done! No more waking up in the middle of the night worrying how I’m going to manage things!`,
-            date: '2023-06-10',
-            stars: 4
-          },
+            name: 'Carlos Ramirez',
+            subject: 'Elderly Assistance',
+            feedback: `I was nervous about letting someone care for my aging mother, but Fullste3am matched us with a caregiver who exceeded every expectation. She's compassionate, respectful, and incredibly reliable. Mom looks forward to her visits — and honestly, so do I. It’s rare to find someone who genuinely cares like this.`,
+            date: '2023-10-11',
+            stars: 5
+          }
           
         ]);
       } finally {

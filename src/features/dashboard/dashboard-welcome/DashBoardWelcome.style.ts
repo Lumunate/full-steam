@@ -23,8 +23,9 @@ export const DashBoardWelcomeControls = styled(Box)({
   display: 'flex',
   flexDirection: 'row',
   flex: 1,
-  justifyContent: 'space-between',
+  justifyContent: 'flex-end',
   alignItems: 'center',
+  gap: '20px'
 });
 
 export const DashBoardSearchInput = styled(Input)({});

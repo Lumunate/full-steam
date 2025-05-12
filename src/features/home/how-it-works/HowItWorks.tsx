@@ -37,13 +37,13 @@ const processSteps = [
   {
     heading: 'Schedule Service',
     description:
-      'Book on-demand assistance or schedule regular help based on your familys needs.',
+      `Book on-demand assistance or schedule regular help based on your family's needs.`,
     logoSrc: '/home/how-it-works/schduele.svg',
   },
   {
     heading: 'Simple Payment',
     description:
-      'Enjoy secure, automated payments after each session based on the helpers rate.',
+      `Enjoy secure, automated payments after each session based on the helper's rate.`,
     logoSrc: '/home/how-it-works/payment.svg',
   },
 ];
@@ -51,7 +51,6 @@ const processSteps = [
 const HowItWorks: React.FC = () => {
 
   const swiperRef = useRef<SwiperType | null>(null);
-  // const { data, isLoading } = useTestimonials();
 
   useEffect(() => {
     if (swiperRef.current) {
